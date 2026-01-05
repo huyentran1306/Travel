@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quyết Toán Côn Đảo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            background-image: url('https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=2073');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: -1;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 10px; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        .gradient-primary { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); }
+        .gradient-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        
+        input:focus, textarea:focus { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
+
+        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(14, 165, 233, 0.4); }
+        .btn-hover:active { transform: translateY(0); }
+    </style>
+</head>
+<body class="text-slate-900 pb-24 md:pb-10">
+
+    <!-- Header -->
+    <header class="glass-header sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                    <i data-lucide="waves" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-slate-800 leading-none tracking-tight">Côn Đảo Trip</h1>
+                    <span class="text-[10px] text-sky-600 uppercase tracking-widest font-bold">Quản lý tài chính "gia đình"</span>
+                </div>
+            </div>
+            <div class="flex gap-1">
+                <button onclick="exportData()" class="p-2.5 text-slate-500 hover:bg-white/50 rounded-xl transition-all" title="Xuất dữ liệu">
+                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                </button>
+                <button onclick="clearAllData()" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50/50 rounded-xl transition-all" title="Xóa hết">
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+        
+        <!-- Dashboard Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="md:col-span-1 glass-card p-5 rounded-2xl border-2 border-indigo-100">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="users" class="w-4 h-4"></i></div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Team Đi Đu Đưa</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span id="people-count-display" class="text-3xl font-black text-slate-800">0</span>
+                    <span class="text-slate-400 font-bold text-sm uppercase">Đồng bọn</span>
+                </div>
+                <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">* Tự động đếm theo số người đóng quỹ</p>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-rose-50 text-rose-500 rounded-lg"><i data-lucide="credit-card" class="w-4 h-4"></i></div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Đã quẹt thẻ</span>
+                </div>
+                <div id="total-spent" class="text-2xl font-bold text-slate-800">0 đ</div>
+            </div>
+            
+            <div class="glass-card p-5 rounded-2xl">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-emerald-50 text-emerald-500 rounded-lg"><i data-lucide="banknote" class="w-4 h-4"></i></div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Tiền vào túi</span>
+                </div>
+                <div id="total-income" class="text-2xl font-bold text-slate-800">0 đ</div>
+            </div>
+
+            <div class="glass-card p-5 rounded-2xl border-2 border-sky-500/20">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-sky-50 text-sky-600 rounded-lg"><i data-lucide="compass" class="w-4 h-4"></i></div>
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Dự chi / Đầu người</span>
+                </div>
+                <div id="planned-per-person" class="text-2xl font-black text-sky-600 tracking-tight">0 đ</div>
+            </div>
+        </div>
+
+        <!-- Settlement Result Card -->
+        <div id="settlement-card" class="glass-card rounded-[2.5rem] p-8 shadow-2xl overflow-hidden relative border-2 border-white">
+            <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+                <i data-lucide="calculator" class="w-48 h-48 text-indigo-500"></i>
+            </div>
+            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="space-y-2 text-center lg:text-left flex-1">
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 mb-1">BẢNG PHONG THẦN TÀI CHÍNH</h2>
+                    <p id="settle-status-title" class="text-3xl font-black text-slate-800 leading-tight">Chưa có ai nộp "lúa"...</p>
+                    <p id="settle-desc" class="text-sm text-slate-500 font-semibold max-w-md">Toán học hông bao giờ nói dối, chỉ có ví tiền là nói lời chia tay thôi.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 flex-1">
+                    <div class="bg-white/50 px-6 py-5 rounded-[2rem] text-center border border-white min-w-[140px] shadow-sm">
+                        <p class="text-[9px] font-black uppercase text-slate-400 mb-2">Thực chi / người</p>
+                        <p id="spent-per-person" class="text-xl font-black text-rose-500">0 đ</p>
+                    </div>
+                    <div class="bg-white/50 px-6 py-5 rounded-[2rem] text-center border border-white min-w-[140px] shadow-sm">
+                        <p class="text-[9px] font-black uppercase text-slate-400 mb-2">Đã đóng / người</p>
+                        <p id="income-per-person" class="text-xl font-black text-emerald-500">0 đ</p>
+                    </div>
+                    <div id="result-box" class="px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px]">
+                        <p id="result-label" class="text-[10px] font-black uppercase text-white/90 mb-2">Tiền mặt trao tay</p>
+                        <p id="result-value" class="text-3xl font-black text-white">0 đ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Đã Chi -->
+            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl">
+                <div class="p-6 flex justify-between items-center bg-white/40">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
+                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Danh sách "Đau Ví"</h2>
+                    </div>
+                    <button onclick="openModal('SPENT')" class="w-11 h-11 gradient-primary text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
+                        <i data-lucide="plus" class="w-7 h-7"></i>
+                    </button>
+                </div>
+                <div id="list-spent" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
+                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
+                    <span class="text-[10px] uppercase text-slate-400 font-black">Tổng chi</span>
+                    <span id="sum-spent" class="text-rose-600 text-2xl font-black">0 đ</span>
+                </div>
+            </div>
+
+            <!-- Thu Quỹ -->
+            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl border-2 border-emerald-500/10">
+                <div class="p-6 flex justify-between items-center bg-white/40">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="users" class="w-5 h-5"></i></div>
+                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Tiếp Tế Quỹ</h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openQuickFundModal()" class="w-11 h-11 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-sm" title="Nhập danh sách nhanh">
+                            <i data-lucide="user-plus" class="w-6 h-6"></i>
+                        </button>
+                        <button onclick="openModal('INCOME')" class="w-11 h-11 bg-emerald-500 text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
+                            <i data-lucide="plus" class="w-7 h-7"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="list-income" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
+                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] uppercase text-slate-400 font-black">Tổng nộp quỹ</span>
+                        <span id="people-count-label" class="text-[9px] text-emerald-600 font-bold uppercase tracking-tighter">0 người đã nộp lúa</span>
+                    </div>
+                    <span id="sum-income" class="text-emerald-600 text-2xl font-black">0 đ</span>
+                </div>
+            </div>
+
+            <!-- Dự Chi -->
+            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl">
+                <div class="p-6 flex justify-between items-center bg-white/40">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="map" class="w-5 h-5"></i></div>
+                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Kế hoạch ăn chơi</h2>
+                    </div>
+                    <button onclick="openModal('PLANNED')" class="w-10 h-10 bg-sky-500 text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
+                        <i data-lucide="plus" class="w-7 h-7"></i>
+                    </button>
+                </div>
+                <div id="list-planned" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
+                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
+                    <span class="text-[10px] uppercase text-slate-400 font-black">Tổng dự chi</span>
+                    <span id="sum-planned" class="text-sky-600 text-2xl font-black">0 đ</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity" onclick="closeModal()"></div>
+        <div class="relative bg-white/95 w-full max-w-md rounded-[40px] shadow-2xl overflow-hidden animate-slide-up border border-white">
+            <div id="modal-header" class="p-8 text-white relative overflow-hidden">
+                <div class="relative z-10 flex justify-between items-start">
+                    <div>
+                        <h2 id="modal-title" class="text-2xl font-black tracking-tight">Thêm mục mới</h2>
+                        <p id="modal-subtitle" class="text-white/90 text-xs mt-1 font-bold uppercase tracking-widest">Thông tin Côn Đảo</p>
+                    </div>
+                    <button onclick="closeModal()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="entry-form" class="p-8 space-y-5">
+                <input type="hidden" id="entry-type">
+                <input type="hidden" id="entry-is-quick" value="false">
+                
+                <div id="names-field" class="space-y-2 hidden">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Danh sách người nộp (phẩy để ngăn cách)</label>
+                    <div class="relative">
+                        <i data-lucide="users" class="absolute left-4 top-4 w-4 h-4 text-emerald-400"></i>
+                        <textarea id="names-list" rows="3" placeholder="Ví dụ: Trân, Vân, Hương..." 
+                                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all font-semibold text-slate-700"></textarea>
+                    </div>
+                    <p class="text-[9px] text-emerald-500 font-bold uppercase italic px-1">Mỗi tên sẽ được tính là 1 thành viên đi cùng</p>
+                </div>
+
+                <div id="content-field" class="space-y-2">
+                    <label id="content-label" class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Nội dung</label>
+                    <div class="relative">
+                        <i id="content-icon" data-lucide="tag" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sky-400"></i>
+                        <input type="text" id="content" placeholder="Ghi chú..." 
+                               class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-semibold text-slate-700">
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <label id="label-amount" class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Số tiền (VNĐ)</label>
+                    <div class="relative">
+                        <i data-lucide="coins" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400"></i>
+                        <input type="text" id="amount" required placeholder="0" inputmode="numeric"
+                               class="w-full pl-11 pr-16 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-black text-slate-800 text-xl"
+                               oninput="handleAmountInput(this)">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">đ</span>
+                    </div>
+                </div>
+
+                <div id="date-field" class="space-y-2">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Thời gian</label>
+                    <div class="relative">
+                        <i data-lucide="calendar" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400"></i>
+                        <input type="date" id="date" 
+                               class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-semibold text-slate-700">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex flex-col gap-3">
+                    <button type="submit" class="w-full py-5 gradient-primary text-white font-black rounded-[24px] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-sky-100 text-lg uppercase tracking-wider">
+                        Chốt kèo!
+                    </button>
+                    <button type="button" onclick="closeModal()" class="w-full py-3 text-slate-400 font-bold hover:text-slate-600 transition-colors text-sm">
+                        Hủy
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let entries = JSON.parse(localStorage.getItem('travel_data_v2')) || [];
+        
+        // Elements
+        const modal = document.getElementById('modal');
+        const modalHeader = document.getElementById('modal-header');
+        const entryForm = document.getElementById('entry-form');
+        const modalTitle = document.getElementById('modal-title');
+        const entryTypeInput = document.getElementById('entry-type');
+        const entryIsQuick = document.getElementById('entry-is-quick');
+        const namesField = document.getElementById('names-field');
+        const namesList = document.getElementById('names-list');
+        const contentField = document.getElementById('content-field');
+        const contentLabel = document.getElementById('content-label');
+        const dateField = document.getElementById('date-field');
+        const amountInput = document.getElementById('amount');
+
+        // Helper: Format amount with commas as user types
+        function handleAmountInput(input) {
+            let value = input.value.replace(/[^0-9]/g, '');
+            if (value === "") {
+                input.value = "";
+                return;
+            }
+            input.value = parseInt(value, 10).toLocaleString('en-US');
+        }
+
+        // Helper: Get numeric value from formatted string
+        function getRawAmount(formattedValue) {
+            return parseFloat(formattedValue.replace(/,/g, '')) || 0;
+        }
+
+        function openQuickFundModal() {
+            entryTypeInput.value = 'INCOME';
+            entryIsQuick.value = 'true';
+            
+            namesField.classList.remove('hidden');
+            contentField.classList.add('hidden');
+            dateField.classList.add('hidden');
+            
+            modalTitle.innerText = 'Tiếp Tế Quỹ Nhanh';
+            document.getElementById('modal-subtitle').innerText = 'Nhập tên các "đại gia" đóng quỹ';
+            document.getElementById('label-amount').innerText = 'Mức đóng / người';
+            modalHeader.className = 'p-8 text-white relative overflow-hidden gradient-emerald';
+            
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+            namesList.focus();
+        }
+
+        function openModal(type) {
+            entryTypeInput.value = type;
+            entryIsQuick.value = 'false';
+            
+            namesField.classList.add('hidden');
+            contentField.classList.remove('hidden');
+            dateField.classList.remove('hidden');
+            
+            document.getElementById('modal-subtitle').innerText = 'Chi tiết kèo';
+            document.getElementById('label-amount').innerText = 'Số tiền';
+            
+            if (type === 'SPENT') {
+                modalTitle.innerText = 'Chi Tiêu Thực Tế';
+                contentLabel.innerText = "Tiêu pha việc gì?";
+                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-rose-500 to-pink-400';
+                document.getElementById('content').placeholder = "Vé tàu, Ăn trưa, Khách sạn...";
+            } else if (type === 'PLANNED') {
+                modalTitle.innerText = 'Dự Tính Ăn Chơi';
+                contentLabel.innerText = "Dự định tốn bao nhiêu?";
+                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-sky-500 to-blue-400';
+                document.getElementById('content').placeholder = "Dự kiến vé bay...";
+            } else if (type === 'INCOME') {
+                modalTitle.innerText = 'Nộp Quỹ Lẻ';
+                contentLabel.innerText = "Tên người nộp";
+                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-400';
+                document.getElementById('content').placeholder = "Nhập tên người nộp...";
+                dateField.classList.add('hidden');
+            }
+            
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+            document.getElementById('content').focus();
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            entryForm.reset();
+        }
+
+        entryForm.onsubmit = (e) => {
+            e.preventDefault();
+            const type = entryTypeInput.value;
+            const amountValue = amountInput.value;
+            const amount = getRawAmount(amountValue);
+            const date = document.getElementById('date').value;
+
+            if (entryIsQuick.value === 'true') {
+                const names = namesList.value.split(',').map(n => n.trim()).filter(n => n !== '');
+                if (names.length === 0) {
+                    alert('Vui lòng nhập tên thành viên!');
+                    return;
+                }
+                names.forEach(name => {
+                    entries.push({
+                        id: Date.now().toString() + Math.random(),
+                        type: 'INCOME',
+                        content: `${name}`,
+                        amount: amount,
+                        date: date
+                    });
+                });
+            } else {
+                entries.push({
+                    id: Date.now().toString(),
+                    type: type,
+                    content: document.getElementById('content').value,
+                    amount: amount,
+                    date: date
+                });
+            }
+            
+            saveData();
+            render();
+            closeModal();
+        };
+
+        function deleteEntry(id) {
+            if (confirm('Xóa mục này nha?')) {
+                entries = entries.filter(e => e.id !== id);
+                saveData();
+                render();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('travel_data_v2', JSON.stringify(entries));
+        }
+
+        function clearAllData() {
+            if (confirm('Bạn muốn xóa trắng hết dữ liệu để làm lại cuộc đời?')) {
+                entries = [];
+                saveData();
+                render();
+            }
+        }
+
+        function formatMoney(amount) {
+            return Math.round(amount).toLocaleString('vi-VN') + ' đ';
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entries, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `quyet_toan_condao_${new Date().toLocaleDateString()}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function render() {
+            const lists = {
+                SPENT: document.getElementById('list-spent'),
+                PLANNED: document.getElementById('list-planned'),
+                INCOME: document.getElementById('list-income')
+            };
+
+            const sums = {
+                SPENT: document.getElementById('sum-spent'),
+                PLANNED: document.getElementById('sum-planned'),
+                INCOME: document.getElementById('sum-income')
+            };
+
+            Object.values(lists).forEach(list => list.innerHTML = '');
+            const totals = { SPENT: 0, PLANNED: 0, INCOME: 0 };
+
+            entries.forEach(entry => {
+                totals[entry.type] += entry.amount;
+            });
+
+            const peopleCount = entries.filter(e => e.type === 'INCOME').length;
+            document.getElementById('people-count-display').innerText = peopleCount;
+            document.getElementById('people-count-label').innerText = `${peopleCount} người đã nộp lúa`;
+
+            entries.sort((a,b) => b.id - a.id).forEach(entry => {
+                const container = lists[entry.type];
+                const row = document.createElement('div');
+                row.className = 'group flex items-center justify-between px-5 py-4 border-b border-white/20 hover:bg-white/40 transition-all';
+                row.innerHTML = `
+                    <div class="flex-1 min-w-0 pr-3">
+                        <p class="text-sm font-bold text-slate-800 truncate tracking-tight">${entry.content}</p>
+                        ${entry.date ? `<span class="text-[9px] text-slate-400 font-bold uppercase">${entry.date}</span>` : ''}
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-black text-slate-900">${formatMoney(entry.amount)}</span>
+                        <button onclick="deleteEntry('${entry.id}')" class="text-slate-300 hover:text-red-500 transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            ['SPENT', 'PLANNED', 'INCOME'].forEach(type => {
+                if (lists[type].innerHTML === '') {
+                    lists[type].innerHTML = `<div class="p-10 text-center text-slate-300 italic text-xs">Vắng vẻ quá, thêm dữ liệu đi nè...</div>`;
+                }
+            });
+
+            sums.SPENT.innerText = formatMoney(totals.SPENT);
+            sums.PLANNED.innerText = formatMoney(totals.PLANNED);
+            sums.INCOME.innerText = formatMoney(totals.INCOME);
+            
+            document.getElementById('total-spent').innerText = formatMoney(totals.SPENT);
+            document.getElementById('total-income').innerText = formatMoney(totals.INCOME);
+            
+            const pCountForCalc = peopleCount || 1; 
+            document.getElementById('planned-per-person').innerText = formatMoney(totals.PLANNED / pCountForCalc);
+
+            const spentPerPerson = totals.SPENT / pCountForCalc;
+            const avgIncomePerPerson = totals.INCOME / pCountForCalc;
+            const balance = avgIncomePerPerson - spentPerPerson;
+
+            document.getElementById('spent-per-person').innerText = formatMoney(spentPerPerson);
+            document.getElementById('income-per-person').innerText = formatMoney(avgIncomePerPerson);
+            
+            const resultBox = document.getElementById('result-box');
+            const resultLabel = document.getElementById('result-label');
+            const resultValue = document.getElementById('result-value');
+            const statusTitle = document.getElementById('settle-status-title');
+
+            if (peopleCount === 0) {
+                statusTitle.innerText = "Chưa có ai 'đặt gạch' nộp quỹ hết trơn á!";
+                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-slate-400 border-none";
+                resultValue.innerText = "Đang hóng...";
+            } else if (balance >= 0) {
+                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-emerald-500 border-none animate-pulse";
+                resultLabel.innerText = "Dư trả lại mỗi người";
+                resultValue.innerText = formatMoney(balance);
+                statusTitle.innerText = "Tiền tiêu hổng hết, chia lại cho bớt giàu nha! 🧧";
+                statusTitle.className = "text-2xl font-black text-emerald-600 lg:text-3xl";
+            } else {
+                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-rose-500 border-none";
+                resultLabel.innerText = "Phải đóng thêm";
+                resultValue.innerText = formatMoney(Math.abs(balance));
+                statusTitle.innerText = "Quỹ cháy túi rồi, nộp 'lúa' nhanh hông là ở lại đảo á! 💸";
+                statusTitle.className = "text-2xl font-black text-rose-600 lg:text-3xl";
+            }
+
+            lucide.createIcons();
+        }
+
+        render();
+    </script>
+</body>
+</html>
