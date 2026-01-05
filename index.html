@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quyết Toán Côn Đảo</title>
+    <title>Quyết Toán Côn Đảo - Supabase Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
@@ -61,25 +63,44 @@
 
         .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(14, 165, 233, 0.4); }
         .btn-hover:active { transform: translateY(0); }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s;
+        }
     </style>
 </head>
 <body class="text-slate-900 pb-24 md:pb-10">
+
+    <div id="loading" class="loading-overlay hidden">
+        <div class="flex flex-col items-center gap-4">
+            <div class="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
+            <p class="font-bold text-sky-600 animate-pulse text-sm uppercase tracking-widest">Đang kết nối Cloud...</p>
+        </div>
+    </div>
 
     <!-- Header -->
     <header class="glass-header sticky top-0 z-40 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
-                    <i data-lucide="waves" class="w-5 h-5"></i>
+                    <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
                 </div>
                 <div>
                     <h1 class="font-extrabold text-slate-800 leading-none tracking-tight">Côn Đảo Trip</h1>
-                    <span class="text-[10px] text-sky-600 uppercase tracking-widest font-bold">Quản lý tài chính "gia đình"</span>
+                    <span class="text-[10px] text-sky-600 uppercase tracking-widest font-bold">Cloud Sync by Supabase</span>
                 </div>
             </div>
             <div class="flex gap-1">
-                <button onclick="exportData()" class="p-2.5 text-slate-500 hover:bg-white/50 rounded-xl transition-all" title="Xuất dữ liệu">
-                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                <button onclick="fetchData()" class="p-2.5 text-slate-500 hover:bg-white/50 rounded-xl transition-all" title="Làm mới">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
                 </button>
                 <button onclick="clearAllData()" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50/50 rounded-xl transition-all" title="Xóa hết">
                     <i data-lucide="trash-2" class="w-5 h-5"></i>
@@ -101,7 +122,7 @@
                     <span id="people-count-display" class="text-3xl font-black text-slate-800">0</span>
                     <span class="text-slate-400 font-bold text-sm uppercase">Đồng bọn</span>
                 </div>
-                <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">* Tự động đếm theo số người đóng quỹ</p>
+                <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">* Tự động đếm theo người đóng quỹ</p>
             </div>
 
             <div class="glass-card p-5 rounded-2xl">
@@ -138,7 +159,7 @@
                 <div class="space-y-2 text-center lg:text-left flex-1">
                     <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 mb-1">BẢNG PHONG THẦN TÀI CHÍNH</h2>
                     <p id="settle-status-title" class="text-3xl font-black text-slate-800 leading-tight">Chưa có ai nộp "lúa"...</p>
-                    <p id="settle-desc" class="text-sm text-slate-500 font-semibold max-w-md">Toán học hông bao giờ nói dối, chỉ có ví tiền là nói lời chia tay thôi.</p>
+                    <p id="settle-desc" class="text-sm text-slate-500 font-semibold max-w-md">Dữ liệu được lưu trữ an toàn trên Supabase Cloud.</p>
                 </div>
                 <div class="flex flex-wrap justify-center gap-4 flex-1">
                     <div class="bg-white/50 px-6 py-5 rounded-[2rem] text-center border border-white min-w-[140px] shadow-sm">
@@ -283,7 +304,7 @@
                 </div>
 
                 <div class="pt-4 flex flex-col gap-3">
-                    <button type="submit" class="w-full py-5 gradient-primary text-white font-black rounded-[24px] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-sky-100 text-lg uppercase tracking-wider">
+                    <button id="btn-submit" type="submit" class="w-full py-5 gradient-primary text-white font-black rounded-[24px] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-sky-100 text-lg uppercase tracking-wider">
                         Chốt kèo!
                     </button>
                     <button type="button" onclick="closeModal()" class="w-full py-3 text-slate-400 font-bold hover:text-slate-600 transition-colors text-sm">
@@ -295,8 +316,13 @@
     </div>
 
     <script>
+        // Supabase Initialization
+        const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // State
-        let entries = JSON.parse(localStorage.getItem('travel_data_v2')) || [];
+        let entries = [];
         
         // Elements
         const modal = document.getElementById('modal');
@@ -311,8 +337,29 @@
         const contentLabel = document.getElementById('content-label');
         const dateField = document.getElementById('date-field');
         const amountInput = document.getElementById('amount');
+        const loading = document.getElementById('loading');
 
-        // Helper: Format amount with commas as user types
+        function toggleLoading(show) {
+            loading.classList.toggle('hidden', !show);
+        }
+
+        async function fetchData() {
+            toggleLoading(true);
+            const { data, error } = await _supabase
+                .from('travel_entries')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Lỗi khi tải dữ liệu:', error);
+                alert('Hông tải được dữ liệu rồi mẹ ơi!');
+            } else {
+                entries = data || [];
+                render();
+            }
+            toggleLoading(false);
+        }
+
         function handleAmountInput(input) {
             let value = input.value.replace(/[^0-9]/g, '');
             if (value === "") {
@@ -322,7 +369,6 @@
             input.value = parseInt(value, 10).toLocaleString('en-US');
         }
 
-        // Helper: Get numeric value from formatted string
         function getRawAmount(formattedValue) {
             return parseFloat(formattedValue.replace(/,/g, '')) || 0;
         }
@@ -330,16 +376,13 @@
         function openQuickFundModal() {
             entryTypeInput.value = 'INCOME';
             entryIsQuick.value = 'true';
-            
             namesField.classList.remove('hidden');
             contentField.classList.add('hidden');
             dateField.classList.add('hidden');
-            
             modalTitle.innerText = 'Tiếp Tế Quỹ Nhanh';
             document.getElementById('modal-subtitle').innerText = 'Nhập tên các "đại gia" đóng quỹ';
             document.getElementById('label-amount').innerText = 'Mức đóng / người';
             modalHeader.className = 'p-8 text-white relative overflow-hidden gradient-emerald';
-            
             modal.classList.remove('hidden');
             lucide.createIcons();
             namesList.focus();
@@ -348,11 +391,9 @@
         function openModal(type) {
             entryTypeInput.value = type;
             entryIsQuick.value = 'false';
-            
             namesField.classList.add('hidden');
             contentField.classList.remove('hidden');
             dateField.classList.remove('hidden');
-            
             document.getElementById('modal-subtitle').innerText = 'Chi tiết kèo';
             document.getElementById('label-amount').innerText = 'Số tiền';
             
@@ -385,75 +426,69 @@
             entryForm.reset();
         }
 
-        entryForm.onsubmit = (e) => {
+        entryForm.onsubmit = async (e) => {
             e.preventDefault();
             const type = entryTypeInput.value;
-            const amountValue = amountInput.value;
-            const amount = getRawAmount(amountValue);
+            const amount = getRawAmount(amountInput.value);
             const date = document.getElementById('date').value;
+            const btnSubmit = document.getElementById('btn-submit');
 
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Đang lưu...";
+            toggleLoading(true);
+
+            let newRows = [];
             if (entryIsQuick.value === 'true') {
                 const names = namesList.value.split(',').map(n => n.trim()).filter(n => n !== '');
                 if (names.length === 0) {
                     alert('Vui lòng nhập tên thành viên!');
+                    toggleLoading(false);
+                    btnSubmit.disabled = false;
                     return;
                 }
                 names.forEach(name => {
-                    entries.push({
-                        id: Date.now().toString() + Math.random(),
-                        type: 'INCOME',
-                        content: `${name}`,
-                        amount: amount,
-                        date: date
-                    });
+                    newRows.push({ type: 'INCOME', content: name, amount, date: date || null });
                 });
             } else {
-                entries.push({
-                    id: Date.now().toString(),
-                    type: type,
-                    content: document.getElementById('content').value,
-                    amount: amount,
-                    date: date
-                });
+                newRows.push({ type, content: document.getElementById('content').value, amount, date: date || null });
+            }
+
+            const { error } = await _supabase.from('travel_entries').insert(newRows);
+            
+            if (error) {
+                alert('Lỗi lưu cloud rồi: ' + error.message);
+            } else {
+                closeModal();
+                await fetchData();
             }
             
-            saveData();
-            render();
-            closeModal();
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = "Chốt kèo!";
+            toggleLoading(false);
         };
 
-        function deleteEntry(id) {
+        async function deleteEntry(id) {
             if (confirm('Xóa mục này nha?')) {
-                entries = entries.filter(e => e.id !== id);
-                saveData();
-                render();
+                toggleLoading(true);
+                const { error } = await _supabase.from('travel_entries').delete().eq('id', id);
+                if (error) alert('Xóa hông được: ' + error.message);
+                else await fetchData();
+                toggleLoading(false);
             }
         }
 
-        function saveData() {
-            localStorage.setItem('travel_data_v2', JSON.stringify(entries));
-        }
-
-        function clearAllData() {
-            if (confirm('Bạn muốn xóa trắng hết dữ liệu để làm lại cuộc đời?')) {
-                entries = [];
-                saveData();
-                render();
+        async function clearAllData() {
+            if (confirm('Bạn muốn xóa trắng hết dữ liệu trên Cloud?')) {
+                toggleLoading(true);
+                const { error } = await _supabase.from('travel_entries').delete().neq('type', 'SYSTEM_DUMMY_RESERVED');
+                if (error) alert('Lỗi xóa sạch: ' + error.message);
+                else await fetchData();
+                toggleLoading(false);
             }
         }
 
         function formatMoney(amount) {
             return Math.round(amount).toLocaleString('vi-VN') + ' đ';
-        }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(entries, null, 2));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", `quyet_toan_condao_${new Date().toLocaleDateString()}.json`);
-            document.body.appendChild(downloadAnchorNode);
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
         }
 
         function render() {
@@ -473,14 +508,14 @@
             const totals = { SPENT: 0, PLANNED: 0, INCOME: 0 };
 
             entries.forEach(entry => {
-                totals[entry.type] += entry.amount;
+                totals[entry.type] += Number(entry.amount);
             });
 
             const peopleCount = entries.filter(e => e.type === 'INCOME').length;
             document.getElementById('people-count-display').innerText = peopleCount;
             document.getElementById('people-count-label').innerText = `${peopleCount} người đã nộp lúa`;
 
-            entries.sort((a,b) => b.id - a.id).forEach(entry => {
+            entries.forEach(entry => {
                 const container = lists[entry.type];
                 const row = document.createElement('div');
                 row.className = 'group flex items-center justify-between px-5 py-4 border-b border-white/20 hover:bg-white/40 transition-all';
@@ -548,7 +583,8 @@
             lucide.createIcons();
         }
 
-        render();
+        // Khởi tạo ứng dụng
+        fetchData();
     </script>
 </body>
 </html>
