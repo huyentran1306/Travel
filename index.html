@@ -4,30 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đà Lạt</title>
+    <title>Quyết Toán Phú Yên - Công Bằng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             -webkit-tap-highlight-color: transparent;
-            background-image: url('https://file3.qdnd.vn/data/images/14/2025/06/25/upload_2217/anh3529104734am.jpeg?dpi=150&quality=100&w=870');
+            background-color: #f8fafc;
+            background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            background-repeat: no-repeat;
         }
 
         body::before {
             content: "";
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: -1;
         }
         
@@ -36,387 +35,429 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(14, 165, 233, 0.4); border-radius: 10px; }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(30px) saturate(200%);
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
-        }
-
-        .glass-header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .animate-slide-up { animation: slideUp 0.3s ease-out; }
         
         .gradient-primary { background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%); }
-        .gradient-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         
-        input:focus, textarea:focus { border-color: #0ea5e9; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1); }
-
-        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(14, 165, 233, 0.4); }
-        .btn-hover:active { transform: translateY(0); }
-
         .loading-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(4px);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
             z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.3s;
         }
     </style>
+<link rel="stylesheet" href="/index.css">
 </head>
-<body class="text-slate-900 pb-24 md:pb-10">
+<body class="text-slate-900 pb-10">
 
     <div id="loading" class="loading-overlay hidden">
         <div class="flex flex-col items-center gap-4">
             <div class="w-12 h-12 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-            <p class="font-bold text-sky-600 animate-pulse text-sm uppercase tracking-widest">Đang kết nối Cloud...</p>
+            <p class="font-bold text-sky-600 animate-pulse text-sm">Đang kết nối Cloud...</p>
         </div>
     </div>
 
     <!-- Header -->
-    <header class="glass-header sticky top-0 z-40 shadow-sm">
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-white/50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
-                    <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+                    <i data-lucide="palmtree" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-slate-800 leading-none tracking-tight">Đà Lạt Trip</h1>
+                    <h1 class="font-extrabold text-slate-800 tracking-tight leading-tight">Phú Yên 2026</h1>
+                    <p class="text-[9px] text-sky-600 font-bold uppercase tracking-wider">Hệ thống quyết toán</p>
                 </div>
             </div>
-            <div class="flex gap-1">
-                <button onclick="fetchData()" class="p-2.5 text-slate-500 hover:bg-white/50 rounded-xl transition-all" title="Làm mới">
-                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                </button>
-                <button onclick="clearAllData()" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50/50 rounded-xl transition-all" title="Xóa hết">
-                    <i data-lucide="trash-2" class="w-5 h-5"></i>
-                </button>
+            <div class="flex gap-2">
+                <button onclick="fetchData()" class="p-2 text-slate-500 hover:bg-white rounded-lg transition-all"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button>
+                <button onclick="clearAllData()" class="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
         
-        <!-- Dashboard Overview -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="md:col-span-1 glass-card p-5 rounded-2xl border-2 border-indigo-100">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="users" class="w-4 h-4"></i></div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Team Đi Đu Đưa</span>
-                </div>
-                <div class="flex items-baseline gap-2">
-                    <span id="people-count-display" class="text-3xl font-black text-slate-800">0</span>
-                    <span class="text-slate-400 font-bold text-sm uppercase">Đồng bọn</span>
-                </div>
-                <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">* Tự động đếm theo người đóng quỹ</p>
+        <!-- Dashboard Summary -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-indigo-500">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đồng bọn</span>
+                <div class="text-2xl font-black text-slate-800" id="people-count-display">0</div>
             </div>
-
-            <div class="glass-card p-5 rounded-2xl">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-rose-50 text-rose-500 rounded-lg"><i data-lucide="credit-card" class="w-4 h-4"></i></div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Đã quẹt thẻ</span>
-                </div>
-                <div id="total-spent" class="text-2xl font-bold text-slate-800">0 đ</div>
+            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-rose-500">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đã chi</span>
+                <div class="text-xl font-black text-rose-600" id="total-spent">0 đ</div>
             </div>
-            
-            <div class="glass-card p-5 rounded-2xl">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-emerald-50 text-emerald-500 rounded-lg"><i data-lucide="banknote" class="w-4 h-4"></i></div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Tiền vào túi</span>
-                </div>
-                <div id="total-income" class="text-2xl font-bold text-slate-800">0 đ</div>
+            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-emerald-500">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Tổng quỹ</span>
+                <div class="text-xl font-black text-emerald-600" id="total-income">0 đ</div>
             </div>
-
-            <div class="glass-card p-5 rounded-2xl border-2 border-sky-500/20">
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-sky-50 text-sky-600 rounded-lg"><i data-lucide="compass" class="w-4 h-4"></i></div>
-                    <span class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Dự chi / Đầu người</span>
-                </div>
-                <div id="planned-per-person" class="text-2xl font-black text-sky-600 tracking-tight">0 đ</div>
+            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-sky-500">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">TB dự tính</span>
+                <div class="text-xl font-black text-sky-600" id="planned-per-person">0 đ</div>
             </div>
         </div>
 
-        <!-- Settlement Result Card -->
-        <div id="settlement-card" class="glass-card rounded-[2.5rem] p-8 shadow-2xl overflow-hidden relative border-2 border-white">
-            <div class="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-                <i data-lucide="calculator" class="w-48 h-48 text-indigo-500"></i>
-            </div>
-            <div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-                <div class="space-y-2 text-center lg:text-left flex-1">
-                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 mb-1">BẢNG PHONG THẦN TÀI CHÍNH</h2>
-                    <p id="settle-status-title" class="text-3xl font-black text-slate-800 leading-tight">Chưa có ai nộp "lúa"...</p>
-                </div>
-                <div class="flex flex-wrap justify-center gap-4 flex-1">
-                    <div class="bg-white/50 px-6 py-5 rounded-[2rem] text-center border border-white min-w-[140px] shadow-sm">
-                        <p class="text-[9px] font-black uppercase text-slate-400 mb-2">Thực chi / người</p>
-                        <p id="spent-per-person" class="text-xl font-black text-rose-500">0 đ</p>
-                    </div>
-                    <div class="bg-white/50 px-6 py-5 rounded-[2rem] text-center border border-white min-w-[140px] shadow-sm">
-                        <p class="text-[9px] font-black uppercase text-slate-400 mb-2">Đã đóng / người</p>
-                        <p id="income-per-person" class="text-xl font-black text-emerald-500">0 đ</p>
-                    </div>
-                    <div id="result-box" class="px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px]">
-                        <p id="result-label" class="text-[10px] font-black uppercase text-white/90 mb-2">Tiền mặt trao tay</p>
-                        <p id="result-value" class="text-3xl font-black text-white">0 đ</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Bảng Phong Thần -->
+        <div class="glass-card rounded-[2rem] p-6 shadow-sm border border-white">
+            <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 mb-5 flex items-center gap-2">
+                <i data-lucide="users" class="w-4 h-4"></i> QUYẾT TOÁN CÁ NHÂN
+            </h2>
+            <div id="individual-balances" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
-        <!-- Tables Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            <!-- Đã Chi -->
-            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl">
-                <div class="p-6 flex justify-between items-center bg-white/40">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-rose-100 text-rose-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
-                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Danh sách "Đau Ví"</h2>
-                    </div>
-                    <button onclick="openModal('SPENT')" class="w-11 h-11 gradient-primary text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
-                        <i data-lucide="plus" class="w-7 h-7"></i>
-                    </button>
+        <!-- Danh sách chi tiết -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Đau Ví -->
+            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-rose-100">
+                <div class="p-5 flex justify-between items-center bg-rose-50/50">
+                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💸 Danh sách đã chi</h2>
+                    <button onclick="openModal('SPENT')" class="w-9 h-9 gradient-primary text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
                 </div>
-                <div id="list-spent" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
-                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
-                    <span class="text-[10px] uppercase text-slate-400 font-black">Tổng chi</span>
-                    <span id="sum-spent" class="text-rose-600 text-2xl font-black">0 đ</span>
-                </div>
+                <div id="list-spent" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
             </div>
 
-            <!-- Thu Quỹ -->
-            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl border-2 border-emerald-500/10">
-                <div class="p-6 flex justify-between items-center bg-white/40">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="users" class="w-5 h-5"></i></div>
-                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Tiếp Tế Quỹ</h2>
-                    </div>
+            <!-- Tiếp Quỹ -->
+            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-emerald-100">
+                <div class="p-5 flex justify-between items-center bg-emerald-50/50">
+                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💰 Tiếp tế quỹ</h2>
                     <div class="flex gap-2">
-                        <button onclick="openQuickFundModal()" class="w-11 h-11 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-sm" title="Nhập danh sách nhanh">
-                            <i data-lucide="user-plus" class="w-6 h-6"></i>
-                        </button>
-                        <button onclick="openModal('INCOME')" class="w-11 h-11 bg-emerald-500 text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
-                            <i data-lucide="plus" class="w-7 h-7"></i>
-                        </button>
+                        <button onclick="openQuickFundModal()" class="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center transition-all"><i data-lucide="users" class="w-5 h-5"></i></button>
+                        <button onclick="openModal('INCOME')" class="w-9 h-9 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
                     </div>
                 </div>
-                <div id="list-income" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
-                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] uppercase text-slate-400 font-black">Tổng nộp quỹ</span>
-                        <span id="people-count-label" class="text-[9px] text-emerald-600 font-bold uppercase tracking-tighter">0 người đã nộp lúa</span>
-                    </div>
-                    <span id="sum-income" class="text-emerald-600 text-2xl font-black">0 đ</span>
-                </div>
+                <div id="list-income" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
             </div>
 
             <!-- Dự Chi -->
-            <div class="glass-card rounded-[2.5rem] overflow-hidden flex flex-col h-full shadow-xl">
-                <div class="p-6 flex justify-between items-center bg-white/40">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="map" class="w-5 h-5"></i></div>
-                        <h2 class="font-black text-slate-800 uppercase text-xs tracking-widest">Kế hoạch ăn chơi</h2>
-                    </div>
-                    <button onclick="openModal('PLANNED')" class="w-10 h-10 bg-sky-500 text-white rounded-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-lg btn-hover">
-                        <i data-lucide="plus" class="w-7 h-7"></i>
-                    </button>
+            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-sky-100">
+                <div class="p-5 flex justify-between items-center bg-sky-50/50">
+                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">📝 Kế hoạch dự tính</h2>
+                    <button onclick="openModal('PLANNED')" class="w-9 h-9 bg-sky-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
                 </div>
-                <div id="list-planned" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar border-t border-white/20"></div>
-                <div class="bg-white/60 p-6 flex justify-between items-center font-bold text-slate-700">
-                    <span class="text-[10px] uppercase text-slate-400 font-black">Tổng dự chi</span>
-                    <span id="sum-planned" class="text-sky-600 text-2xl font-black">0 đ</span>
-                </div>
+                <div id="list-planned" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
             </div>
         </div>
     </main>
 
-    <!-- Modal -->
+    <!-- Modal Form (Toàn cục) -->
     <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity" onclick="closeModal()"></div>
-        <div class="relative bg-white/95 w-full max-w-md rounded-[40px] shadow-2xl overflow-hidden animate-slide-up border border-white">
-            <div id="modal-header" class="p-8 text-white relative overflow-hidden">
-                <div class="relative z-10 flex justify-between items-start">
-                    <div>
-                        <h2 id="modal-title" class="text-2xl font-black tracking-tight">Thêm mục mới</h2>
-                        <p id="modal-subtitle" class="text-white/90 text-xs mt-1 font-bold uppercase tracking-widest">Thông tin Đà Lạt</p>
-                    </div>
-                    <button onclick="closeModal()" class="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors">
-                        <i data-lucide="x" class="w-5 h-5"></i>
-                    </button>
-                </div>
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="relative bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-slide-up border border-slate-100">
+            <div id="modal-header" class="p-6 text-white font-black text-lg flex justify-between items-center">
+                <span id="modal-title">Thêm mục mới</span>
+                <button onclick="closeModal()" class="p-1 hover:bg-white/20 rounded-lg"><i data-lucide="x"></i></button>
             </div>
-            
-            <form id="entry-form" class="p-8 space-y-5">
+            <form id="entry-form" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
                 <input type="hidden" id="entry-type">
                 <input type="hidden" id="entry-is-quick" value="false">
                 
-                <div id="names-field" class="space-y-2 hidden">
-                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Danh sách người nộp (phẩy để ngăn cách)</label>
-                    <div class="relative">
-                        <i data-lucide="users" class="absolute left-4 top-4 w-4 h-4 text-emerald-400"></i>
-                        <textarea id="names-list" rows="3" placeholder="Ví dụ: Trân, Vân, Hương..." 
-                                  class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all font-semibold text-slate-700"></textarea>
-                    </div>
-                    <p class="text-[9px] text-emerald-500 font-bold uppercase italic px-1">Mỗi tên sẽ được tính là 1 thành viên đi cùng</p>
+                <div id="names-field" class="hidden">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Tên những người nộp (cách nhau bằng dấu phẩy)</label>
+                    <textarea id="names-list" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" rows="3" placeholder="Trân, Vân, Hương..."></textarea>
                 </div>
 
-                <div id="content-field" class="space-y-2">
-                    <label id="content-label" class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Nội dung</label>
-                    <div class="relative">
-                        <i id="content-icon" data-lucide="tag" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-sky-400"></i>
-                        <input type="text" id="content" placeholder="Ghi chú..." 
-                               class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-semibold text-slate-700">
-                    </div>
+                <div id="participants-field" class="hidden">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Ai cùng tham gia gánh kèo này?</label>
+                    <div id="participants-list-container" class="grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-100 rounded-2xl max-h-40 overflow-y-auto custom-scrollbar"></div>
+                </div>
+
+                <div id="content-field">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Nội dung / Tên người</label>
+                    <input type="text" id="content" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" placeholder="Ghi chú...">
                 </div>
                 
-                <div class="space-y-2">
-                    <label id="label-amount" class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Số tiền (VNĐ)</label>
-                    <div class="relative">
-                        <i data-lucide="coins" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-400"></i>
-                        <input type="text" id="amount" required placeholder="0" inputmode="numeric"
-                               class="w-full pl-11 pr-16 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-black text-slate-800 text-xl"
-                               oninput="handleAmountInput(this)">
-                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">đ</span>
-                    </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Số tiền (VNĐ)</label>
+                    <input type="text" id="amount" required class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 font-bold text-xl text-slate-800" placeholder="0" oninput="handleAmountInput(this)">
                 </div>
 
-                <div id="date-field" class="space-y-2">
-                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-widest ml-1">Thời gian</label>
-                    <div class="relative">
-                        <i data-lucide="calendar" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400"></i>
-                        <input type="date" id="date" 
-                               class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-4 focus:ring-sky-500/10 outline-none transition-all font-semibold text-slate-700">
-                    </div>
+                <div id="date-field">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Ngày tháng</label>
+                    <input type="date" id="date" class="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none">
                 </div>
 
-                <div class="pt-4 flex flex-col gap-3">
-                    <button id="btn-submit" type="submit" class="w-full py-5 gradient-primary text-white font-black rounded-[24px] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-sky-100 text-lg uppercase tracking-wider">
-                        Chốt kèo!
-                    </button>
-                    <button type="button" onclick="closeModal()" class="w-full py-3 text-slate-400 font-bold hover:text-slate-600 transition-colors text-sm">
-                        Hủy
-                    </button>
-                </div>
+                <button type="submit" id="btn-submit" class="w-full py-5 gradient-primary text-white font-black rounded-3xl shadow-xl shadow-sky-100 active:scale-95 transition-all text-lg tracking-wide uppercase">Lưu vào Cloud</button>
             </form>
         </div>
     </div>
 
+    <!-- Modal Chi Tiết Cá Nhân -->
+    <div id="modal-details" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="closeDetailsModal()"></div>
+        <div class="relative bg-white w-full max-w-lg rounded-[2.5rem] shadow-2xl overflow-hidden animate-slide-up flex flex-col max-h-[85vh] border border-slate-200">
+            <div class="p-6 bg-slate-800 text-white font-black text-lg flex justify-between items-center shrink-0">
+                <div class="flex flex-col">
+                    <span id="detail-person-name">Chi tiết gánh kèo</span>
+                    <span class="text-[10px] uppercase font-bold text-white/50 tracking-widest">Lịch sử ăn chơi</span>
+                </div>
+                <button onclick="closeDetailsModal()" class="p-1 hover:bg-white/20 rounded-lg"><i data-lucide="x"></i></button>
+            </div>
+            <div id="detail-list" class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-slate-50"></div>
+            <div class="p-6 bg-white border-t flex justify-between items-center shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                <span class="text-xs font-black text-slate-400 uppercase">Tổng nợ:</span>
+                <span id="detail-total-owed" class="text-2xl font-black text-rose-600">0 đ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Custom Alert -->
+    <div id="custom-alert-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCustomAlert()"></div>
+        <div class="relative bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-6 text-center animate-slide-up border border-slate-100">
+            <div class="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 mx-auto mb-4">
+                <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+            </div>
+            <h3 id="custom-alert-title" class="text-base font-black text-slate-800 mb-2">Thông báo</h3>
+            <p id="custom-alert-message" class="text-xs text-slate-500 leading-relaxed mb-6 whitespace-pre-line text-left max-h-[40vh] overflow-y-auto custom-scrollbar p-1"></p>
+            <button onclick="closeCustomAlert()" class="w-full py-3.5 bg-slate-800 text-white font-black rounded-2xl active:scale-95 transition-all text-sm tracking-wide uppercase">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Modal Custom Confirm -->
+    <div id="custom-confirm-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeCustomConfirm()"></div>
+        <div class="relative bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-6 text-center animate-slide-up border border-slate-100">
+            <div class="w-14 h-14 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 mx-auto mb-4" id="custom-confirm-icon-bg">
+                <i id="custom-confirm-icon" data-lucide="help-circle" class="w-7 h-7"></i>
+            </div>
+            <h3 id="custom-confirm-title" class="text-base font-black text-slate-800 mb-2">Xác nhận</h3>
+            <p id="custom-confirm-message" class="text-xs text-slate-500 leading-relaxed mb-6 whitespace-pre-line text-left"></p>
+            <div class="flex gap-3">
+                <button onclick="closeCustomConfirm()" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-650 font-bold rounded-2xl active:scale-95 transition-all text-sm uppercase border border-slate-200">Hủy</button>
+                <button id="custom-confirm-btn-ok" class="flex-1 py-3.5 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-2xl active:scale-95 transition-all text-sm uppercase shadow-lg shadow-indigo-100">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Supabase Initialization
+        // Cấu hình Supabase
         const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // State
         let entries = [];
         
-        // Elements
         const modal = document.getElementById('modal');
-        const modalHeader = document.getElementById('modal-header');
         const entryForm = document.getElementById('entry-form');
-        const modalTitle = document.getElementById('modal-title');
-        const entryTypeInput = document.getElementById('entry-type');
-        const entryIsQuick = document.getElementById('entry-is-quick');
-        const namesField = document.getElementById('names-field');
-        const namesList = document.getElementById('names-list');
-        const contentField = document.getElementById('content-field');
-        const contentLabel = document.getElementById('content-label');
-        const dateField = document.getElementById('date-field');
-        const amountInput = document.getElementById('amount');
         const loading = document.getElementById('loading');
 
-        function toggleLoading(show) {
-            loading.classList.toggle('hidden', !show);
+        // TRÌNH THAY THẾ CHẮC CHẮN CHO ALERT VÀ CONFIRM TRÊN IFRAME
+        let customConfirmCallback = null;
+
+        function showAlert(title, message) {
+            document.getElementById('custom-alert-title').innerText = title;
+            document.getElementById('custom-alert-message').innerText = message;
+            document.getElementById('custom-alert-modal').classList.remove('hidden');
+            lucide.createIcons();
         }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert-modal').classList.add('hidden');
+        }
+
+        function showConfirm(title, message, onConfirm, isDangerous = false) {
+            document.getElementById('custom-confirm-title').innerText = title;
+            document.getElementById('custom-confirm-message').innerText = message;
+            
+            const iconBg = document.getElementById('custom-confirm-icon-bg');
+            const icon = document.getElementById('custom-confirm-icon');
+            const okBtn = document.getElementById('custom-confirm-btn-ok');
+
+            if (isDangerous) {
+                iconBg.className = "w-14 h-14 bg-rose-50 rounded-full flex items-center justify-center text-rose-500 mx-auto mb-4";
+                icon.setAttribute('data-lucide', 'trash-2');
+                okBtn.className = "flex-1 py-3.5 bg-rose-500 hover:bg-rose-600 text-white font-black rounded-2xl active:scale-95 transition-all text-sm uppercase shadow-lg shadow-rose-100";
+            } else {
+                iconBg.className = "w-14 h-14 bg-sky-50 rounded-full flex items-center justify-center text-sky-500 mx-auto mb-4";
+                icon.setAttribute('data-lucide', 'help-circle');
+                okBtn.className = "flex-1 py-3.5 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-2xl active:scale-95 transition-all text-sm uppercase shadow-lg shadow-indigo-100";
+            }
+
+            customConfirmCallback = onConfirm;
+            document.getElementById('custom-confirm-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeCustomConfirm() {
+            document.getElementById('custom-confirm-modal').classList.add('hidden');
+            customConfirmCallback = null;
+        }
+
+        // Đăng ký sự kiện click cho nút xác nhận OK
+        document.getElementById('custom-confirm-btn-ok').onclick = () => {
+            if (customConfirmCallback) {
+                customConfirmCallback();
+            }
+            closeCustomConfirm();
+        };
+
+        function toggleLoading(show) { loading.classList.toggle('hidden', !show); }
+        function formatMoney(amount) { return Math.round(Number(amount) || 0).toLocaleString('vi-VN') + ' đ'; }
 
         async function fetchData() {
             toggleLoading(true);
-            const { data, error } = await _supabase
-                .from('travel_entries')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                console.error('Lỗi khi tải dữ liệu:', error);
-                alert('Hông tải được dữ liệu rồi mẹ ơi!');
-            } else {
+            try {
+                const { data, error } = await _supabase.from('travel_entries').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
                 entries = data || [];
                 render();
-            }
-            toggleLoading(false);
+            } catch (err) { console.error('Lỗi tải dữ liệu:', err); }
+            finally { toggleLoading(false); }
         }
 
-        function handleAmountInput(input) {
-            let value = input.value.replace(/[^0-9]/g, '');
-            if (value === "") {
-                input.value = "";
+        // HÀM XÓA - SỬA LẠI ĐỂ HOẠT ĐỘNG CHẮC CHẮN HƠN VÀ CHẨN ĐOÁN RLS CHÍNH XÁC
+        async function deleteEntry(id) {
+            if (!id) {
+                showAlert('⚠️ Lỗi ID', 'Mục này không có ID hợp lệ. Hãy thử tải lại trang (F5 hoặc bấm nút Đổi mới dữ liệu) trước khi xóa.');
                 return;
             }
-            input.value = parseInt(value, 10).toLocaleString('en-US');
+            showConfirm('Xác nhận xóa?', 'Bạn có chắc chắn muốn xóa mục này khỏi hệ thống không?', async () => {
+                toggleLoading(true);
+                try {
+                    // Sử dụng .select() để biết có thực sự xóa được dòng nào hay không
+                    const { data, error } = await _supabase.from('travel_entries').delete().eq('id', id).select();
+                    if (error) throw error;
+                    
+                    // Nếu Supabase không báo lỗi nhưng mảng dữ liệu trả về rỗng, chứng tỏ RLS đang chặn quyền Quyết định DELETE
+                    if (!data || data.length === 0) {
+                        showAlert('⚠️ Không thể xóa mục này!', 
+                              'Nguyên nhân: Bảng "travel_entries" của bạn trên Supabase đang bật Row Level Security (RLS) nhưng BẠN CHƯA CHO PHÉP QUYỀN XÓA (DELETE Policy).\n\n' +
+                              'Cách khắc phục cực kỳ đơn giản:\n' +
+                              '1. Vào Supabase Dashboard trang của bạn.\n' +
+                              '2. Đi tới phần "Database" -> "Policies" (ở thanh dọc bên trái).\n' +
+                              '3. Nhấp "New Policy" tại bảng "travel_entries" -> Chọn "Create a policy from scratch" (để tùy chỉnh).\n' +
+                              '4. Nhập thông tin sau:\n' +
+                              '   • Policy name: Allow delete access for all\n' +
+                              '   • Allowed operations: DELETE\n' +
+                              '   • Target roles: public (hoặc anon)\n' +
+                              '   • USING expression: true\n' +
+                              '5. Nhấp "Save policy" ở dưới góc phải là xong xuôi!');
+                        return;
+                    }
+                    
+                    // Xóa tại chỗ để phản hồi nhanh
+                    entries = entries.filter(e => e.id !== id);
+                    render();
+                } catch (err) {
+                    showAlert('⚠️ Lỗi Cloud', 'Lỗi khi xóa từ Cloud: ' + err.message);
+                    fetchData(); // Tải lại nếu lỗi
+                } finally {
+                    toggleLoading(false);
+                }
+            }, true);
         }
 
-        function getRawAmount(formattedValue) {
-            return parseFloat(formattedValue.replace(/,/g, '')) || 0;
-        }
+        // Xem chi tiết gánh kèo
+        function showPersonDetails(name) {
+            const detailModal = document.getElementById('modal-details');
+            const nameEl = document.getElementById('detail-person-name');
+            const listEl = document.getElementById('detail-list');
+            const totalEl = document.getElementById('detail-total-owed');
+            
+            nameEl.innerText = 'Bảng chi của: ' + name;
+            listEl.innerHTML = '';
+            
+            let totalOwed = 0;
+            const mySpent = entries.filter(e => {
+                if (e.type !== 'SPENT') return false;
+                const pList = e.participants ? e.participants.split(',') : getUniquePeople();
+                return pList.includes(name);
+            });
 
-        function openQuickFundModal() {
-            entryTypeInput.value = 'INCOME';
-            entryIsQuick.value = 'true';
-            namesField.classList.remove('hidden');
-            contentField.classList.add('hidden');
-            dateField.classList.add('hidden');
-            modalTitle.innerText = 'Tiếp Tế Quỹ Nhanh';
-            document.getElementById('modal-subtitle').innerText = 'Nhập tên các "đại gia" đóng quỹ';
-            document.getElementById('label-amount').innerText = 'Mức đóng / người';
-            modalHeader.className = 'p-8 text-white relative overflow-hidden gradient-emerald';
-            modal.classList.remove('hidden');
+            if (mySpent.length === 0) {
+                listEl.innerHTML = '<div class="p-10 text-center text-slate-400 italic">Chưa gánh kèo nào cả. Đại gia!</div>';
+            } else {
+                mySpent.forEach(e => {
+                    const pList = e.participants ? e.participants.split(',') : getUniquePeople();
+                    const share = e.amount / (pList.length || 1);
+                    totalOwed += share;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'p-5 bg-white border border-slate-200 rounded-2xl shadow-sm flex flex-col gap-2 animate-slide-up';
+                    item.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <span class="font-bold text-slate-800 text-sm">${e.content}</span>
+                            <span class="font-black text-rose-500">${formatMoney(share)}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-[9px] text-slate-400 uppercase font-black">
+                            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-2.5 h-2.5"></i> ${e.date || '---'}</span>
+                            <span>Kèo: ${formatMoney(e.amount)} (/${pList.length} người)</span>
+                        </div>
+                    `;
+                    listEl.appendChild(item);
+                });
+            }
+            
+            totalEl.innerText = formatMoney(totalOwed);
+            detailModal.classList.remove('hidden');
             lucide.createIcons();
-            namesList.focus();
+        }
+
+        function closeDetailsModal() { document.getElementById('modal-details').classList.add('hidden'); }
+
+        function handleAmountInput(input) {
+            let val = input.value.replace(/[^0-9]/g, '');
+            input.value = val ? parseInt(val).toLocaleString('en-US') : '';
+        }
+
+        function getUniquePeople() { 
+            return [...new Set(entries.filter(e => e.type === 'INCOME').map(e => e.content))]; 
         }
 
         function openModal(type) {
-            entryTypeInput.value = type;
-            entryIsQuick.value = 'false';
-            namesField.classList.add('hidden');
-            contentField.classList.remove('hidden');
-            dateField.classList.remove('hidden');
-            document.getElementById('modal-subtitle').innerText = 'Chi tiết kèo';
-            document.getElementById('label-amount').innerText = 'Số tiền';
+            document.getElementById('entry-type').value = type;
+            document.getElementById('entry-is-quick').value = 'false';
+            document.getElementById('names-field').classList.add('hidden');
+            document.getElementById('content-field').classList.remove('hidden');
             
+            document.getElementById('modal-title').innerText = type === 'SPENT' ? 'Ghi nhận chi tiêu' : (type === 'INCOME' ? 'Nộp thêm quỹ' : 'Kế hoạch dự kiến');
+            document.getElementById('modal-header').className = `p-6 text-white font-black text-lg flex justify-between items-center ${type === 'SPENT' ? 'bg-rose-500' : (type === 'INCOME' ? 'bg-emerald-500' : 'bg-sky-500')}`;
+            
+            document.getElementById('participants-field').classList.toggle('hidden', type !== 'SPENT');
             if (type === 'SPENT') {
-                modalTitle.innerText = 'Chi Tiêu Thực Tế';
-                contentLabel.innerText = "Tiêu pha việc gì?";
-                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-rose-500 to-pink-400';
-                document.getElementById('content').placeholder = "Vé tàu, Ăn trưa, Khách sạn...";
-            } else if (type === 'PLANNED') {
-                modalTitle.innerText = 'Dự Tính Ăn Chơi';
-                contentLabel.innerText = "Dự định tốn bao nhiêu?";
-                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-sky-500 to-blue-400';
-                document.getElementById('content').placeholder = "Dự kiến vé bay...";
-            } else if (type === 'INCOME') {
-                modalTitle.innerText = 'Nộp Quỹ Lẻ';
-                contentLabel.innerText = "Tên người nộp";
-                modalHeader.className = 'p-8 text-white relative overflow-hidden bg-gradient-to-br from-emerald-500 to-teal-400';
-                document.getElementById('content').placeholder = "Nhập tên người nộp...";
-                dateField.classList.add('hidden');
+                const container = document.getElementById('participants-list-container');
+                container.innerHTML = '';
+                const people = getUniquePeople();
+                if (people.length === 0) {
+                    container.innerHTML = '<p class="text-[10px] text-slate-400 italic p-2 col-span-2">Cần nộp quỹ để có danh sách thành viên</p>';
+                } else {
+                    people.forEach(p => {
+                        container.innerHTML += `
+                            <label class="flex items-center gap-2 p-3 bg-white border border-slate-50 rounded-xl cursor-pointer hover:border-sky-300 transition-all">
+                                <input type="checkbox" value="${p}" class="w-5 h-5 rounded border-slate-300 text-sky-600" checked>
+                                <span class="text-xs font-bold text-slate-600 truncate">${p}</span>
+                            </label>
+                        `;
+                    });
+                }
             }
-            
             document.getElementById('date').value = new Date().toISOString().split('T')[0];
             modal.classList.remove('hidden');
             lucide.createIcons();
-            document.getElementById('content').focus();
+        }
+
+        function openQuickFundModal() {
+            openModal('INCOME');
+            document.getElementById('entry-is-quick').value = 'true';
+            document.getElementById('names-field').classList.remove('hidden');
+            document.getElementById('content-field').classList.add('hidden');
+            document.getElementById('modal-title').innerText = 'Nộp quỹ đồng loạt';
         }
 
         function closeModal() {
@@ -426,163 +467,170 @@
 
         entryForm.onsubmit = async (e) => {
             e.preventDefault();
-            const type = entryTypeInput.value;
-            const amount = getRawAmount(amountInput.value);
-            const date = document.getElementById('date').value;
-            const btnSubmit = document.getElementById('btn-submit');
-
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Đang lưu...";
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.innerText = "Đang gửi...";
             toggleLoading(true);
 
-            let newRows = [];
-            if (entryIsQuick.value === 'true') {
-                const names = namesList.value.split(',').map(n => n.trim()).filter(n => n !== '');
-                if (names.length === 0) {
-                    alert('Vui lòng nhập tên thành viên!');
-                    toggleLoading(false);
-                    btnSubmit.disabled = false;
-                    return;
-                }
-                names.forEach(name => {
-                    newRows.push({ type: 'INCOME', content: name, amount, date: date || null });
-                });
-            } else {
-                newRows.push({ type, content: document.getElementById('content').value, amount, date: date || null });
-            }
+            const type = document.getElementById('entry-type').value;
+            const isQuick = document.getElementById('entry-is-quick').value === 'true';
+            const amount = parseFloat(document.getElementById('amount').value.replace(/,/g, '')) || 0;
+            const date = document.getElementById('date').value;
 
-            const { error } = await _supabase.from('travel_entries').insert(newRows);
-            
-            if (error) {
-                alert('Lỗi lưu cloud rồi: ' + error.message);
-            } else {
+            try {
+                let rows = [];
+                if (isQuick) {
+                    const names = document.getElementById('names-list').value.split(',').map(n => n.trim()).filter(n => n);
+                    if (names.length === 0) throw new Error("Chưa nhập tên ai cả!");
+                    names.forEach(name => rows.push({ type: 'INCOME', content: name, amount, date }));
+                } else {
+                    let parts = null;
+                    if (type === 'SPENT') {
+                        const checks = document.querySelectorAll('#participants-list-container input:checked');
+                        parts = Array.from(checks).map(c => c.value).join(',');
+                        if (!parts && getUniquePeople().length > 0) throw new Error("Chọn ít nhất 1 người tham gia!");
+                    }
+                    const content = document.getElementById('content').value;
+                    if (!content) throw new Error("Nhập nội dung đã!");
+                    rows.push({ type, content, amount, date, participants: parts });
+                }
+                const { error } = await _supabase.from('travel_entries').insert(rows);
+                if (error) throw error;
                 closeModal();
                 await fetchData();
+            } catch (err) { showAlert('⚠️ Có lỗi xảy ra', 'Hic: ' + err.message); }
+            finally { 
+                btn.disabled = false;
+                btn.innerText = "Lưu vào Cloud";
+                toggleLoading(false); 
             }
-            
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = "Chốt kèo!";
-            toggleLoading(false);
         };
 
-        async function deleteEntry(id) {
-            if (confirm('Xóa mục này nha?')) {
-                toggleLoading(true);
-                const { error } = await _supabase.from('travel_entries').delete().eq('id', id);
-                if (error) alert('Xóa hông được: ' + error.message);
-                else await fetchData();
-                toggleLoading(false);
-            }
-        }
-
         async function clearAllData() {
-            if (confirm('Bạn muốn xóa trắng hết dữ liệu trên Cloud?')) {
+            showConfirm('Cảnh báo nguy hiểm!', 'Bạn có chắc chắn muốn xóa sạch TOÀN BỘ dữ liệu trên Cloud? Thao tác này KHÔNG thể hoàn tác!', async () => {
                 toggleLoading(true);
-                const { error } = await _supabase.from('travel_entries').delete().neq('type', 'SYSTEM_DUMMY_RESERVED');
-                if (error) alert('Lỗi xóa sạch: ' + error.message);
-                else await fetchData();
-                toggleLoading(false);
-            }
-        }
-
-        function formatMoney(amount) {
-            return Math.round(amount).toLocaleString('vi-VN') + ' đ';
+                try {
+                    const { data, error } = await _supabase.from('travel_entries').delete().neq('type', 'SYSTEM_RESERVED').select();
+                    if (error) throw error;
+                    
+                    if (!data || data.length === 0) {
+                        showAlert('⚠️ Không thể reset dữ liệu!', 
+                              'Nguyên nhân: Bảng "travel_entries" của bạn đang được bật RLS (Row Level Security) nhưng BẠN CHƯA CHO PHÉP QUYỀN XÓA (DELETE Policy cho role "anon").\n\n' +
+                              'Vui lòng làm theo hướng dẫn cài đặt DELETE Policy cho vai trò "anon" trên trang chủ Supabase Dashboard nhé!');
+                        return;
+                    }
+                    
+                    await fetchData();
+                } catch (err) { showAlert('⚠️ Lỗi xóa dữ liệu', 'Lỗi xóa: ' + err.message); }
+                finally { toggleLoading(false); }
+            }, true);
         }
 
         function render() {
-            const lists = {
-                SPENT: document.getElementById('list-spent'),
-                PLANNED: document.getElementById('list-planned'),
-                INCOME: document.getElementById('list-income')
-            };
+            const uniquePeople = getUniquePeople();
+            const personStats = {};
+            uniquePeople.forEach(p => personStats[p] = { paid: 0, owed: 0 });
 
-            const sums = {
-                SPENT: document.getElementById('sum-spent'),
-                PLANNED: document.getElementById('sum-planned'),
-                INCOME: document.getElementById('sum-income')
-            };
+            let totalSpent = 0, totalIncome = 0, totalPlanned = 0;
+            const lists = { SPENT: document.getElementById('list-spent'), INCOME: document.getElementById('list-income'), PLANNED: document.getElementById('list-planned') };
+            Object.values(lists).forEach(l => l.innerHTML = '');
 
-            Object.values(lists).forEach(list => list.innerHTML = '');
-            const totals = { SPENT: 0, PLANNED: 0, INCOME: 0 };
-
-            entries.forEach(entry => {
-                totals[entry.type] += Number(entry.amount);
-            });
-
-            const peopleCount = entries.filter(e => e.type === 'INCOME').length;
-            document.getElementById('people-count-display').innerText = peopleCount;
-            document.getElementById('people-count-label').innerText = `${peopleCount} người đã nộp lúa`;
-
-            entries.forEach(entry => {
-                const container = lists[entry.type];
-                const row = document.createElement('div');
-                row.className = 'group flex items-center justify-between px-5 py-4 border-b border-white/20 hover:bg-white/40 transition-all';
-                row.innerHTML = `
-                    <div class="flex-1 min-w-0 pr-3">
-                        <p class="text-sm font-bold text-slate-800 truncate tracking-tight">${entry.content}</p>
-                        ${entry.date ? `<span class="text-[9px] text-slate-400 font-bold uppercase">${entry.date}</span>` : ''}
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <span class="text-sm font-black text-slate-900">${formatMoney(entry.amount)}</span>
-                        <button onclick="deleteEntry('${entry.id}')" class="text-slate-300 hover:text-red-500 transition-colors">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-
-            ['SPENT', 'PLANNED', 'INCOME'].forEach(type => {
-                if (lists[type].innerHTML === '') {
-                    lists[type].innerHTML = `<div class="p-10 text-center text-slate-300 italic text-xs">Vắng vẻ quá, thêm dữ liệu đi nè...</div>`;
+            entries.forEach(e => {
+                const amt = Number(e.amount) || 0;
+                if (e.type === 'SPENT') {
+                    totalSpent += amt;
+                    const pList = e.participants ? e.participants.split(',') : uniquePeople;
+                    const share = amt / (pList.length || 1);
+                    pList.forEach(p => { if(personStats[p]) personStats[p].owed += share; });
+                } else if (e.type === 'INCOME') {
+                    totalIncome += amt;
+                    if(personStats[e.content]) personStats[e.content].paid += amt;
+                } else if (e.type === 'PLANNED') {
+                    totalPlanned += amt;
                 }
+
+                // Render danh sách
+                const item = document.createElement('div');
+                item.className = 'px-4 py-4 border-b border-slate-100 flex justify-between items-center bg-white/50 animate-slide-up group';
+                
+                const info = document.createElement('div');
+                info.className = 'flex-1 min-w-0';
+                info.innerHTML = `
+                    <p class="text-[13px] font-bold text-slate-800 truncate">${e.content || '...'}</p>
+                    <p class="text-[9px] text-slate-400 font-black uppercase flex items-center gap-1 mt-0.5"><i data-lucide="clock" class="w-2.5 h-2.5"></i> ${e.date || ''}</p>
+                `;
+
+                const actions = document.createElement('div');
+                actions.className = 'flex items-center gap-3';
+                
+                const amountSpan = document.createElement('span');
+                amountSpan.className = 'text-[13px] font-black text-slate-900';
+                amountSpan.innerText = formatMoney(amt);
+                
+                const delBtn = document.createElement('button');
+                delBtn.className = 'w-8 h-8 flex items-center justify-center text-red-200 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all';
+                delBtn.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
+                delBtn.onclick = () => deleteEntry(e.id);
+
+                actions.appendChild(amountSpan);
+                actions.appendChild(delBtn);
+                
+                item.appendChild(info);
+                item.appendChild(actions);
+                lists[e.type]?.appendChild(item);
             });
 
-            sums.SPENT.innerText = formatMoney(totals.SPENT);
-            sums.PLANNED.innerText = formatMoney(totals.PLANNED);
-            sums.INCOME.innerText = formatMoney(totals.INCOME);
-            
-            document.getElementById('total-spent').innerText = formatMoney(totals.SPENT);
-            document.getElementById('total-income').innerText = formatMoney(totals.INCOME);
-            
-            const pCountForCalc = peopleCount || 1; 
-            document.getElementById('planned-per-person').innerText = formatMoney(totals.PLANNED / pCountForCalc);
-
-            const spentPerPerson = totals.SPENT / pCountForCalc;
-            const avgIncomePerPerson = totals.INCOME / pCountForCalc;
-            const balance = avgIncomePerPerson - spentPerPerson;
-
-            document.getElementById('spent-per-person').innerText = formatMoney(spentPerPerson);
-            document.getElementById('income-per-person').innerText = formatMoney(avgIncomePerPerson);
-            
-            const resultBox = document.getElementById('result-box');
-            const resultLabel = document.getElementById('result-label');
-            const resultValue = document.getElementById('result-value');
-            const statusTitle = document.getElementById('settle-status-title');
-
-            if (peopleCount === 0) {
-                statusTitle.innerText = "Chưa có ai 'đặt gạch' nộp quỹ hết trơn á!";
-                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-slate-400 border-none";
-                resultValue.innerText = "Đang hóng...";
-            } else if (balance >= 0) {
-                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-emerald-500 border-none animate-pulse";
-                resultLabel.innerText = "Dư trả lại mỗi người";
-                resultValue.innerText = formatMoney(balance);
-                statusTitle.innerText = "Tiền tiêu hổng hết, chia lại cho bớt giàu nha! 🧧";
-                statusTitle.className = "text-2xl font-black text-emerald-600 lg:text-3xl";
+            // Render Bảng Phong Thần
+            const balances = document.getElementById('individual-balances');
+            balances.innerHTML = '';
+            if (uniquePeople.length === 0) {
+                balances.innerHTML = '<div class="col-span-full p-10 text-center text-slate-400 italic text-sm">Chưa có ai nộp quỹ cả...</div>';
             } else {
-                resultBox.className = "px-8 py-5 rounded-[2.5rem] text-center shadow-2xl flex flex-col justify-center min-w-[200px] bg-rose-500 border-none";
-                resultLabel.innerText = "Phải đóng thêm";
-                resultValue.innerText = formatMoney(Math.abs(balance));
-                statusTitle.innerText = "Quỹ cháy túi rồi, nộp 'lúa' nhanh hông là ở lại đảo á! 💸";
-                statusTitle.className = "text-2xl font-black text-rose-600 lg:text-3xl";
+                uniquePeople.sort().forEach(name => {
+                    const s = personStats[name];
+                    const diff = s.paid - s.owed;
+                    const card = document.createElement('div');
+                    card.className = `glass-card p-5 rounded-3xl border-2 transition-all animate-slide-up ${diff >= 0 ? 'border-emerald-100' : 'border-rose-100'}`;
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="font-black text-slate-800 text-base truncate max-w-[120px]">${name}</span>
+                            <span class="px-2 py-1 rounded-lg text-[8px] font-black uppercase ${diff >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${diff >= 0 ? 'Tiền dư' : 'Cần bù'}</span>
+                        </div>
+                        <div class="space-y-3 mb-4">
+                            <div class="flex justify-between items-center text-[10px] font-bold">
+                                <span class="text-slate-400">Đã nộp:</span>
+                                <span class="text-emerald-600">${formatMoney(s.paid)}</span>
+                            </div>
+                            <div class="flex flex-col gap-1 p-2 bg-slate-50 rounded-xl border border-slate-100">
+                                <div class="flex justify-between items-center text-[10px] font-bold">
+                                    <span class="text-slate-400">Gánh kèo:</span>
+                                    <span class="text-rose-500">${formatMoney(s.owed)}</span>
+                                </div>
+                                <button onclick="showPersonDetails('${name}')" class="w-full mt-1 py-1.5 bg-white text-[9px] font-black text-indigo-500 rounded-lg border border-indigo-100 flex items-center justify-center gap-1 hover:bg-indigo-500 hover:text-white transition-all uppercase">
+                                    <i data-lucide="list-checks" class="w-3 h-3"></i> Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-dashed border-slate-200 flex justify-between items-center">
+                            <span class="text-[9px] font-black text-slate-400 uppercase">Còn lại</span>
+                            <span class="text-xl font-black ${diff >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatMoney(Math.abs(diff))}</span>
+                        </div>
+                    `;
+                    balances.appendChild(card);
+                });
             }
 
+            // Summary
+            document.getElementById('total-spent').innerText = formatMoney(totalSpent);
+            document.getElementById('total-income').innerText = formatMoney(totalIncome);
+            document.getElementById('people-count-display').innerText = uniquePeople.length;
+            document.getElementById('planned-per-person').innerText = formatMoney(totalPlanned / (uniquePeople.length || 1));
             lucide.createIcons();
         }
 
-        // Khởi tạo ứng dụng
+        // Khởi chạy lần đầu
         fetchData();
     </script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
