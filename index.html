@@ -72,88 +72,131 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-white/50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
-                    <i data-lucide="palmtree" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-slate-800 tracking-tight leading-tight">Phú Yên 2026</h1>
-                    <p class="text-[9px] text-sky-600 font-bold uppercase tracking-wider">Hệ thống quyết toán</p>
-                </div>
+    <!-- Home Screen (Trip Selector) -->
+    <div id="home-screen" class="max-w-4xl mx-auto px-4 py-10 space-y-8 animate-slide-up">
+        <!-- Header of home screen -->
+        <div class="text-center space-y-3">
+            <div class="inline-flex w-16 h-16 gradient-primary rounded-2xl items-center justify-center text-white shadow-xl shadow-sky-200 mb-2">
+                <i data-lucide="compass" class="w-8 h-8"></i>
             </div>
-            <div class="flex gap-2">
-                <button onclick="fetchData()" class="p-2 text-slate-500 hover:bg-white rounded-lg transition-all"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button>
-                <button onclick="clearAllData()" class="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight leading-none bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">QUYẾT TOÁN ĐỒNG BỌN</h1>
+        </div>
+
+        <!-- Active Trips Grid -->
+        <div class="glass-card rounded-[2rem] p-6 md:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <h2 class="text-xs font-black uppercase tracking-[0.2em] text-indigo-500 flex items-center gap-2">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i> CHỌN CHUYẾN ĐI CỦA BẠN
+                </h2>
+                <button onclick="openNewTripModal()" class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm chuyến mới
+                </button>
+            </div>
+
+            <div id="trips-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Chuyến đi sẽ được gen tự động ở đây -->
             </div>
         </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
         
-        <!-- Dashboard Summary -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-indigo-500">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đồng bọn</span>
-                <div class="text-2xl font-black text-slate-800" id="people-count-display">0</div>
-            </div>
-            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-rose-500">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đã chi</span>
-                <div class="text-xl font-black text-rose-600" id="total-spent">0 đ</div>
-            </div>
-            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-emerald-500">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Tổng quỹ</span>
-                <div class="text-xl font-black text-emerald-600" id="total-income">0 đ</div>
-            </div>
-            <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-sky-500">
-                <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">TB dự tính</span>
-                <div class="text-xl font-black text-sky-600" id="planned-per-person">0 đ</div>
-            </div>
+        <div class="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            <span>© 2026 travel accountant system • design with love</span>
         </div>
+    </div>
 
-        <!-- Bảng Phong Thần -->
-        <div class="glass-card rounded-[2rem] p-6 shadow-sm border border-white">
-            <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 mb-5 flex items-center gap-2">
-                <i data-lucide="users" class="w-4 h-4"></i> QUYẾT TOÁN CÁ NHÂN
-            </h2>
-            <div id="individual-balances" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-        </div>
-
-        <!-- Danh sách chi tiết -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Đau Ví -->
-            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-rose-100">
-                <div class="p-5 flex justify-between items-center bg-rose-50/50">
-                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💸 Danh sách đã chi</h2>
-                    <button onclick="openModal('SPENT')" class="w-9 h-9 gradient-primary text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
-                </div>
-                <div id="list-spent" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
-            </div>
-
-            <!-- Tiếp Quỹ -->
-            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-emerald-100">
-                <div class="p-5 flex justify-between items-center bg-emerald-50/50">
-                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💰 Tiếp tế quỹ</h2>
-                    <div class="flex gap-2">
-                        <button onclick="openQuickFundModal()" class="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center transition-all"><i data-lucide="users" class="w-5 h-5"></i></button>
-                        <button onclick="openModal('INCOME')" class="w-9 h-9 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
+    <!-- Detail Screen (Trip Details - Default Hidden) -->
+    <div id="detail-screen" class="hidden">
+        <!-- Header -->
+        <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-md border-b border-white/50">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <button onclick="goBackToHome()" class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-all" title="Quay lại">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-sky-200">
+                        <i data-lucide="palmtree" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <h1 class="font-extrabold text-slate-800 tracking-tight leading-tight" id="detail-header-title">Phú Yên 2026</h1>
+                            <!-- Ngôi sao bí mật mở khóa Admin Mode -->
+                            <button onclick="handleStarClick()" class="text-amber-400 hover:scale-125 hover:text-amber-500 transition-all focus:outline-none" title="Mở khóa chế độ Admin">
+                                <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                            </button>
+                        </div>
+                        <p class="text-[9px] text-sky-600 font-bold uppercase tracking-wider">Hệ thống quyết toán • <span id="admin-badge-text">Khách 👁️</span></p>
                     </div>
                 </div>
-                <div id="list-income" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
+                <div class="flex gap-2">
+                    <button onclick="fetchData()" class="p-2 text-slate-500 hover:bg-white rounded-lg transition-all"><i data-lucide="rotate-cw" class="w-5 h-5"></i></button>
+                    <button onclick="clearAllData()" id="btn-clear-all" class="p-2 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all hidden"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+            
+            <!-- Dashboard Summary -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-indigo-500">
+                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đồng bọn</span>
+                    <div class="text-2xl font-black text-slate-800" id="people-count-display">0</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-rose-500">
+                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Đã chi</span>
+                    <div class="text-xl font-black text-rose-600" id="total-spent">0 đ</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-emerald-500">
+                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Tổng quỹ</span>
+                    <div class="text-xl font-black text-emerald-600" id="total-income">0 đ</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl flex flex-col justify-center border-l-4 border-l-sky-500">
+                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-tighter">TB dự tính</span>
+                    <div class="text-xl font-black text-sky-600" id="planned-per-person">0 đ</div>
+                </div>
             </div>
 
-            <!-- Dự Chi -->
-            <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-sky-100">
-                <div class="p-5 flex justify-between items-center bg-sky-50/50">
-                    <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">📝 Kế hoạch dự tính</h2>
-                    <button onclick="openModal('PLANNED')" class="w-9 h-9 bg-sky-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
-                </div>
-                <div id="list-planned" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
+            <!-- Bảng Phong Thần -->
+            <div class="glass-card rounded-[2rem] p-6 shadow-sm border border-white">
+                <h2 class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 mb-5 flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4"></i> QUYẾT TOÁN CÁ NHÂN
+                </h2>
+                <div id="individual-balances" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
-        </div>
-    </main>
+
+            <!-- Danh sách chi tiết -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Đau Ví -->
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-rose-100">
+                    <div class="p-5 flex justify-between items-center bg-rose-50/50">
+                        <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💸 Danh sách đã chi</h2>
+                        <button onclick="openModal('SPENT')" id="btn-add-spent" class="w-9 h-9 gradient-primary text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all hidden"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                    </div>
+                    <div id="list-spent" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
+                </div>
+
+                <!-- Tiếp Quỹ -->
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-emerald-100">
+                    <div class="p-5 flex justify-between items-center bg-emerald-50/50">
+                        <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">💰 Tiếp tế quỹ</h2>
+                        <div class="flex gap-2 hidden" id="income-actions-container">
+                            <button onclick="openQuickFundModal()" class="w-9 h-9 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center transition-all"><i data-lucide="users" class="w-5 h-5"></i></button>
+                            <button onclick="openModal('INCOME')" class="w-9 h-9 bg-emerald-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                    <div id="list-income" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
+                </div>
+
+                <!-- Dự Chi -->
+                <div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full border border-sky-100">
+                    <div class="p-5 flex justify-between items-center bg-sky-50/50">
+                        <h2 class="font-black text-slate-700 uppercase text-[10px] tracking-widest">📝 Kế hoạch dự tính</h2>
+                        <button onclick="openModal('PLANNED')" id="btn-add-planned" class="w-9 h-9 bg-sky-500 text-white rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-all hidden"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                    </div>
+                    <div id="list-planned" class="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar bg-white/30"></div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <!-- Modal Form (Toàn cục) -->
     <div id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
@@ -239,10 +282,57 @@
             <h3 id="custom-confirm-title" class="text-base font-black text-slate-800 mb-2">Xác nhận</h3>
             <p id="custom-confirm-message" class="text-xs text-slate-500 leading-relaxed mb-6 whitespace-pre-line text-left"></p>
             <div class="flex gap-3">
-                <button onclick="closeCustomConfirm()" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-650 font-bold rounded-2xl active:scale-95 transition-all text-sm uppercase border border-slate-200">Hủy</button>
+                <button onclick="closeCustomConfirm()" class="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-2xl active:scale-95 transition-all text-sm uppercase border border-slate-200">Hủy</button>
                 <button id="custom-confirm-btn-ok" class="flex-1 py-3.5 bg-indigo-500 hover:bg-indigo-600 text-white font-black rounded-2xl active:scale-95 transition-all text-sm uppercase shadow-lg shadow-indigo-100">Đồng ý</button>
             </div>
         </div>
+    </div>
+
+    <!-- Modal Thêm Chuyến Đi Mới -->
+    <div id="new-trip-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onclick="closeNewTripModal()"></div>
+        <div class="relative bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-slide-up border border-slate-100">
+            <div class="p-6 bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-black text-lg flex justify-between items-center">
+                <span>Thêm chuyến mới</span>
+                <button onclick="closeNewTripModal()" class="p-1 hover:bg-white/20 rounded-lg"><i data-lucide="x"></i></button>
+            </div>
+            <form id="new-trip-form" class="p-6 space-y-4" onsubmit="handleCreateTrip(event)">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Mã Chuyến Đi (VD: PY, CD, DL)</label>
+                    <input type="text" id="trip-id-input" required class="w-full p-4 bg-slate-50 border border-slate-150 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 font-bold uppercase transition-all" placeholder="PY">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Tên Chuyến Đi (VD: Phú Yên 2026)</label>
+                    <input type="text" id="trip-name-input" required class="w-full p-4 bg-slate-50 border border-slate-155 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" placeholder="Phú Yên 2026">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Mô tả chuyến đi</label>
+                    <input type="text" id="trip-desc-input" class="w-full p-4 bg-slate-50 border border-slate-155 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" placeholder="Chuyến đi khám phá xứ nẫu...">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Emoji Biểu lượng (VD: 🏝️, 🌾, ⛵)</label>
+                    <input type="text" id="trip-emoji-input" class="w-full p-4 bg-slate-50 border border-slate-155 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" placeholder="🏝️">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Ảnh nền URL (Tùy chọn)</label>
+                    <input type="text" id="trip-bg-input" class="w-full p-4 bg-slate-50 border border-slate-155 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 transition-all" placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <button type="submit" class="w-full py-5 gradient-primary text-white font-black rounded-3xl shadow-xl shadow-sky-100 active:scale-95 transition-all text-lg tracking-wide uppercase">Tạo Chuyến Đi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Navigation Bar inside Admin Mode -->
+    <div id="admin-toast-nav" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 text-white rounded-full px-5 py-3 shadow-2xl flex items-center gap-4 z-50 animate-slide-up hidden whitespace-nowrap max-w-[95%]">
+        <span class="flex items-center gap-2 text-xs font-black tracking-wide text-amber-400 select-none">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+            ĐANG Ở CHẾ ĐỘ ADMIN
+        </span>
+        <div class="h-5 w-px bg-white/10"></div>
+        <button onclick="goBackToHome()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white font-extrabold text-xs rounded-full transition-all uppercase flex items-center gap-1.5 shadow-lg tracking-wider">
+            <i data-lucide="check" class="w-4 h-4"></i> Hoàn tất & Về Home
+        </button>
     </div>
 
     <script>
@@ -251,13 +341,27 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Core data
+        let allEntries = [];
         let entries = [];
-        
+        let selectedTrip = null;
+        let isAdminMode = false;
+        let adminClickCount = 0;
+
+        // Cài đặt Chuyến đi mặc định
+        const defaultTrips = [
+            { id: 'PY', name: 'Phú Yên 2026', desc: 'Chuyến đi xứ nẫu hoa vàng cỏ xanh', bg: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070', emoji: '🌾' }
+        ];
+
+        let trips = JSON.parse(localStorage.getItem('travel_trips')) || defaultTrips;
+        // Loại bỏ Côn Đảo (CD) hoàn toàn khỏi bộ nhớ nếu còn tồn đọng
+        trips = trips.filter(t => t.id !== 'CD');
+        localStorage.setItem('travel_trips', JSON.stringify(trips));
+
         const modal = document.getElementById('modal');
         const entryForm = document.getElementById('entry-form');
         const loading = document.getElementById('loading');
 
-        // TRÌNH THAY THẾ CHẮC CHẮN CHO ALERT VÀ CONFIRM TRÊN IFRAME
         let customConfirmCallback = null;
 
         function showAlert(title, message) {
@@ -299,7 +403,6 @@
             customConfirmCallback = null;
         }
 
-        // Đăng ký sự kiện click cho nút xác nhận OK
         document.getElementById('custom-confirm-btn-ok').onclick = () => {
             if (customConfirmCallback) {
                 customConfirmCallback();
@@ -310,60 +413,224 @@
         function toggleLoading(show) { loading.classList.toggle('hidden', !show); }
         function formatMoney(amount) { return Math.round(Number(amount) || 0).toLocaleString('vi-VN') + ' đ'; }
 
+        // --- HÀM CHO VŨ TRỤ CHUYẾN ĐI (TRIPS) ---
+
+        function renderTrips() {
+            const grid = document.getElementById('trips-grid');
+            grid.innerHTML = '';
+            
+            trips.forEach(t => {
+                const card = document.createElement('div');
+                card.className = "relative rounded-3xl overflow-hidden shadow-md border-2 border-white hover:shadow-xl transition-all h-40 group cursor-pointer active:scale-95 duration-200";
+                card.style.backgroundImage = `url('${t.bg || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070'}')`;
+                card.style.backgroundSize = "cover";
+                card.style.backgroundPosition = "center";
+                
+                card.innerHTML = `
+                    <div class="absolute inset-0 bg-slate-900/60 group-hover:bg-slate-900/50 transition-all duration-200"></div>
+                    <div class="absolute inset-0 p-6 flex flex-col justify-between text-white">
+                        <div class="flex justify-between items-start">
+                            <span class="text-3xl">${t.emoji || '🏝️'}</span>
+                            <div class="flex gap-2 items-center">
+                                <span class="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider">${t.id}</span>
+                                ${t.id !== 'PY' ? `<button onclick="deleteTrip('${t.id}', event)" class="p-1 hover:bg-red-500 rounded-lg text-white/80 hover:text-white transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold tracking-tight leading-tight">${t.name}</h3>
+                            <p class="text-[11px] text-white/80 line-clamp-1 mt-1 font-medium">${t.desc || 'Chưa có mô tả'}</p>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => selectTrip(t.id);
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function selectTrip(tripId) {
+            selectedTrip = trips.find(t => t.id === tripId) || trips[0];
+            
+            // Cập nhật background body theo chuyến đi
+            document.body.style.backgroundImage = `url('${selectedTrip.bg || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070'}')`;
+            
+            // Thiết lập trạng thái ban đầu của detail screen
+            isAdminMode = false;
+            adminClickCount = 0;
+
+            // Chuyển màn hình
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('detail-screen').classList.remove('hidden');
+
+            // Cập nhật info tiêu đề trên Detail View
+            document.getElementById('detail-header-title').innerText = selectedTrip.name;
+
+            updateAdminUI();
+            fetchData();
+        }
+
+        function goBackToHome() {
+            isAdminMode = false;
+            adminClickCount = 0;
+            updateAdminUI();
+
+            document.getElementById('detail-screen').classList.add('hidden');
+            document.getElementById('home-screen').classList.remove('hidden');
+            
+            // Khôi phục background ban đầu cho Home screen
+            document.body.style.backgroundImage = `url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070')`;
+            
+            renderTrips();
+        }
+
+        function openNewTripModal() {
+            document.getElementById('new-trip-modal').classList.remove('hidden');
+        }
+
+        function closeNewTripModal() {
+            document.getElementById('new-trip-modal').classList.add('hidden');
+            document.getElementById('new-trip-form').reset();
+        }
+
+        function handleCreateTrip(event) {
+            event.preventDefault();
+            const id = document.getElementById('trip-id-input').value.trim().toUpperCase();
+            const name = document.getElementById('trip-name-input').value.trim();
+            const desc = document.getElementById('trip-desc-input').value.trim();
+            const emoji = document.getElementById('trip-emoji-input').value.trim() || '🏝️';
+            let bg = document.getElementById('trip-bg-input').value.trim();
+
+            if (!id || !name) {
+                showAlert('⚠️ Thiếu thông tin', 'Vui lòng cung cấp mã chuyến đi và tên chuyến đi.');
+                return;
+            }
+
+            if (trips.some(t => t.id === id)) {
+                showAlert('⚠️ Mã đã tồn tại', 'Mã chuyến đi này đã được sử dụng rồi.');
+                return;
+            }
+
+            if (!bg) {
+                bg = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=2070';
+            }
+
+            trips.push({ id, name, desc, emoji, bg });
+            localStorage.setItem('travel_trips', JSON.stringify(trips));
+            
+            closeNewTripModal();
+            renderTrips();
+            showAlert('🎉 Tạo thành công', 'Chuyến đi mới của bạn đã được khởi tạo!');
+        }
+
+        function deleteTrip(tripId, event) {
+            if (event) event.stopPropagation();
+            showConfirm('Xóa chuyến đi?', 'Bạn có chắc chắn muốn xóa chuyến đi thủ công này khỏi danh sách thiết lập không? Dữ liệu lịch sử trên Cloud của chuyến này sẽ không bị xóa.', () => {
+                trips = trips.filter(t => t.id !== tripId);
+                localStorage.setItem('travel_trips', JSON.stringify(trips));
+                renderTrips();
+            }, true);
+        }
+
+        // --- ĐIỀU HƯỚNG QUYỀN ADMIN ---
+
+        function handleStarClick() {
+            if (isAdminMode) {
+                isAdminMode = false;
+                adminClickCount = 0;
+                showAlert('🔒 Trở về xem', 'Bạn đã hạ quyền Admin. Giao diện trở về chế độ Khách (Chỉ xem).');
+                render();
+                updateAdminUI();
+                return;
+            }
+
+            adminClickCount++;
+            if (adminClickCount >= 3) {
+                isAdminMode = true;
+                adminClickCount = 0;
+                showAlert('🗝️ Admin Mode Unlocked', '🔓 Đã kích hoạt Chế độ Quản trị viên!\nBây giờ bạn có đầy đủ quyền thao tác Thêm, Sửa, và Xóa dữ liệu.');
+                render();
+                updateAdminUI();
+            }
+        }
+
+        function updateAdminUI() {
+            const adminToastNav = document.getElementById('admin-toast-nav');
+            const adminStatusSub = document.getElementById('admin-badge-text');
+            const btnClearAll = document.getElementById('btn-clear-all');
+            
+            const addButtons = [
+                document.getElementById('btn-add-spent'),
+                document.getElementById('income-actions-container'),
+                document.getElementById('btn-add-planned')
+            ];
+
+            if (isAdminMode) {
+                if (adminToastNav) adminToastNav.classList.remove('hidden');
+                if (adminStatusSub) adminStatusSub.innerHTML = '<span class="text-amber-500 font-extrabold animate-pulse">Quản trị viên ⚡</span>';
+                if (btnClearAll) btnClearAll.classList.remove('hidden');
+                addButtons.forEach(btn => { if (btn) btn.classList.remove('hidden'); });
+            } else {
+                if (adminToastNav) adminToastNav.classList.add('hidden');
+                if (adminStatusSub) adminStatusSub.innerHTML = '<span class="text-slate-500 font-bold">Khách 👁️</span>';
+                if (btnClearAll) btnClearAll.classList.add('hidden');
+                addButtons.forEach(btn => { if (btn) btn.classList.add('hidden'); });
+            }
+            lucide.createIcons();
+        }
+
+        // --- ĐỒNG BỘ DỮ LIỆU CLOUD ---
+
         async function fetchData() {
+            if (!selectedTrip) return;
             toggleLoading(true);
             try {
                 const { data, error } = await _supabase.from('travel_entries').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
-                entries = data || [];
+                allEntries = data || [];
+                
+                // Lọc dữ liệu của chuyến đi được chọn
+                entries = allEntries.filter(e => {
+                    const entryTripId = e.trip_id || 'PY';
+                    return entryTripId === selectedTrip.id;
+                });
+                
                 render();
             } catch (err) { console.error('Lỗi tải dữ liệu:', err); }
             finally { toggleLoading(false); }
         }
 
-        // HÀM XÓA - SỬA LẠI ĐỂ HOẠT ĐỘNG CHẮC CHẮN HƠN VÀ CHẨN ĐOÁN RLS CHÍNH XÁC
         async function deleteEntry(id) {
             if (!id) {
-                showAlert('⚠️ Lỗi ID', 'Mục này không có ID hợp lệ. Hãy thử tải lại trang (F5 hoặc bấm nút Đổi mới dữ liệu) trước khi xóa.');
+                showAlert('⚠️ Lỗi ID', 'Mục không có ID hợp lệ. Hãy thử bấm nút tải lại dữ liệu trước khi xóa.');
                 return;
             }
             showConfirm('Xác nhận xóa?', 'Bạn có chắc chắn muốn xóa mục này khỏi hệ thống không?', async () => {
                 toggleLoading(true);
                 try {
-                    // Sử dụng .select() để biết có thực sự xóa được dòng nào hay không
                     const { data, error } = await _supabase.from('travel_entries').delete().eq('id', id).select();
                     if (error) throw error;
                     
-                    // Nếu Supabase không báo lỗi nhưng mảng dữ liệu trả về rỗng, chứng tỏ RLS đang chặn quyền Quyết định DELETE
                     if (!data || data.length === 0) {
                         showAlert('⚠️ Không thể xóa mục này!', 
-                              'Nguyên nhân: Bảng "travel_entries" của bạn trên Supabase đang bật Row Level Security (RLS) nhưng BẠN CHƯA CHO PHÉP QUYỀN XÓA (DELETE Policy).\n\n' +
-                              'Cách khắc phục cực kỳ đơn giản:\n' +
-                              '1. Vào Supabase Dashboard trang của bạn.\n' +
-                              '2. Đi tới phần "Database" -> "Policies" (ở thanh dọc bên trái).\n' +
-                              '3. Nhấp "New Policy" tại bảng "travel_entries" -> Chọn "Create a policy from scratch" (để tùy chỉnh).\n' +
-                              '4. Nhập thông tin sau:\n' +
-                              '   • Policy name: Allow delete access for all\n' +
-                              '   • Allowed operations: DELETE\n' +
-                              '   • Target roles: public (hoặc anon)\n' +
-                              '   • USING expression: true\n' +
-                              '5. Nhấp "Save policy" ở dưới góc phải là xong xuôi!');
+                              'Nguyên nhân: Bảng của bạn chưa được cấp quyền DELETE Policy trên Supabase.\n\n' +
+                              'Cách khắc phục:\n' +
+                              '1. Vào Supabase Dashboard.\n' +
+                              '2. Mục "Database" -> "Policies".\n' +
+                              '3. Thêm Policy cho table "travel_entries" với thao tác DELETE, target role là public (hoặc anon), USING: true.');
                         return;
                     }
                     
-                    // Xóa tại chỗ để phản hồi nhanh
                     entries = entries.filter(e => e.id !== id);
                     render();
                 } catch (err) {
-                    showAlert('⚠️ Lỗi Cloud', 'Lỗi khi xóa từ Cloud: ' + err.message);
-                    fetchData(); // Tải lại nếu lỗi
+                    showAlert('⚠️ Lỗi Cloud', 'Không thể xóa: ' + err.message);
+                    fetchData();
                 } finally {
                     toggleLoading(false);
                 }
             }, true);
         }
 
-        // Xem chi tiết gánh kèo
         function showPersonDetails(name) {
             const detailModal = document.getElementById('modal-details');
             const nameEl = document.getElementById('detail-person-name');
@@ -421,6 +688,10 @@
         }
 
         function openModal(type) {
+            if (!isAdminMode) {
+                showAlert('🔒 Quyền truy cập', 'Bạn cần kích hoạt quyền Admin để thực hiện sửa đổi.');
+                return;
+            }
             document.getElementById('entry-type').value = type;
             document.getElementById('entry-is-quick').value = 'false';
             document.getElementById('names-field').classList.add('hidden');
@@ -453,6 +724,10 @@
         }
 
         function openQuickFundModal() {
+            if (!isAdminMode) {
+                showAlert('🔒 Quyền truy cập', 'Bạn cần kích hoạt quyền Admin để thực hiện sửa đổi.');
+                return;
+            }
             openModal('INCOME');
             document.getElementById('entry-is-quick').value = 'true';
             document.getElementById('names-field').classList.remove('hidden');
@@ -467,6 +742,10 @@
 
         entryForm.onsubmit = async (e) => {
             e.preventDefault();
+            if (!isAdminMode) {
+                showAlert('🔒 Admin Mode', 'Xin lỗi, bạn cần mở khóa Admin Mode để thay đổi dữ liệu.');
+                return;
+            }
             const btn = document.getElementById('btn-submit');
             btn.disabled = true;
             btn.innerText = "Đang gửi...";
@@ -482,7 +761,13 @@
                 if (isQuick) {
                     const names = document.getElementById('names-list').value.split(',').map(n => n.trim()).filter(n => n);
                     if (names.length === 0) throw new Error("Chưa nhập tên ai cả!");
-                    names.forEach(name => rows.push({ type: 'INCOME', content: name, amount, date }));
+                    names.forEach(name => rows.push({ 
+                        type: 'INCOME', 
+                        content: name, 
+                        amount, 
+                        date,
+                        trip_id: selectedTrip.id 
+                    }));
                 } else {
                     let parts = null;
                     if (type === 'SPENT') {
@@ -492,14 +777,38 @@
                     }
                     const content = document.getElementById('content').value;
                     if (!content) throw new Error("Nhập nội dung đã!");
-                    rows.push({ type, content, amount, date, participants: parts });
+                    rows.push({ 
+                        type, 
+                        content, 
+                        amount, 
+                        date, 
+                        participants: parts,
+                        trip_id: selectedTrip.id 
+                    });
                 }
                 const { error } = await _supabase.from('travel_entries').insert(rows);
-                if (error) throw error;
+                if (error) {
+                    if (error.message && (error.message.includes('column "trip_id"') || error.message.includes('trip_id'))) {
+                        throw new Error('THIEU_COT_TRIP_ID');
+                    }
+                    throw error;
+                }
                 closeModal();
                 await fetchData();
-            } catch (err) { showAlert('⚠️ Có lỗi xảy ra', 'Hic: ' + err.message); }
-            finally { 
+            } catch (err) { 
+                if (err.message === 'THIEU_COT_TRIP_ID') {
+                    showAlert('⚠️ Thiếu cột trip_id trên Supabase', 
+                        'Để phân loại và lưu dữ liệu cho từng chuyến đi, bạn cần thêm cột "trip_id" vào bảng "travel_entries" của bạn trên Supabase.\n\n' +
+                        'Cách làm cực kỳ đơn giản:\n' +
+                        '1. Đăng nhập Supabase và vào trang Dashboard dự án.\n' +
+                        '2. Chọn thanh "SQL Editor" ở bên trái (biểu trưng chữ >_).\n' +
+                        '3. Nhấp chọn "New query" rồi dán đoạn mã này vào:\n\n' +
+                        "ALTER TABLE travel_entries ADD COLUMN trip_id text DEFAULT 'PY';\n\n" +
+                        '4. Nhấp nút "Run" bên góc dưới để chạy là xong! Sau đó quay lại đây lưu là sẽ thành công!');
+                } else {
+                    showAlert('⚠️ Có lỗi xảy ra', 'Hic: ' + err.message); 
+                }
+            } finally { 
                 btn.disabled = false;
                 btn.innerText = "Lưu vào Cloud";
                 toggleLoading(false); 
@@ -507,21 +816,28 @@
         };
 
         async function clearAllData() {
-            showConfirm('Cảnh báo nguy hiểm!', 'Bạn có chắc chắn muốn xóa sạch TOÀN BỘ dữ liệu trên Cloud? Thao tác này KHÔNG thể hoàn tác!', async () => {
+            if (!isAdminMode) {
+                showAlert('🔒 Admin Mode', 'Bạn cần có quyền Admin để thực hiện khôi phục xóa bảng.');
+                return;
+            }
+            if (!selectedTrip) return;
+            showConfirm('Cảnh báo nguy hiểm!', `Bạn có chắc chắn muốn xóa sạch TOÀN BỘ dữ liệu của chuyến đi "${selectedTrip.name}"? Dữ liệu các chuyến khác sẽ được giữ an toàn. Hành động này không thể hoàn tác!`, async () => {
                 toggleLoading(true);
                 try {
-                    const { data, error } = await _supabase.from('travel_entries').delete().neq('type', 'SYSTEM_RESERVED').select();
+                    const { data, error } = await _supabase.from('travel_entries')
+                        .delete()
+                        .eq('trip_id', selectedTrip.id)
+                        .select();
                     if (error) throw error;
                     
                     if (!data || data.length === 0) {
-                        showAlert('⚠️ Không thể reset dữ liệu!', 
-                              'Nguyên nhân: Bảng "travel_entries" của bạn đang được bật RLS (Row Level Security) nhưng BẠN CHƯA CHO PHÉP QUYỀN XÓA (DELETE Policy cho role "anon").\n\n' +
-                              'Vui lòng làm theo hướng dẫn cài đặt DELETE Policy cho vai trò "anon" trên trang chủ Supabase Dashboard nhé!');
+                        showAlert('ℹ️ Thông báo', `Không tìm thấy dòng dữ liệu nào thuộc chuyến đi "${selectedTrip.name}" để xóa, hoặc bảng của bạn chưa cấp DELETE policy.`);
                         return;
                     }
                     
                     await fetchData();
-                } catch (err) { showAlert('⚠️ Lỗi xóa dữ liệu', 'Lỗi xóa: ' + err.message); }
+                    showAlert('✨ Đã reset', `Dữ liệu của chuyến "${selectedTrip.name}" đã được dọn sạch.`);
+                } catch (err) { showAlert('⚠️ Lỗi xóa dữ liệu', 'Lỗi: ' + err.message); }
                 finally { toggleLoading(false); }
             }, true);
         }
@@ -549,9 +865,9 @@
                     totalPlanned += amt;
                 }
 
-                // Render danh sách
+                // Render item list
                 const item = document.createElement('div');
-                item.className = 'px-4 py-4 border-b border-slate-100 flex justify-between items-center bg-white/50 animate-slide-up group';
+                item.className = 'px-4 py-4 border-b border-slate-100 flex justify-between items-center bg-white/50 animate-slide-up group text-slate-800';
                 
                 const info = document.createElement('div');
                 info.className = 'flex-1 min-w-0';
@@ -566,18 +882,27 @@
                 const amountSpan = document.createElement('span');
                 amountSpan.className = 'text-[13px] font-black text-slate-900';
                 amountSpan.innerText = formatMoney(amt);
-                
-                const delBtn = document.createElement('button');
-                delBtn.className = 'w-8 h-8 flex items-center justify-center text-red-200 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all';
-                delBtn.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
-                delBtn.onclick = () => deleteEntry(e.id);
-
                 actions.appendChild(amountSpan);
-                actions.appendChild(delBtn);
                 
+                // Nút xóa chỉ hiển thị khi ở Admin Mode
+                if (isAdminMode) {
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'w-8 h-8 flex items-center justify-center text-red-200 hover:text-red-550 hover:bg-red-50 rounded-lg transition-all dark-delete-btn';
+                    delBtn.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
+                    delBtn.onclick = () => deleteEntry(e.id);
+                    actions.appendChild(delBtn);
+                }
+
                 item.appendChild(info);
                 item.appendChild(actions);
                 lists[e.type]?.appendChild(item);
+            });
+
+            // Tiêu đề trống
+            Object.keys(lists).forEach(k => {
+                if (lists[k].children.length === 0) {
+                    lists[k].innerHTML = `<div class="p-8 text-center text-slate-400 italic text-[11px] font-semibold">Chưa có bản ghi nào của chuyến đi này</div>`;
+                }
             });
 
             // Render Bảng Phong Thần
@@ -628,8 +953,8 @@
             lucide.createIcons();
         }
 
-        // Khởi chạy lần đầu
-        fetchData();
+        // Khởi chạy lần đầu tiên
+        renderTrips();
     </script>
 <script type="module" src="/index.tsx"></script>
 </body>
