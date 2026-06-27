@@ -643,15 +643,15 @@
             let totalOwed = 0;
             const mySpent = entries.filter(e => {
                 if (e.type !== 'SPENT') return false;
-                const pList = e.participants ? e.participants.split(',') : getUniquePeople();
-                return pList.includes(name);
+                const pList = e.participants ? e.participants.split(',').map(p => p.trim()) : getUniquePeople();
+                return pList.includes(name.trim());
             });
 
             if (mySpent.length === 0) {
                 listEl.innerHTML = '<div class="p-10 text-center text-slate-400 italic">Chưa gánh kèo nào cả. Đại gia!</div>';
             } else {
                 mySpent.forEach(e => {
-                    const pList = e.participants ? e.participants.split(',') : getUniquePeople();
+                    const pList = e.participants ? e.participants.split(',').map(p => p.trim()) : getUniquePeople();
                     const share = e.amount / (pList.length || 1);
                     totalOwed += share;
                     
@@ -684,7 +684,20 @@
         }
 
         function getUniquePeople() { 
-            return [...new Set(entries.filter(e => e.type === 'INCOME').map(e => e.content))]; 
+            const people = new Set();
+            entries.forEach(e => {
+                if (e.type === 'INCOME' && e.content) {
+                    const name = e.content.trim();
+                    if (name) people.add(name);
+                }
+                if (e.type === 'SPENT' && e.participants) {
+                    e.participants.split(',').forEach(p => {
+                        const name = p.trim();
+                        if (name) people.add(name);
+                    });
+                }
+            });
+            return [...people];
         }
 
         function openModal(type) {
@@ -772,10 +785,10 @@
                     let parts = null;
                     if (type === 'SPENT') {
                         const checks = document.querySelectorAll('#participants-list-container input:checked');
-                        parts = Array.from(checks).map(c => c.value).join(',');
+                        parts = Array.from(checks).map(c => c.value.trim()).join(',');
                         if (!parts && getUniquePeople().length > 0) throw new Error("Chọn ít nhất 1 người tham gia!");
                     }
-                    const content = document.getElementById('content').value;
+                    const content = document.getElementById('content').value.trim();
                     if (!content) throw new Error("Nhập nội dung đã!");
                     rows.push({ 
                         type, 
@@ -855,12 +868,16 @@
                 const amt = Number(e.amount) || 0;
                 if (e.type === 'SPENT') {
                     totalSpent += amt;
-                    const pList = e.participants ? e.participants.split(',') : uniquePeople;
+                    const pList = e.participants ? e.participants.split(',').map(p => p.trim()) : uniquePeople;
                     const share = amt / (pList.length || 1);
-                    pList.forEach(p => { if(personStats[p]) personStats[p].owed += share; });
+                    pList.forEach(p => { 
+                        const name = p.trim();
+                        if (personStats[name]) personStats[name].owed += share; 
+                    });
                 } else if (e.type === 'INCOME') {
                     totalIncome += amt;
-                    if(personStats[e.content]) personStats[e.content].paid += amt;
+                    const name = e.content ? e.content.trim() : '';
+                    if (personStats[name]) personStats[name].paid += amt;
                 } else if (e.type === 'PLANNED') {
                     totalPlanned += amt;
                 }
