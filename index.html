@@ -79,7 +79,14 @@
             <div class="inline-flex w-16 h-16 gradient-primary rounded-2xl items-center justify-center text-white shadow-xl shadow-sky-200 mb-2">
                 <i data-lucide="compass" class="w-8 h-8"></i>
             </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight leading-none bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">QUYẾT TOÁN ĐỒNG BỌN</h1>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight leading-none flex items-center justify-center gap-2 select-none">
+                <span class="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">QUYẾT TOÁN ĐỒNG BỌN</span>
+                <!-- Ngôi sao bí mật mở khóa Admin Mode ở Home Screen -->
+                <button onclick="handleStarClick()" class="text-amber-400 hover:scale-125 hover:text-amber-500 transition-all focus:outline-none cursor-pointer" title="Mở khóa chế độ Admin">
+                    <i data-lucide="star" class="w-5 h-5 fill-amber-400"></i>
+                </button>
+            </h1>
+            <div id="home-admin-badge" class="text-[10px] text-amber-600 font-extrabold uppercase tracking-widest hidden animate-pulse">CHẾ ĐỘ QUẢN TRỊ VIÊN ĐANG KÍCH HOẠT ⚡</div>
         </div>
 
         <!-- Active Trips Grid -->
@@ -433,7 +440,7 @@
                             <span class="text-3xl">${t.emoji || '🏝️'}</span>
                             <div class="flex gap-2 items-center">
                                 <span class="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-xl text-[9px] font-black uppercase tracking-wider">${t.id}</span>
-                                ${t.id !== 'PY' ? `<button onclick="deleteTrip('${t.id}', event)" class="p-1 hover:bg-red-500 rounded-lg text-white/80 hover:text-white transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                                ${isAdminMode ? `<button onclick="deleteTrip('${t.id}', event)" class="flex items-center gap-1 px-2.5 py-1.5 bg-rose-500 hover:bg-rose-600 text-white font-black text-[10px] rounded-xl transition-all uppercase shadow-lg shadow-rose-500/20 active:scale-95" title="Xóa chuyến đi"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Xóa</button>` : ''}
                             </div>
                         </div>
                         <div>
@@ -557,6 +564,7 @@
             const adminToastNav = document.getElementById('admin-toast-nav');
             const adminStatusSub = document.getElementById('admin-badge-text');
             const btnClearAll = document.getElementById('btn-clear-all');
+            const homeAdminBadge = document.getElementById('home-admin-badge');
             
             const addButtons = [
                 document.getElementById('btn-add-spent'),
@@ -568,13 +576,16 @@
                 if (adminToastNav) adminToastNav.classList.remove('hidden');
                 if (adminStatusSub) adminStatusSub.innerHTML = '<span class="text-amber-500 font-extrabold animate-pulse">Quản trị viên ⚡</span>';
                 if (btnClearAll) btnClearAll.classList.remove('hidden');
+                if (homeAdminBadge) homeAdminBadge.classList.remove('hidden');
                 addButtons.forEach(btn => { if (btn) btn.classList.remove('hidden'); });
             } else {
                 if (adminToastNav) adminToastNav.classList.add('hidden');
                 if (adminStatusSub) adminStatusSub.innerHTML = '<span class="text-slate-500 font-bold">Khách 👁️</span>';
                 if (btnClearAll) btnClearAll.classList.add('hidden');
+                if (homeAdminBadge) homeAdminBadge.classList.add('hidden');
                 addButtons.forEach(btn => { if (btn) btn.classList.add('hidden'); });
             }
+            renderTrips();
             lucide.createIcons();
         }
 
