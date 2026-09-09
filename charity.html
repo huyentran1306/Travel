@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌟 Gieo Nắng 2026 - Quản Lý Từ Thiện</title>
+    <meta name="description" content="Hệ thống quản lý thu chi chuyến từ thiện Gieo Nắng - Trung Thu 2026">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background: #0f172a;
+        }
+
+        .bg-charity {
+            background-image: url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(15,23,42,0.88) 0%, rgba(30,15,5,0.82) 100%);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .glass-warm {
+            background: rgba(245,158,11,0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(245,158,11,0.2);
+        }
+
+        .glass-light {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .tab-active {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245,158,11,0.4);
+        }
+
+        .tab-inactive {
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-inactive:hover {
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245,158,11,0.35);
+        }
+
+        .btn-gold:hover { filter: brightness(1.1); }
+        .btn-gold:active { transform: scale(0.97); }
+
+        .btn-red {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 15px rgba(239,68,68,0.3);
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.3);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .anim-up { animation: slideUp 0.35s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .anim-fade { animation: fadeIn 0.3s ease-out; }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.4); border-radius: 10px; }
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .entry-item {
+            transition: all 0.2s;
+        }
+        .entry-item:hover { background: rgba(255,255,255,0.06) !important; }
+
+        .badge-done {
+            background: rgba(16,185,129,0.15);
+            color: #34d399;
+            border: 1px solid rgba(16,185,129,0.3);
+        }
+        .badge-pending {
+            background: rgba(245,158,11,0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245,158,11,0.3);
+        }
+        .badge-received {
+            background: rgba(59,130,246,0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+
+        select, input, textarea {
+            color: #1e293b;
+        }
+
+        .section-header {
+            background: linear-gradient(90deg, rgba(245,158,11,0.15), transparent);
+            border-left: 3px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-charity text-white min-h-screen pb-16">
+
+<!-- Loading Overlay -->
+<div id="loading" class="loading-overlay hidden">
+    <div class="flex flex-col items-center gap-4">
+        <div class="w-14 h-14 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+        <p class="font-bold text-amber-400 animate-pulse text-sm tracking-wide uppercase">Đang đồng bộ...</p>
+    </div>
+</div>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="glass rounded-[2.5rem] p-8 w-full max-w-sm text-center anim-up">
+        <div class="text-6xl mb-4">🌟</div>
+        <h1 class="text-2xl font-black text-white mb-1">Gieo Nắng 2026</h1>
+        <p class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-6">Quản lý từ thiện nội bộ</p>
+        <div class="space-y-3">
+            <input type="password" id="access-password" 
+                   class="w-full px-4 py-4 rounded-2xl bg-white text-slate-800 font-bold text-center text-lg outline-none border-2 border-transparent focus:border-amber-400 transition-all"
+                   placeholder="Nhập mật khẩu..."
+                   onkeydown="if(event.key==='Enter') checkPassword()">
+            <button onclick="checkPassword()" class="w-full py-4 btn-gold font-black rounded-2xl text-sm uppercase tracking-wider">
+                Vào hệ thống 🚀
+            </button>
+        </div>
+        <p class="text-white/30 text-[10px] mt-4">Dành riêng cho nhóm từ thiện Gieo Nắng</p>
+    </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app" class="hidden max-w-5xl mx-auto px-4 py-6 space-y-6">
+
+    <!-- Header -->
+    <header class="anim-up">
+        <div class="glass rounded-[2rem] p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl" style="background: linear-gradient(135deg, #f59e0b, #ea580c);">
+                    🌟
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-white leading-tight">GIEO NẮNG</h1>
+                    <p class="text-amber-400 text-[10px] font-black uppercase tracking-widest">Trung Thu 2026 • Quản Lý Nội Bộ</p>
+                    <p class="text-white/50 text-[10px] mt-0.5">📍 Buôn Ngô - Cư Pui - Dak Lak &nbsp;|&nbsp; 📅 19-20/09/2026 &nbsp;|&nbsp; 👶 270 em</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="fetchAllData()" class="p-2.5 glass rounded-xl text-white/60 hover:text-white transition-all" title="Tải lại">
+                    <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                </button>
+                <button onclick="handleAdminClick()" id="admin-star-btn" class="p-2.5 glass rounded-xl text-amber-400 hover:scale-110 transition-all" title="Admin">
+                    <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                </button>
+                <div id="admin-badge" class="hidden px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-amber-300 border border-amber-500/30" style="background: rgba(245,158,11,0.15);">
+                    ⚡ Admin
+                </div>
+                <button onclick="lockApp()" class="p-2.5 glass rounded-xl text-white/40 hover:text-red-400 transition-all" title="Khóa">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Summary Dashboard -->
+    <div id="dashboard" class="grid grid-cols-2 sm:grid-cols-4 gap-3 anim-up">
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-emerald-500">
+            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Tổng Quỹ</p>
+            <p class="text-xl font-black text-emerald-400" id="stat-total-income">--</p>
+        </div>
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-red-500">
+            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Đã Chi</p>
+            <p class="text-xl font-black text-red-400" id="stat-total-expense">--</p>
+        </div>
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-amber-500">
+            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Còn Lại</p>
+            <p class="text-xl font-black text-amber-400" id="stat-balance">--</p>
+        </div>
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-blue-500">
+            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Người Đóng Góp</p>
+            <p class="text-xl font-black text-blue-400" id="stat-donors">--</p>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex gap-2 overflow-x-auto pb-1 anim-up" style="scrollbar-width: none;">
+        <button id="tab-btn-fund" onclick="switchTab('fund')" class="tab-active flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
+            <i data-lucide="wallet" class="w-4 h-4"></i> Quỹ Từ Thiện
+        </button>
+        <button id="tab-btn-donations" onclick="switchTab('donations')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
+            <i data-lucide="gift" class="w-4 h-4"></i> Đồ Đóng Góp
+        </button>
+        <button id="tab-btn-members" onclick="switchTab('members')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
+            <i data-lucide="users" class="w-4 h-4"></i> Chi Thành Viên
+        </button>
+    </div>
+
+    <!-- ===================== TAB 1: QUỸ TỪ THIỆN ===================== -->
+    <div id="tab-fund" class="space-y-4">
+
+        <!-- Income Section -->
+        <div class="glass rounded-[1.5rem] overflow-hidden">
+            <div class="section-header px-5 py-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-black text-white text-sm flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+                        💚 ĐÓNG GÓP / THU VÀO
+                    </h2>
+                    <p class="text-white/40 text-[10px] mt-0.5">Tiền mặt & vật dụng đóng góp vào quỹ</p>
+                </div>
+                <button id="btn-add-income" onclick="openModal('INCOME')" class="hidden btn-green px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                </button>
+            </div>
+            <div id="list-income" class="divide-y divide-white/5 max-h-80 overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+            </div>
+        </div>
+
+        <!-- Expense Section - grouped by category -->
+        <div class="glass rounded-[1.5rem] overflow-hidden">
+            <div class="section-header px-5 py-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-black text-white text-sm flex items-center gap-2">
+                        <i data-lucide="trending-down" class="w-4 h-4 text-red-400"></i>
+                        ❤️ CHI TIÊU / MUA SẮM
+                    </h2>
+                    <p class="text-white/40 text-[10px] mt-0.5">Tất cả khoản chi cho chuyến từ thiện</p>
+                </div>
+                <button id="btn-add-expense" onclick="openModal('EXPENSE')" class="hidden btn-red px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                </button>
+            </div>
+            <!-- Category filter -->
+            <div class="px-4 pt-3 pb-2 flex gap-2 overflow-x-auto" style="scrollbar-width: none;">
+                <button onclick="filterExpense('ALL')" id="cat-all" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(245,158,11,0.3); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4);">Tất cả</button>
+                <button onclick="filterExpense('GIFT_CHILDREN')" id="cat-gift" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎁 Quà trẻ em</button>
+                <button onclick="filterExpense('FOOD_STALL')" id="cat-food" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍹 Ẩm thực</button>
+                <button onclick="filterExpense('FAIR_GAMES')" id="cat-games" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎪 Hội chợ</button>
+                <button onclick="filterExpense('COOKING')" id="cat-cook" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍲 Nấu ăn</button>
+                <button onclick="filterExpense('TRANSPORT')" id="cat-trans" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🚛 Di chuyển</button>
+                <button onclick="filterExpense('OTHER')" id="cat-other" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">📦 Khác</button>
+            </div>
+            <div id="list-expense" class="divide-y divide-white/5 max-h-96 overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+            </div>
+            <!-- Expense total -->
+            <div class="px-5 py-3 border-t border-white/10 flex justify-between items-center">
+                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Tổng chi (lọc):</span>
+                <span id="expense-filtered-total" class="text-base font-black text-red-400">--</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== TAB 2: ĐỒ ĐÓNG GÓP ===================== -->
+    <div id="tab-donations" class="hidden space-y-4">
+        <div class="glass rounded-[1.5rem] overflow-hidden">
+            <div class="section-header px-5 py-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-black text-white text-sm flex items-center gap-2">
+                        <i data-lucide="package" class="w-4 h-4 text-blue-400"></i>
+                        🎁 DANH SÁCH ĐỒ ĐÓNG GÓP
+                    </h2>
+                    <p class="text-white/40 text-[10px] mt-0.5">Vật phẩm, hiện vật đóng góp cho chuyến</p>
+                </div>
+                <button id="btn-add-donation" onclick="openModal('DONATION')" class="hidden btn-blue px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                </button>
+            </div>
+            <div id="list-donations" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== TAB 3: CHI THÀNH VIÊN ===================== -->
+    <div id="tab-members" class="hidden space-y-4">
+
+        <!-- Member Summary Cards -->
+        <div id="member-summary-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="glass rounded-2xl p-5 text-center">
+                <p class="text-white/30 text-xs">Đang tải dữ liệu thành viên...</p>
+            </div>
+        </div>
+
+        <!-- Member Expenses List -->
+        <div class="glass rounded-[1.5rem] overflow-hidden">
+            <div class="section-header px-5 py-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-black text-white text-sm flex items-center gap-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-purple-400"></i>
+                        👥 CHI TIÊU THÀNH VIÊN
+                    </h2>
+                    <p class="text-white/40 text-[10px] mt-0.5">Chi phí cá nhân của từng thành viên tham gia</p>
+                </div>
+                <button id="btn-add-member-expense" onclick="openModal('MEMBER_EXPENSE')" class="hidden px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95" style="background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: white; box-shadow: 0 4px 15px rgba(139,92,246,0.3);">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                </button>
+            </div>
+            <div id="list-member-expenses" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================== MODAL FORM ===================== -->
+<div id="modal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="relative w-full sm:max-w-md rounded-t-[2rem] sm:rounded-[2rem] overflow-hidden anim-up" style="max-height: 90vh; background: #1e293b; border: 1px solid rgba(255,255,255,0.12);">
+        <div id="modal-header" class="p-5 flex justify-between items-center">
+            <div>
+                <p id="modal-title" class="font-black text-white text-base">Thêm mới</p>
+                <p id="modal-subtitle" class="text-white/40 text-[10px] mt-0.5"></p>
+            </div>
+            <button onclick="closeModal()" class="p-2 rounded-xl hover:bg-white/10 text-white/60 transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <form id="entry-form" class="p-5 pt-0 space-y-3 overflow-y-auto custom-scrollbar" style="max-height: calc(90vh - 80px);">
+            <input type="hidden" id="modal-type">
+            <input type="hidden" id="modal-edit-id">
+
+            <!-- Donor Name / Content -->
+            <div id="field-donor-name">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên người đóng góp / Diễn giải</label>
+                <input type="text" id="input-donor-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ví dụ: Trân, c.Vân...">
+            </div>
+
+            <!-- Category (for expense) -->
+            <div id="field-category" class="hidden">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Danh mục</label>
+                <select id="input-category" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                    <option value="GIFT_CHILDREN">🎁 Quà cho trẻ em (2.1)</option>
+                    <option value="FOOD_STALL">🍹 Gian hàng ẩm thực (2.2)</option>
+                    <option value="FAIR_GAMES">🎪 Gian hàng hội chợ (2.3)</option>
+                    <option value="COOKING">🍲 Nấu ăn (2.5)</option>
+                    <option value="TRANSPORT">🚛 Di chuyển (2.6)</option>
+                    <option value="OTHER">📦 Khác</option>
+                </select>
+            </div>
+
+            <!-- Item Name (for donation) -->
+            <div id="field-item-name" class="hidden">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên vật phẩm</label>
+                <input type="text" id="input-item-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ví dụ: Gấu bông, Quần áo...">
+            </div>
+
+            <!-- Quantity + Unit -->
+            <div id="field-quantity" class="hidden grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Số lượng</label>
+                    <input type="number" id="input-quantity" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="1">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Đơn vị</label>
+                    <input type="text" id="input-unit" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Cái, Kg...">
+                </div>
+            </div>
+
+            <!-- Amount -->
+            <div id="field-amount">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Số tiền (VNĐ)</label>
+                <input type="text" id="input-amount" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-lg font-black" placeholder="0" oninput="fmtAmount(this)">
+            </div>
+
+            <!-- Member Name (for member expense) -->
+            <div id="field-member-name" class="hidden">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên thành viên</label>
+                <input type="text" id="input-member-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Tên thành viên...">
+            </div>
+
+            <!-- Member category -->
+            <div id="field-member-cat" class="hidden">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Loại chi phí</label>
+                <select id="input-member-cat" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                    <option value="FOOD">🍜 Ăn uống</option>
+                    <option value="TRANSPORT">🚗 Di chuyển</option>
+                    <option value="ACCOMMODATION">🏠 Lưu trú</option>
+                    <option value="OTHER">📦 Khác</option>
+                </select>
+            </div>
+
+            <!-- Payer + Participants (for member expense) -->
+            <div id="field-payer" class="hidden">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Người trả / Ghi chú chia sẻ</label>
+                <input type="text" id="input-payer" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ai trả? (tuỳ chọn)">
+            </div>
+
+            <!-- Status -->
+            <div id="field-status">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Trạng thái</label>
+                <select id="input-status" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                    <option value="DONE">✅ Hoàn tất / Đã nhận</option>
+                    <option value="PENDING">⏳ Đang xử lý / Chờ nhận</option>
+                </select>
+            </div>
+
+            <!-- Date -->
+            <div>
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ngày</label>
+                <input type="date" id="input-date" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+            </div>
+
+            <!-- Note -->
+            <div>
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ghi chú (tuỳ chọn)</label>
+                <input type="text" id="input-note" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Thêm ghi chú...">
+            </div>
+
+            <button type="submit" id="btn-submit" class="w-full py-4 btn-gold font-black rounded-2xl text-sm uppercase tracking-wider mt-2">
+                💾 Lưu vào Cloud
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] hidden">
+    <div class="glass px-5 py-3 rounded-2xl text-white text-sm font-bold flex items-center gap-2 shadow-2xl anim-up">
+        <span id="toast-icon">✅</span>
+        <span id="toast-msg">Đã lưu!</span>
+    </div>
+</div>
+
+<script>
+// ==================== SUPABASE CONFIG ====================
+const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA';
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const CHARITY_ID = 'GN2026';
+const CORRECT_PASSWORD = 'gieunang2026';
+
+// ==================== STATE ====================
+let isAdmin = false;
+let adminClickCount = 0;
+let fundEntries = [];
+let donationItems = [];
+let memberExpenses = [];
+let currentExpenseFilter = 'ALL';
+let toastTimer = null;
+
+// ==================== AUTH ====================
+function checkPassword() {
+    const pwd = document.getElementById('access-password').value;
+    if (pwd === CORRECT_PASSWORD) {
+        sessionStorage.setItem('charity_auth', '1');
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        document.getElementById('main-app').classList.add('anim-fade');
+        fetchAllData();
+        lucide.createIcons();
+    } else {
+        document.getElementById('access-password').classList.add('border-red-400');
+        showToast('❌', 'Mật khẩu không đúng!');
+        setTimeout(() => document.getElementById('access-password').classList.remove('border-red-400'), 1500);
+    }
+}
+
+function lockApp() {
+    sessionStorage.removeItem('charity_auth');
+    document.getElementById('main-app').classList.add('hidden');
+    document.getElementById('lock-screen').classList.remove('hidden');
+    document.getElementById('access-password').value = '';
+    isAdmin = false; adminClickCount = 0;
+    updateAdminUI();
+}
+
+// Check session on load
+window.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.getItem('charity_auth') === '1') {
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        fetchAllData();
+    }
+    lucide.createIcons();
+    document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('access-password').addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkPassword();
+    });
+});
+
+// ==================== ADMIN ====================
+function handleAdminClick() {
+    if (isAdmin) {
+        isAdmin = false; adminClickCount = 0;
+        updateAdminUI();
+        showToast('🔒', 'Đã thoát Admin Mode');
+        return;
+    }
+    adminClickCount++;
+    if (adminClickCount >= 3) {
+        isAdmin = true; adminClickCount = 0;
+        updateAdminUI();
+        showToast('🗝️', 'Admin Mode đã mở khóa!');
+    }
+}
+
+function updateAdminUI() {
+    const adminBadge = document.getElementById('admin-badge');
+    const addBtns = ['btn-add-income','btn-add-expense','btn-add-donation','btn-add-member-expense'];
+    if (isAdmin) {
+        adminBadge.classList.remove('hidden');
+        addBtns.forEach(id => document.getElementById(id)?.classList.remove('hidden'));
+    } else {
+        adminBadge.classList.add('hidden');
+        addBtns.forEach(id => document.getElementById(id)?.classList.add('hidden'));
+    }
+    render();
+}
+
+// ==================== DATA FETCH ====================
+async function fetchAllData() {
+    toggleLoading(true);
+    try {
+        const [fundRes, donRes, memRes] = await Promise.all([
+            _supabase.from('charity_fund_entries').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false }),
+            _supabase.from('charity_donations').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false }),
+            _supabase.from('charity_member_expenses').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false })
+        ]);
+        if (fundRes.error) throw fundRes.error;
+        if (donRes.error) throw donRes.error;
+        if (memRes.error) throw memRes.error;
+        fundEntries = fundRes.data || [];
+        donationItems = donRes.data || [];
+        memberExpenses = memRes.data || [];
+        render();
+    } catch (err) {
+        showToast('⚠️', 'Lỗi tải dữ liệu: ' + err.message);
+        console.error(err);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+// ==================== RENDER ====================
+function render() {
+    renderDashboard();
+    renderFund();
+    renderDonations();
+    renderMembers();
+    lucide.createIcons();
+}
+
+function renderDashboard() {
+    const incomes = fundEntries.filter(e => e.type === 'INCOME');
+    const expenses = fundEntries.filter(e => e.type === 'EXPENSE');
+    const totalIncome = incomes.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const totalExpense = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const balance = totalIncome - totalExpense;
+    const donorCount = incomes.length;
+
+    document.getElementById('stat-total-income').textContent = fmt(totalIncome);
+    document.getElementById('stat-total-expense').textContent = fmt(totalExpense);
+    document.getElementById('stat-balance').textContent = fmt(balance);
+    document.getElementById('stat-donors').textContent = donorCount + ' người';
+}
+
+function renderFund() {
+    // Income list
+    const incomes = fundEntries.filter(e => e.type === 'INCOME');
+    const listIncome = document.getElementById('list-income');
+    if (incomes.length === 0) {
+        listIncome.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có dữ liệu thu</div>';
+    } else {
+        listIncome.innerHTML = incomes.map(e => `
+            <div class="entry-item px-5 py-3.5 flex justify-between items-center">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-white truncate">${e.donor_name || e.content || '--'}</p>
+                    <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2">
+                        <span>${e.date || ''}</span>
+                        ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <span class="font-black text-emerald-400 text-sm">${fmt(e.amount)}</span>
+                    <span class="px-2 py-1 rounded-lg text-[9px] font-black ${e.status === 'DONE' ? 'badge-done' : 'badge-pending'}">${e.status === 'DONE' ? 'Nhận rồi' : 'Chờ'}</span>
+                    ${isAdmin ? `<button onclick="deleteEntry('fund',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Expense list (filtered)
+    renderExpenseList();
+}
+
+function renderExpenseList() {
+    let expenses = fundEntries.filter(e => e.type === 'EXPENSE');
+    if (currentExpenseFilter !== 'ALL') {
+        expenses = expenses.filter(e => e.category === currentExpenseFilter);
+    }
+    const listExpense = document.getElementById('list-expense');
+    const total = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+    document.getElementById('expense-filtered-total').textContent = fmt(total);
+
+    const catLabels = {
+        GIFT_CHILDREN: '🎁 Quà trẻ em',
+        FOOD_STALL: '🍹 Ẩm thực',
+        FAIR_GAMES: '🎪 Hội chợ',
+        COOKING: '🍲 Nấu ăn',
+        TRANSPORT: '🚛 Di chuyển',
+        OTHER: '📦 Khác'
+    };
+
+    if (expenses.length === 0) {
+        listExpense.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Không có dữ liệu cho bộ lọc này</div>';
+    } else {
+        listExpense.innerHTML = expenses.map(e => `
+            <div class="entry-item px-5 py-3.5 flex justify-between items-center">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold text-white truncate">${e.content || '--'}</p>
+                    <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2 flex-wrap">
+                        <span class="text-amber-400/70">${catLabels[e.category] || e.category || ''}</span>
+                        ${e.date ? `<span>• ${e.date}</span>` : ''}
+                        ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
+                    </p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                    <span class="font-black text-red-400 text-sm">${fmt(e.amount)}</span>
+                    <span class="px-2 py-1 rounded-lg text-[9px] font-black ${e.status === 'DONE' ? 'badge-done' : 'badge-pending'}">${e.status === 'DONE' ? 'Done' : 'Pending'}</span>
+                    ${isAdmin ? `<button onclick="deleteEntry('fund',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+    lucide.createIcons();
+}
+
+function filterExpense(cat) {
+    currentExpenseFilter = cat;
+    const catMap = { ALL: 'cat-all', GIFT_CHILDREN: 'cat-gift', FOOD_STALL: 'cat-food', FAIR_GAMES: 'cat-games', COOKING: 'cat-cook', TRANSPORT: 'cat-trans', OTHER: 'cat-other' };
+    Object.values(catMap).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.background = 'rgba(255,255,255,0.06)';
+        el.style.color = 'rgba(255,255,255,0.5)';
+        el.style.border = '1px solid rgba(255,255,255,0.1)';
+    });
+    const active = document.getElementById(catMap[cat]);
+    if (active) {
+        active.style.background = 'rgba(245,158,11,0.3)';
+        active.style.color = '#fbbf24';
+        active.style.border = '1px solid rgba(245,158,11,0.4)';
+    }
+    renderExpenseList();
+}
+
+function renderDonations() {
+    const list = document.getElementById('list-donations');
+    if (donationItems.length === 0) {
+        list.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có đồ đóng góp nào được ghi nhận</div>';
+        return;
+    }
+    list.innerHTML = donationItems.map(d => `
+        <div class="entry-item px-5 py-3.5 flex justify-between items-center">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-white">${d.donor_name || '--'}</p>
+                <p class="text-[11px] text-blue-300 font-semibold">${d.item_name || ''} ${d.quantity ? `• ${d.quantity} ${d.unit || ''}` : ''}</p>
+                <p class="text-[10px] text-white/40 mt-0.5">
+                    ${d.date || ''}
+                    ${d.estimated_value ? ` • Est. ${fmt(d.estimated_value)}` : ''}
+                    ${d.note ? ` • ${d.note}` : ''}
+                </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+                <span class="px-2 py-1 rounded-lg text-[9px] font-black ${d.status === 'RECEIVED' ? 'badge-received' : 'badge-pending'}">${d.status === 'RECEIVED' ? '📦 Đã nhận' : '⏳ Chờ nhận'}</span>
+                ${isAdmin ? `<button onclick="deleteEntry('donation',${JSON.stringify(d.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+            </div>
+        </div>
+    `).join('');
+    lucide.createIcons();
+}
+
+function renderMembers() {
+    // Build per-member stats
+    const memberMap = {};
+    memberExpenses.forEach(e => {
+        const name = e.member_name || 'Không rõ';
+        if (!memberMap[name]) memberMap[name] = { total: 0, entries: [] };
+        memberMap[name].total += Number(e.amount || 0);
+        memberMap[name].entries.push(e);
+    });
+
+    const grid = document.getElementById('member-summary-grid');
+    if (Object.keys(memberMap).length === 0) {
+        grid.innerHTML = '<div class="glass rounded-2xl p-5 col-span-full text-center text-white/30 text-xs">Chưa có dữ liệu chi thành viên</div>';
+    } else {
+        grid.innerHTML = Object.entries(memberMap).map(([name, s]) => `
+            <div class="glass rounded-2xl p-4 anim-up">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="font-black text-white text-sm">${name}</p>
+                    <span class="text-[9px] font-black px-2 py-1 rounded-lg" style="background:rgba(139,92,246,0.2); color:#c4b5fd; border: 1px solid rgba(139,92,246,0.3);">${s.entries.length} khoản</span>
+                </div>
+                <p class="text-xl font-black" style="color: #c4b5fd;">${fmt(s.total)}</p>
+            </div>
+        `).join('');
+    }
+
+    const catLabels = { FOOD:'🍜 Ăn uống', TRANSPORT:'🚗 Di chuyển', ACCOMMODATION:'🏠 Lưu trú', OTHER:'📦 Khác' };
+    const list = document.getElementById('list-member-expenses');
+    if (memberExpenses.length === 0) {
+        list.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có dữ liệu</div>';
+        return;
+    }
+    list.innerHTML = memberExpenses.map(e => `
+        <div class="entry-item px-5 py-3.5 flex justify-between items-center">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-white">${e.member_name || '--'} <span class="text-white/40 font-normal">• ${e.content || ''}</span></p>
+                <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2">
+                    <span style="color:#c4b5fd;">${catLabels[e.category] || e.category || ''}</span>
+                    ${e.date ? `<span>• ${e.date}</span>` : ''}
+                    ${e.payer ? `<span>• Trả: ${e.payer}</span>` : ''}
+                    ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
+                </p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+                <span class="font-black text-sm" style="color:#c4b5fd;">${fmt(e.amount)}</span>
+                ${isAdmin ? `<button onclick="deleteEntry('member',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+            </div>
+        </div>
+    `).join('');
+    lucide.createIcons();
+}
+
+// ==================== TABS ====================
+function switchTab(tab) {
+    ['fund','donations','members'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        document.getElementById('tab-btn-' + t).classList.remove('tab-active');
+        document.getElementById('tab-btn-' + t).classList.add('tab-inactive');
+    });
+    document.getElementById('tab-' + tab).classList.remove('hidden');
+    document.getElementById('tab-btn-' + tab).classList.add('tab-active');
+    document.getElementById('tab-btn-' + tab).classList.remove('tab-inactive');
+}
+
+// ==================== MODAL ====================
+function openModal(type) {
+    if (!isAdmin) { showToast('🔒', 'Cần quyền Admin để thêm dữ liệu!'); return; }
+    document.getElementById('modal-type').value = type;
+    document.getElementById('modal-edit-id').value = '';
+    document.getElementById('entry-form').reset();
+    document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+
+    // Reset field visibility
+    const fields = ['field-donor-name','field-category','field-item-name','field-quantity','field-amount','field-member-name','field-member-cat','field-payer','field-status'];
+    fields.forEach(f => { const el = document.getElementById(f); if(el) el.classList.add('hidden'); });
+
+    const titles = {
+        INCOME: { t: '💚 Thêm khoản thu / đóng góp', s: 'Ghi nhận tiền mặt đóng vào quỹ' },
+        EXPENSE: { t: '❤️ Thêm khoản chi', s: 'Ghi nhận chi tiêu cho chuyến từ thiện' },
+        DONATION: { t: '🎁 Thêm đồ đóng góp', s: 'Vật phẩm, hiện vật đóng góp' },
+        MEMBER_EXPENSE: { t: '👥 Chi thành viên', s: 'Chi tiêu cá nhân trong chuyến' }
+    };
+    document.getElementById('modal-title').textContent = titles[type]?.t || 'Thêm mới';
+    document.getElementById('modal-subtitle').textContent = titles[type]?.s || '';
+
+    if (type === 'INCOME') {
+        ['field-donor-name','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        document.getElementById('input-status').value = 'DONE';
+        document.getElementById('input-donor-name').placeholder = 'Tên người đóng tiền...';
+    } else if (type === 'EXPENSE') {
+        ['field-donor-name','field-category','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        document.getElementById('input-donor-name').placeholder = 'Tên sản phẩm / Nội dung chi...';
+        document.getElementById('input-status').value = 'PENDING';
+    } else if (type === 'DONATION') {
+        ['field-donor-name','field-item-name','field-quantity','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        document.getElementById('field-quantity').classList.remove('hidden');
+        document.getElementById('input-donor-name').placeholder = 'Tên người đóng góp đồ...';
+        document.getElementById('input-status').innerHTML = `<option value="RECEIVED">📦 Đã nhận</option><option value="PENDING">⏳ Chưa nhận</option>`;
+    } else if (type === 'MEMBER_EXPENSE') {
+        ['field-member-name','field-member-cat','field-donor-name','field-amount','field-payer'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        document.getElementById('input-donor-name').placeholder = 'Mô tả chi tiêu...';
+    }
+
+    document.getElementById('modal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+    document.getElementById('entry-form').reset();
+    // Reset donation status options
+    document.getElementById('input-status').innerHTML = `<option value="DONE">✅ Hoàn tất / Đã nhận</option><option value="PENDING">⏳ Đang xử lý / Chờ nhận</option>`;
+}
+
+document.getElementById('entry-form').onsubmit = async (e) => {
+    e.preventDefault();
+    if (!isAdmin) return;
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true; btn.textContent = 'Đang lưu...';
+    toggleLoading(true);
+
+    const type = document.getElementById('modal-type').value;
+    const date = document.getElementById('input-date').value;
+    const note = document.getElementById('input-note').value.trim();
+    const amount = parseFloat(document.getElementById('input-amount').value.replace(/,/g, '')) || 0;
+    const status = document.getElementById('input-status').value;
+    const donorName = document.getElementById('input-donor-name').value.trim();
+
+    try {
+        if (type === 'INCOME') {
+            const { error } = await _supabase.from('charity_fund_entries').insert({
+                charity_id: CHARITY_ID, type: 'INCOME', content: donorName,
+                donor_name: donorName, amount, date, status, note
+            });
+            if (error) throw error;
+        } else if (type === 'EXPENSE') {
+            const category = document.getElementById('input-category').value;
+            const { error } = await _supabase.from('charity_fund_entries').insert({
+                charity_id: CHARITY_ID, type: 'EXPENSE', content: donorName,
+                category, amount, date, status, note
+            });
+            if (error) throw error;
+        } else if (type === 'DONATION') {
+            const itemName = document.getElementById('input-item-name').value.trim();
+            const quantity = parseFloat(document.getElementById('input-quantity').value) || null;
+            const unit = document.getElementById('input-unit').value.trim();
+            const { error } = await _supabase.from('charity_donations').insert({
+                charity_id: CHARITY_ID, donor_name: donorName, item_name: itemName,
+                quantity, unit, estimated_value: amount || null, status, date, note
+            });
+            if (error) throw error;
+        } else if (type === 'MEMBER_EXPENSE') {
+            const memberName = document.getElementById('input-member-name').value.trim();
+            const category = document.getElementById('input-member-cat').value;
+            const payer = document.getElementById('input-payer').value.trim();
+            const { error } = await _supabase.from('charity_member_expenses').insert({
+                charity_id: CHARITY_ID, member_name: memberName, category,
+                content: donorName, amount, payer, date, note
+            });
+            if (error) throw error;
+        }
+        closeModal();
+        await fetchAllData();
+        showToast('✅', 'Đã lưu thành công!');
+    } catch (err) {
+        showToast('⚠️', 'Lỗi: ' + err.message);
+    } finally {
+        btn.disabled = false; btn.textContent = '💾 Lưu vào Cloud';
+        toggleLoading(false);
+    }
+};
+
+// ==================== DELETE ====================
+async function deleteEntry(table, id) {
+    if (!isAdmin) return;
+    if (!confirm('Xóa mục này?')) return;
+    toggleLoading(true);
+    try {
+        const tableMap = { fund: 'charity_fund_entries', donation: 'charity_donations', member: 'charity_member_expenses' };
+        const { error } = await _supabase.from(tableMap[table]).delete().eq('id', id);
+        if (error) throw error;
+        await fetchAllData();
+        showToast('🗑️', 'Đã xóa!');
+    } catch (err) {
+        showToast('⚠️', 'Lỗi xóa: ' + err.message);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+// ==================== HELPERS ====================
+function fmt(amount) {
+    return Math.round(Number(amount) || 0).toLocaleString('vi-VN') + ' đ';
+}
+
+function fmtAmount(input) {
+    let val = input.value.replace(/[^0-9]/g, '');
+    input.value = val ? parseInt(val).toLocaleString('en-US') : '';
+}
+
+function toggleLoading(show) {
+    document.getElementById('loading').classList.toggle('hidden', !show);
+}
+
+function showToast(icon, msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-icon').textContent = icon;
+    document.getElementById('toast-msg').textContent = msg;
+    toast.classList.remove('hidden');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add('hidden'), 2500);
+}
+</script>
+</body>
+</html>
