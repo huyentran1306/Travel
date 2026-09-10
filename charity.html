@@ -218,9 +218,9 @@
                 <button onclick="fetchAllData()" class="p-2.5 glass rounded-xl text-white/70 hover:text-white transition-all active:scale-95" title="Tải lại dữ liệu">
                     <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                 </button>
-                <button onclick="toggleAdminMode()" id="admin-mode-toggle" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-lg" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;" title="Bật/Tắt chế độ Quản trị (Thêm, Sửa, Xóa)">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i>
-                    <span id="admin-toggle-text">Quản trị: BẬT ⚡</span>
+                <button onclick="toggleAdminMode()" id="admin-mode-toggle" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-lg" style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.15);" title="Bấm để bật quyền Quản trị (Thêm, Sửa, Xóa)">
+                    <i data-lucide="eye" class="w-4 h-4" id="admin-toggle-icon"></i>
+                    <span id="admin-toggle-text">Chế độ Xem 👁️ (Bật Sửa)</span>
                 </button>
                 <button onclick="lockApp()" class="p-2.5 glass rounded-xl text-white/40 hover:text-red-400 transition-all active:scale-95" title="Khóa màn hình">
                     <i data-lucide="lock" class="w-4 h-4"></i>
@@ -759,7 +759,7 @@ const CHARITY_ID = 'GN2026';
 const CORRECT_PASSWORD = 'gieonang2026'; // Mật khẩu chuẩn: Gieo Nắng 2026
 
 // ==================== STATE & CONFIG ====================
-let isAdmin = true; // Mặc định mở quyền quản trị sau khi đã nhập mật khẩu hệ thống
+let isAdmin = false; // Mặc định mở ở CHẾ ĐỘ XEM (View-only), bấm Quản trị mới mở quyền Thêm/Sửa/Xóa
 let adminClickCount = 0;
 let fundEntries = [];
 let donationItems = [];
@@ -810,7 +810,7 @@ function checkPassword() {
     const pwd = document.getElementById('access-password').value.trim();
     if (pwd === CORRECT_PASSWORD || pwd === 'gieunang2026') {
         sessionStorage.setItem('charity_auth', '1');
-        isAdmin = true;
+        isAdmin = false; // Mặc định vào CHẾ ĐỘ XEM (View-only), bấm Bật Quản trị mới mở quyền Sửa
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
         document.getElementById('main-app').classList.add('anim-fade');
@@ -834,7 +834,7 @@ function lockApp() {
 // Check session on load
 window.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('charity_auth') === '1') {
-        isAdmin = true;
+        isAdmin = false; // Mặc định vào CHẾ ĐỘ XEM an toàn
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
         updateAdminUI();
@@ -851,24 +851,40 @@ window.addEventListener('DOMContentLoaded', () => {
 function toggleAdminMode() {
     isAdmin = !isAdmin;
     updateAdminUI();
-    showToast(isAdmin ? '⚡' : '🔒', isAdmin ? 'Đã bật Chế độ Quản trị (Thêm, Sửa, Xóa)' : 'Đã chuyển về Chế độ Xem');
+    showToast(isAdmin ? '⚡' : '👁️', isAdmin ? 'Đã bật Chế độ Quản trị (Thêm, Sửa, Xóa) ⚡' : 'Đã chuyển về Chế độ Xem an toàn 👁️');
 }
 
 function updateAdminUI() {
     const btn = document.getElementById('admin-mode-toggle');
     const label = document.getElementById('admin-toggle-text');
-    if (!btn || !label) return;
-
-    if (isAdmin) {
-        btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-        btn.style.color = '#ffffff';
-        label.textContent = 'Quản trị: BẬT ⚡';
-    } else {
-        btn.style.background = 'rgba(255,255,255,0.08)';
-        btn.style.color = 'rgba(255,255,255,0.7)';
-        label.textContent = 'Chế độ Xem 👁️';
+    const icon = document.getElementById('admin-toggle-icon');
+    if (btn && label) {
+        if (isAdmin) {
+            btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            btn.style.color = '#ffffff';
+            btn.style.border = '1px solid rgba(245,158,11,0.5)';
+            label.textContent = 'Quản trị: BẬT ⚡';
+            btn.title = 'Đang bật quyền Quản trị (Bấm để chuyển về Chế độ Xem an toàn)';
+            if (icon) icon.setAttribute('data-lucide', 'shield-check');
+        } else {
+            btn.style.background = 'rgba(255,255,255,0.08)';
+            btn.style.color = 'rgba(255,255,255,0.8)';
+            btn.style.border = '1px solid rgba(255,255,255,0.15)';
+            label.textContent = 'Chế độ Xem 👁️ (Bật Sửa)';
+            btn.title = 'Đang ở Chế độ Xem (Bấm để bật quyền Quản trị & Chỉnh sửa)';
+            if (icon) icon.setAttribute('data-lucide', 'eye');
+        }
     }
+
+    // Ẩn/hiện toàn bộ các nút Thêm mới
+    const addButtons = ['btn-add-income', 'btn-add-expense', 'btn-add-donation', 'btn-add-member', 'btn-add-member-expense'];
+    addButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', !isAdmin);
+    });
+
     render();
+    lucide.createIcons();
 }
 
 // ==================== DATA FETCH ====================
@@ -1616,7 +1632,7 @@ function submitActualAmountModal() {
 // ==================== QUICK STATUS TOGGLES ====================
 async function toggleExpenseStatus(id, currentStatus) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để chỉnh sửa!');
         return;
     }
     const item = fundEntries.find(x => x.id === id);
@@ -1657,7 +1673,7 @@ async function toggleExpenseStatus(id, currentStatus) {
 
 async function toggleIncomeStatus(id, currentStatus) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để chỉnh sửa!');
         return;
     }
     const newStatus = currentStatus === 'DONE' ? 'PENDING' : 'DONE';
@@ -1676,7 +1692,7 @@ async function toggleIncomeStatus(id, currentStatus) {
 
 async function toggleDonationStatus(id, currentStatus) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để chỉnh sửa!');
         return;
     }
     const newStatus = currentStatus === 'RECEIVED' ? 'PENDING' : 'RECEIVED';
@@ -1695,7 +1711,7 @@ async function toggleDonationStatus(id, currentStatus) {
 
 async function toggleMemberPayment(id, currentStatus) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để chỉnh sửa!');
         return;
     }
     const member = tripMembers.find(m => m.id === id);
@@ -1838,7 +1854,7 @@ function updateParticipantsSplitInfo() {
 
 function openModal(type) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thêm mới!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để thêm mới!');
         return;
     }
     document.getElementById('modal-type').value = type;
@@ -1869,7 +1885,7 @@ function openModal(type) {
 
 function openEditModal(type, id) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để chỉnh sửa!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để chỉnh sửa!');
         return;
     }
     document.getElementById('modal-type').value = type;
@@ -2154,7 +2170,7 @@ document.getElementById('entry-form').onsubmit = async (e) => {
 // ==================== DELETE ====================
 async function deleteEntry(table, id) {
     if (!isAdmin) {
-        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để xóa!');
+        showToast('🔒', 'Bạn đang ở Chế độ Xem. Vui lòng bấm "Bật Sửa" ở góc trên để xóa!');
         return;
     }
     const confirmed = await customConfirm({
