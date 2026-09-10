@@ -205,118 +205,189 @@
     <header class="anim-up">
         <div class="glass rounded-[2rem] p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl" style="background: linear-gradient(135deg, #f59e0b, #ea580c);">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20" style="background: linear-gradient(135deg, #f59e0b, #ea580c);">
                     🌟
                 </div>
                 <div>
-                    <h1 class="text-xl font-black text-white leading-tight">GIEO NẮNG</h1>
-                    <p class="text-amber-400 text-[10px] font-black uppercase tracking-widest">Trung Thu 2026 • Quản Lý Nội Bộ</p>
-                    <p class="text-white/50 text-[10px] mt-0.5">📍 Buôn Ngô - Cư Pui - Dak Lak &nbsp;|&nbsp; 📅 19-20/09/2026 &nbsp;|&nbsp; 👶 270 em</p>
+                    <h1 class="text-xl font-black text-white leading-tight">GIEO NẮNG 2026</h1>
+                    <p class="text-amber-400 text-[10px] font-black uppercase tracking-widest">Trung Thu 2026 • Quản Lý Thu Chi Từ Thiện</p>
+                    <p class="text-white/50 text-[10px] mt-0.5">📍 Buôn Ngô - Cư Pui - Dak Lak &nbsp;|&nbsp; 📅 19-20/09/2026 &nbsp;|&nbsp; 👶 <span id="header-children-count">350</span> em</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-                <button onclick="fetchAllData()" class="p-2.5 glass rounded-xl text-white/60 hover:text-white transition-all" title="Tải lại">
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                <button onclick="fetchAllData()" class="p-2.5 glass rounded-xl text-white/70 hover:text-white transition-all active:scale-95" title="Tải lại dữ liệu">
                     <i data-lucide="rotate-cw" class="w-4 h-4"></i>
                 </button>
-                <button onclick="handleAdminClick()" id="admin-star-btn" class="p-2.5 glass rounded-xl text-amber-400 hover:scale-110 transition-all" title="Admin">
-                    <i data-lucide="star" class="w-4 h-4 fill-amber-400"></i>
+                <button onclick="toggleAdminMode()" id="admin-mode-toggle" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-black transition-all active:scale-95 shadow-lg" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;" title="Bật/Tắt chế độ Quản trị (Thêm, Sửa, Xóa)">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span id="admin-toggle-text">Quản trị: BẬT ⚡</span>
                 </button>
-                <div id="admin-badge" class="hidden px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest text-amber-300 border border-amber-500/30" style="background: rgba(245,158,11,0.15);">
-                    ⚡ Admin
-                </div>
-                <button onclick="lockApp()" class="p-2.5 glass rounded-xl text-white/40 hover:text-red-400 transition-all" title="Khóa">
+                <button onclick="lockApp()" class="p-2.5 glass rounded-xl text-white/40 hover:text-red-400 transition-all active:scale-95" title="Khóa màn hình">
                     <i data-lucide="lock" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Summary Dashboard -->
-    <div id="dashboard" class="grid grid-cols-2 sm:grid-cols-4 gap-3 anim-up">
+    <!-- Summary Dashboard (5 chỉ số thông minh: Phân tách Dự kiến vs Thực tế) -->
+    <div id="dashboard" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 anim-up">
+        <!-- 1. Quỹ Thu Thực Tế -->
         <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-emerald-500">
-            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Tổng Quỹ</p>
-            <p class="text-xl font-black text-emerald-400" id="stat-total-income">--</p>
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Quỹ Thu Thực Tế</p>
+                <span class="text-xs">💚</span>
+            </div>
+            <p class="text-lg sm:text-xl font-black text-emerald-400" id="stat-total-income">--</p>
+            <p class="text-[10px] text-white/50 mt-1" id="stat-donors-count">-- người đóng góp</p>
         </div>
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-red-500">
-            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Đã Chi</p>
-            <p class="text-xl font-black text-red-400" id="stat-total-expense">--</p>
-        </div>
+
+        <!-- 2. Dự Trù Kinh Phí (Kế hoạch chi) -->
         <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-amber-500">
-            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Còn Lại</p>
-            <p class="text-xl font-black text-amber-400" id="stat-balance">--</p>
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[9px] font-black text-amber-400 uppercase tracking-widest">Dự Trù Chi Phí</p>
+                <span class="text-xs">📋</span>
+            </div>
+            <p class="text-lg sm:text-xl font-black text-amber-400" id="stat-planned-expense">--</p>
+            <p class="text-[10px] text-white/50 mt-1" id="stat-planned-count">Kế hoạch dự kiến</p>
         </div>
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-blue-500">
-            <p class="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Người Đóng Góp</p>
-            <p class="text-xl font-black text-blue-400" id="stat-donors">--</p>
+
+        <!-- 3. Đã Chi Thực Tế -->
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-rose-500">
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[9px] font-black text-rose-400 uppercase tracking-widest">Đã Chi Thực Tế</p>
+                <span class="text-xs">💸</span>
+            </div>
+            <p class="text-lg sm:text-xl font-black text-rose-400" id="stat-actual-expense">--</p>
+            <p class="text-[10px] text-white/50 mt-1" id="stat-actual-count">Đã thanh toán thực tế</p>
+        </div>
+
+        <!-- 4. Tồn Quỹ Thực Tế -->
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-cyan-500">
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Tồn Quỹ Thực Tế</p>
+                <span class="text-xs">🪙</span>
+            </div>
+            <p class="text-lg sm:text-xl font-black text-cyan-400" id="stat-actual-balance">--</p>
+            <p class="text-[10px] text-white/50 mt-1">Thu - Đã chi thực tế</p>
+        </div>
+
+        <!-- 5. Cân Đối Dự Trù -->
+        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-purple-500 col-span-2 sm:col-span-1">
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-[9px] font-black text-purple-300 uppercase tracking-widest">Cân Đối Dự Trù</p>
+                <span class="text-xs">⚖️</span>
+            </div>
+            <p class="text-lg sm:text-xl font-black" id="stat-planned-balance">--</p>
+            <p class="text-[10px] mt-1" id="stat-balance-desc">Thu - Dự trù chi</p>
         </div>
     </div>
 
     <!-- Tab Navigation -->
     <div class="flex gap-2 overflow-x-auto pb-1 anim-up" style="scrollbar-width: none;">
         <button id="tab-btn-fund" onclick="switchTab('fund')" class="tab-active flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="wallet" class="w-4 h-4"></i> Quỹ Từ Thiện
+            <i data-lucide="wallet" class="w-4 h-4"></i> Quỹ Từ Thiện (Thu & Chi)
         </button>
         <button id="tab-btn-donations" onclick="switchTab('donations')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="gift" class="w-4 h-4"></i> Đồ Đóng Góp
+            <i data-lucide="gift" class="w-4 h-4"></i> Đồ Đóng Góp (Hiện Vật)
         </button>
         <button id="tab-btn-members" onclick="switchTab('members')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="users" class="w-4 h-4"></i> Chi Thành Viên
+            <i data-lucide="users" class="w-4 h-4"></i> 👥 Quỹ Người Đi Chuyến
         </button>
     </div>
 
     <!-- ===================== TAB 1: QUỸ TỪ THIỆN ===================== -->
-    <div id="tab-fund" class="space-y-4">
+    <div id="tab-fund" class="space-y-6">
 
-        <!-- Income Section -->
+        <!-- 1.1 Income Section (Thu vào thực tế) -->
         <div class="glass rounded-[1.5rem] overflow-hidden">
             <div class="section-header px-5 py-4 flex justify-between items-center">
                 <div>
                     <h2 class="font-black text-white text-sm flex items-center gap-2">
                         <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
-                        💚 ĐÓNG GÓP / THU VÀO
+                        💚 TIỀN ĐÓNG GÓP / THU VÀO (THỰC TẾ)
                     </h2>
-                    <p class="text-white/40 text-[10px] mt-0.5">Tiền mặt & vật dụng đóng góp vào quỹ</p>
+                    <p class="text-white/40 text-[10px] mt-0.5">Tiền mặt từ các mạnh thường quân chuyển vào quỹ</p>
                 </div>
-                <button id="btn-add-income" onclick="openModal('INCOME')" class="hidden btn-green px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                <button id="btn-add-income" onclick="openModal('INCOME')" class="btn-green px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-emerald-500/20">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm người đóng
                 </button>
             </div>
             <div id="list-income" class="divide-y divide-white/5 max-h-80 overflow-y-auto custom-scrollbar">
-                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách đóng góp...</div>
+            </div>
+            <div class="px-5 py-3 border-t border-white/10 flex justify-between items-center bg-white/[0.02]">
+                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Tổng thu thực tế:</span>
+                <span id="income-total-bar" class="text-base font-black text-emerald-400">--</span>
             </div>
         </div>
 
-        <!-- Expense Section - grouped by category -->
+        <!-- 1.2 Expense Section (Dự trù & Thực chi) -->
         <div class="glass rounded-[1.5rem] overflow-hidden">
-            <div class="section-header px-5 py-4 flex justify-between items-center">
+            <div class="section-header px-5 py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <div>
                     <h2 class="font-black text-white text-sm flex items-center gap-2">
-                        <i data-lucide="trending-down" class="w-4 h-4 text-red-400"></i>
-                        ❤️ CHI TIÊU / MUA SẮM
+                        <i data-lucide="receipt" class="w-4 h-4 text-amber-400"></i>
+                        ❤️ KHOẢN CHI & DỰ TRÙ KINH PHÍ
                     </h2>
-                    <p class="text-white/40 text-[10px] mt-0.5">Tất cả khoản chi cho chuyến từ thiện</p>
+                    <p class="text-white/40 text-[10px] mt-0.5">Dự trù kế hoạch mua sắm và các khoản đã thực chi</p>
                 </div>
-                <button id="btn-add-expense" onclick="openModal('EXPENSE')" class="hidden btn-red px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                <button id="btn-add-expense" onclick="openModal('EXPENSE')" class="btn-gold self-start sm:self-auto px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-amber-500/20">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm khoản chi / dự trù
                 </button>
             </div>
-            <!-- Category filter -->
-            <div class="px-4 pt-3 pb-2 flex gap-2 overflow-x-auto" style="scrollbar-width: none;">
-                <button onclick="filterExpense('ALL')" id="cat-all" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(245,158,11,0.3); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4);">Tất cả</button>
-                <button onclick="filterExpense('GIFT_CHILDREN')" id="cat-gift" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎁 Quà trẻ em</button>
-                <button onclick="filterExpense('FOOD_STALL')" id="cat-food" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍹 Ẩm thực</button>
-                <button onclick="filterExpense('FAIR_GAMES')" id="cat-games" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎪 Hội chợ</button>
-                <button onclick="filterExpense('COOKING')" id="cat-cook" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍲 Nấu ăn</button>
-                <button onclick="filterExpense('TRANSPORT')" id="cat-trans" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🚛 Di chuyển</button>
-                <button onclick="filterExpense('OTHER')" id="cat-other" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">📦 Khác</button>
+
+            <!-- Bộ lọc kép: Trạng thái & Danh mục + Tìm kiếm nhanh -->
+            <div class="px-5 py-3 border-b border-white/5 space-y-2.5 bg-white/[0.02]">
+                <!-- Thanh tìm kiếm nhanh khoản dự trù -->
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 text-amber-400/80 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    <input type="text" id="expense-search-input" 
+                           oninput="onExpenseSearch(this.value)" 
+                           placeholder="🔍 Gõ để tìm nhanh khoản dự trù (ví dụ: bánh gấu, sữa, sườn heo, tô giấy, xe...)" 
+                           class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-white/[0.08] text-white placeholder-white/40 text-xs font-semibold outline-none border border-white/10 focus:border-amber-400 focus:bg-white/[0.12] transition-all">
+                    <button id="expense-search-clear" onclick="clearExpenseSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-all" title="Xóa tìm kiếm">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Lọc trạng thái (Dự trù vs Đã chi) -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-1" style="scrollbar-width: none;">
+                    <span class="text-[10px] font-black text-white/40 uppercase tracking-wider shrink-0 mr-1">Trạng thái:</span>
+                    <button onclick="filterExpenseStatus('ALL')" id="stat-filter-all" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(245,158,11,0.25); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4);">
+                        Tất cả (<span id="count-expense-all">0</span>)
+                    </button>
+                    <button onclick="filterExpenseStatus('PENDING')" id="stat-filter-pending" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">
+                        ⏳ Dự trù / Dự kiến (<span id="count-expense-pending">0</span>)
+                    </button>
+                    <button onclick="filterExpenseStatus('DONE')" id="stat-filter-done" class="px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);">
+                        ✅ Đã chi thực tế (<span id="count-expense-done">0</span>)
+                    </button>
+                </div>
+
+                <!-- Lọc danh mục -->
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1" style="scrollbar-width: none;">
+                    <span class="text-[10px] font-black text-white/40 uppercase tracking-wider shrink-0 mr-1">Danh mục:</span>
+                    <button onclick="filterExpenseCategory('ALL')" id="cat-all" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3);">Tất cả</button>
+                    <button onclick="filterExpenseCategory('GIFT_CHILDREN')" id="cat-gift" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎁 Quà trẻ em</button>
+                    <button onclick="filterExpenseCategory('FOOD_STALL')" id="cat-food" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍹 Ẩm thực</button>
+                    <button onclick="filterExpenseCategory('FAIR_GAMES')" id="cat-games" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🎪 Hội chợ</button>
+                    <button onclick="filterExpenseCategory('COOKING')" id="cat-cook" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🍲 Nấu ăn</button>
+                    <button onclick="filterExpenseCategory('TRANSPORT')" id="cat-trans" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">🚛 Di chuyển</button>
+                    <button onclick="filterExpenseCategory('OTHER')" id="cat-other" class="px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap transition-all" style="background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1);">📦 Khác</button>
+                </div>
             </div>
-            <div id="list-expense" class="divide-y divide-white/5 max-h-96 overflow-y-auto custom-scrollbar">
-                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+
+            <div id="list-expense" class="divide-y divide-white/5 max-h-[480px] overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách chi tiêu...</div>
             </div>
-            <!-- Expense total -->
-            <div class="px-5 py-3 border-t border-white/10 flex justify-between items-center">
-                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Tổng chi (lọc):</span>
-                <span id="expense-filtered-total" class="text-base font-black text-red-400">--</span>
+
+            <!-- Expense Subtotal Bar -->
+            <div class="px-5 py-3 border-t border-white/10 flex flex-wrap justify-between items-center gap-2 bg-white/[0.02]">
+                <div class="text-[11px] text-white/60 space-x-3">
+                    <span><span id="expense-filtered-label">Tổng dự trù (lọc)</span>: <strong id="expense-filtered-total" class="text-amber-400 font-black">--</strong></span>
+                    <span>• Đã thực chi: <strong id="expense-filtered-done" class="text-rose-400 font-black">--</strong></span>
+                </div>
+                <div class="text-[10px] text-white/40 italic">💡 Mẹo: Bấm vào nhãn trạng thái để đổi nhanh Dự trù ↔ Đã chi</div>
             </div>
         </div>
     </div>
@@ -328,79 +399,157 @@
                 <div>
                     <h2 class="font-black text-white text-sm flex items-center gap-2">
                         <i data-lucide="package" class="w-4 h-4 text-blue-400"></i>
-                        🎁 DANH SÁCH ĐỒ ĐÓNG GÓP
+                        🎁 DANH SÁCH ĐỒ ĐÓNG GÓP (HIỆN VẬT)
                     </h2>
-                    <p class="text-white/40 text-[10px] mt-0.5">Vật phẩm, hiện vật đóng góp cho chuyến</p>
+                    <p class="text-white/40 text-[10px] mt-0.5">Vật phẩm, hiện vật, quà tặng đóng góp cho các em</p>
                 </div>
-                <button id="btn-add-donation" onclick="openModal('DONATION')" class="hidden btn-blue px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                <button id="btn-add-donation" onclick="openModal('DONATION')" class="btn-blue px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-blue-500/20">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm hiện vật
                 </button>
             </div>
             <div id="list-donations" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
-                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách đồ đóng góp...</div>
             </div>
         </div>
     </div>
 
-    <!-- ===================== TAB 3: CHI THÀNH VIÊN ===================== -->
-    <div id="tab-members" class="hidden space-y-4">
+    <!-- ===================== TAB 3: QUỸ NGƯỜI ĐI CHUYẾN (QUỸ RIÊNG) ===================== -->
+    <div id="tab-members" class="hidden space-y-6">
 
-        <!-- Member Summary Cards -->
-        <div id="member-summary-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <div class="glass rounded-2xl p-5 text-center">
-                <p class="text-white/30 text-xs">Đang tải dữ liệu thành viên...</p>
+        <!-- Mini-Dashboard Quỹ Người Đi Chuyến (Quỹ riêng) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 anim-up">
+            <!-- 1. Người tham gia -->
+            <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-purple-500">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-black text-purple-300 uppercase tracking-widest">Người Đi Chuyến</p>
+                    <span class="text-xs">👥</span>
+                </div>
+                <p class="text-lg sm:text-xl font-black text-purple-300" id="stat-member-count">0 người</p>
+                <p class="text-[10px] text-white/50 mt-1" id="stat-member-status-desc">0 đã đóng • 0 chưa</p>
+            </div>
+
+            <!-- 2. Tổng thu quỹ đoàn -->
+            <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-emerald-500">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Tổng Thu Quỹ Đoàn</p>
+                    <span class="text-xs">💰</span>
+                </div>
+                <p class="text-lg sm:text-xl font-black text-emerald-400" id="stat-member-total-income">--</p>
+                <p class="text-[10px] text-white/50 mt-1" id="stat-member-income-sub">Đã gồm 5tr xe</p>
+            </div>
+
+            <!-- 3. Tổng chi đoàn -->
+            <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-rose-500">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-black text-rose-400 uppercase tracking-widest">Tổng Chi Đoàn</p>
+                    <span class="text-xs">💸</span>
+                </div>
+                <p class="text-lg sm:text-xl font-black text-rose-400" id="stat-member-total-expense">--</p>
+                <p class="text-[10px] text-white/50 mt-1" id="stat-member-expense-sub">0 khoản chi</p>
+            </div>
+
+            <!-- 4. Quỹ đoàn còn lại -->
+            <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-cyan-500">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Quỹ Đoàn Còn Lại</p>
+                    <span class="text-xs">🪙</span>
+                </div>
+                <p class="text-lg sm:text-xl font-black text-cyan-400" id="stat-member-balance">--</p>
+                <p class="text-[10px] text-white/50 mt-1" id="stat-member-balance-sub">Thu quỹ - Chi đoàn</p>
+            </div>
+
+            <!-- 5. Chưa thu -->
+            <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-amber-500 col-span-2 sm:col-span-1">
+                <div class="flex items-center justify-between mb-1">
+                    <p class="text-[9px] font-black text-amber-400 uppercase tracking-widest">Chưa Thu</p>
+                    <span class="text-xs">⏳</span>
+                </div>
+                <p class="text-lg sm:text-xl font-black text-amber-400" id="stat-member-unpaid">--</p>
+                <p class="text-[10px] text-white/50 mt-1" id="stat-member-unpaid-sub">Cần thu thêm</p>
             </div>
         </div>
 
-        <!-- Member Expenses List -->
+        <!-- Section 1: Danh sách thành viên tham gia & Trạng thái đóng tiền (1.5tr) -->
+        <div class="glass rounded-[1.5rem] overflow-hidden">
+            <div class="section-header px-5 py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
+                <div>
+                    <h2 class="font-black text-white text-sm flex items-center gap-2">
+                        <i data-lucide="user-check" class="w-4 h-4 text-purple-400"></i>
+                        👥 DANH SÁCH NGƯỜI ĐI CHUYẾN (1.500.000 đ / người)
+                    </h2>
+                    <p class="text-white/40 text-[10px] mt-0.5">Tiền riêng của đoàn đi • Có hỗ trợ 5.000.000 đ tiền xe từ quỹ chung</p>
+                </div>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <div class="px-3 py-1.5 rounded-xl text-[10px] font-black bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1">
+                        <i data-lucide="truck" class="w-3.5 h-3.5"></i> Hỗ trợ xe: +5.000.000 đ
+                    </div>
+                    <button id="btn-add-member" onclick="openModal('MEMBER')" class="px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-purple-500/20" style="background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: white;">
+                        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Thêm người đi
+                    </button>
+                </div>
+            </div>
+            <div id="list-trip-members" class="divide-y divide-white/5 max-h-[420px] overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách người tham gia...</div>
+            </div>
+            <div class="px-5 py-3 border-t border-white/10 flex flex-wrap justify-between items-center gap-2 bg-white/[0.02]">
+                <span class="text-[10px] text-white/40 italic">💡 Mẹo: Bấm vào nhãn trạng thái để đổi nhanh Chưa đóng ↔ Đã đóng</span>
+                <span class="text-xs text-purple-300 font-bold" id="members-paid-summary">Đã thu: -- / --</span>
+            </div>
+        </div>
+
+        <!-- Section 2: Chi tiêu của đoàn (Ăn uống, Xăng xe, Khách sạn...) -->
         <div class="glass rounded-[1.5rem] overflow-hidden">
             <div class="section-header px-5 py-4 flex justify-between items-center">
                 <div>
                     <h2 class="font-black text-white text-sm flex items-center gap-2">
                         <i data-lucide="receipt" class="w-4 h-4 text-purple-400"></i>
-                        👥 CHI TIÊU THÀNH VIÊN
+                        🧾 CHI TIÊU CỦA ĐOÀN (Ăn uống, Xăng xe, Khách sạn...)
                     </h2>
-                    <p class="text-white/40 text-[10px] mt-0.5">Chi phí cá nhân của từng thành viên tham gia</p>
+                    <p class="text-white/40 text-[10px] mt-0.5">Các khoản chi tiêu sinh hoạt, đi lại trong chuyến đi (trừ vào Quỹ Đoàn)</p>
                 </div>
-                <button id="btn-add-member-expense" onclick="openModal('MEMBER_EXPENSE')" class="hidden px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95" style="background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: white; box-shadow: 0 4px 15px rgba(139,92,246,0.3);">
-                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm
+                <button id="btn-add-member-expense" onclick="openModal('MEMBER_EXPENSE')" class="px-4 py-2 rounded-xl text-xs font-black flex items-center gap-1.5 transition-all active:scale-95 shadow-md shadow-purple-500/20" style="background: linear-gradient(135deg,#8b5cf6,#7c3aed); color: white;">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm khoản chi đoàn
                 </button>
             </div>
-            <div id="list-member-expenses" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
-                <div class="p-8 text-center text-white/30 text-xs">Đang tải...</div>
+            <div id="list-member-expenses" class="divide-y divide-white/5 max-h-[420px] overflow-y-auto custom-scrollbar">
+                <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách chi phí đoàn...</div>
+            </div>
+            <div class="px-5 py-3 border-t border-white/10 flex justify-between items-center bg-white/[0.02]">
+                <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Tổng chi phí đoàn:</span>
+                <span id="member-expense-total-bar" class="text-base font-black text-rose-400">--</span>
             </div>
         </div>
     </div>
 
 </div>
 
-<!-- ===================== MODAL FORM ===================== -->
+<!-- ===================== MODAL FORM (THÊM / SỬA DỮ LIỆU) ===================== -->
 <div id="modal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onclick="closeModal()"></div>
-    <div class="relative w-full sm:max-w-md rounded-t-[2rem] sm:rounded-[2rem] overflow-hidden anim-up" style="max-height: 90vh; background: #1e293b; border: 1px solid rgba(255,255,255,0.12);">
-        <div id="modal-header" class="p-5 flex justify-between items-center">
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeModal()"></div>
+    <div class="relative w-full sm:max-w-md rounded-t-[2rem] sm:rounded-[2rem] overflow-hidden anim-up shadow-2xl" style="max-height: 90vh; background: #1e293b; border: 1px solid rgba(255,255,255,0.15);">
+        <div id="modal-header" class="p-5 flex justify-between items-center border-b border-white/10 bg-slate-900/50">
             <div>
                 <p id="modal-title" class="font-black text-white text-base">Thêm mới</p>
                 <p id="modal-subtitle" class="text-white/40 text-[10px] mt-0.5"></p>
             </div>
-            <button onclick="closeModal()" class="p-2 rounded-xl hover:bg-white/10 text-white/60 transition-all">
+            <button onclick="closeModal()" class="p-2 rounded-xl hover:bg-white/10 text-white/60 hover:text-white transition-all">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
-        <form id="entry-form" class="p-5 pt-0 space-y-3 overflow-y-auto custom-scrollbar" style="max-height: calc(90vh - 80px);">
+        <form id="entry-form" class="p-5 space-y-3.5 overflow-y-auto custom-scrollbar" style="max-height: calc(90vh - 85px);">
             <input type="hidden" id="modal-type">
             <input type="hidden" id="modal-edit-id">
 
             <!-- Donor Name / Content -->
             <div id="field-donor-name">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên người đóng góp / Diễn giải</label>
-                <input type="text" id="input-donor-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ví dụ: Trân, c.Vân...">
+                <label id="label-donor-name" class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên người đóng góp / Diễn giải</label>
+                <input type="text" id="input-donor-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="Ví dụ: Trân, c.Vân...">
             </div>
 
             <!-- Category (for expense) -->
             <div id="field-category" class="hidden">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Danh mục</label>
-                <select id="input-category" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Danh mục chi tiêu</label>
+                <select id="input-category" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/20 text-white outline-none focus:border-amber-400 transition-all text-sm font-medium">
                     <option value="GIFT_CHILDREN">🎁 Quà cho trẻ em (2.1)</option>
                     <option value="FOOD_STALL">🍹 Gian hàng ẩm thực (2.2)</option>
                     <option value="FAIR_GAMES">🎪 Gian hàng hội chợ (2.3)</option>
@@ -412,38 +561,38 @@
 
             <!-- Item Name (for donation) -->
             <div id="field-item-name" class="hidden">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên vật phẩm</label>
-                <input type="text" id="input-item-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ví dụ: Gấu bông, Quần áo...">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên vật phẩm / hiện vật</label>
+                <input type="text" id="input-item-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="Ví dụ: Gấu bông, Quần áo...">
             </div>
 
             <!-- Quantity + Unit -->
             <div id="field-quantity" class="hidden grid grid-cols-2 gap-3">
                 <div>
                     <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Số lượng</label>
-                    <input type="number" id="input-quantity" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="1">
+                    <input type="number" id="input-quantity" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="1">
                 </div>
                 <div>
                     <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Đơn vị</label>
-                    <input type="text" id="input-unit" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Cái, Kg...">
+                    <input type="text" id="input-unit" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="Cái, Thùng, Kg...">
                 </div>
             </div>
 
             <!-- Amount -->
             <div id="field-amount">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Số tiền (VNĐ)</label>
-                <input type="text" id="input-amount" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-lg font-black" placeholder="0" oninput="fmtAmount(this)">
+                <label id="label-amount" class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Số tiền (VNĐ)</label>
+                <input type="text" id="input-amount" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-amber-400 placeholder-white/30 outline-none focus:border-amber-400 transition-all text-lg font-black" placeholder="0" oninput="fmtAmount(this); updateModalDiff(); updateParticipantsSplitInfo();">
             </div>
 
             <!-- Member Name (for member expense) -->
             <div id="field-member-name" class="hidden">
                 <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Tên thành viên</label>
-                <input type="text" id="input-member-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Tên thành viên...">
+                <input type="text" id="input-member-name" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="Ví dụ: Trân, Liền, Hải...">
             </div>
 
             <!-- Member category -->
             <div id="field-member-cat" class="hidden">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Loại chi phí</label>
-                <select id="input-member-cat" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Loại chi phí thành viên</label>
+                <select id="input-member-cat" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/20 text-white outline-none focus:border-amber-400 transition-all text-sm font-medium">
                     <option value="FOOD">🍜 Ăn uống</option>
                     <option value="TRANSPORT">🚗 Di chuyển</option>
                     <option value="ACCOMMODATION">🏠 Lưu trú</option>
@@ -451,34 +600,64 @@
                 </select>
             </div>
 
-            <!-- Payer + Participants (for member expense) -->
+            <!-- Payer (for member expense) -->
             <div id="field-payer" class="hidden">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Người trả / Ghi chú chia sẻ</label>
-                <input type="text" id="input-payer" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Ai trả? (tuỳ chọn)">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Người đứng ra trả / Ghi chú chi tiêu</label>
+                <input type="text" id="input-payer" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm font-semibold" placeholder="Ai trả tiền? (Ví dụ: Cả đoàn, hoặc Trân, Liền...)">
+            </div>
+
+            <!-- Participants Selection (Người tham gia chia tiền) -->
+            <div id="field-participants" class="hidden">
+                <div class="flex justify-between items-center mb-1.5">
+                    <label class="block text-[10px] font-black text-purple-300 uppercase tracking-wider">👥 Người tham gia chia tiền</label>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="selectAllParticipants(true)" class="text-[10px] text-purple-400 hover:text-purple-300 underline font-bold">Chọn tất cả</button>
+                        <span class="text-white/30 text-[10px]">•</span>
+                        <button type="button" onclick="selectAllParticipants(false)" class="text-[10px] text-white/50 hover:text-white underline">Bỏ chọn</button>
+                    </div>
+                </div>
+                <div id="participants-list" class="max-h-36 overflow-y-auto custom-scrollbar p-2.5 rounded-xl bg-slate-900/80 border border-white/10 space-y-1.5">
+                    <!-- Dynamic member checkboxes -->
+                </div>
+                <div class="flex justify-between items-center text-[10px] text-white/60 mt-1 px-1">
+                    <span id="participants-count-label">Đang chọn: 0 người</span>
+                    <span id="participants-split-label" class="font-black text-purple-300">0 đ / người</span>
+                </div>
+                <p class="text-[9px] text-white/40 mt-1 italic">💡 Mặc định chọn tất cả để chia đều. Bỏ tích những người không tham gia khoản chi này.</p>
             </div>
 
             <!-- Status -->
             <div id="field-status">
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Trạng thái</label>
-                <select id="input-status" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
-                    <option value="DONE">✅ Hoàn tất / Đã nhận</option>
-                    <option value="PENDING">⏳ Đang xử lý / Chờ nhận</option>
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Trạng thái ghi nhận</label>
+                <select id="input-status" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/20 text-white outline-none focus:border-amber-400 transition-all text-sm font-medium" onchange="onModalStatusChange()">
+                    <option value="PENDING">⏳ Dự trù / Dự kiến chi</option>
+                    <option value="DONE">✅ Đã thực chi / Đã thanh toán</option>
                 </select>
+            </div>
+
+            <!-- Actual Amount (Số tiền thực tế đã chi khi chọn DONE) -->
+            <div id="field-actual-amount" class="hidden">
+                <div class="flex justify-between items-center mb-1.5">
+                    <label class="block text-[10px] font-black text-rose-300 uppercase tracking-wider">Số tiền ĐÃ CHI THỰC TẾ (VNĐ)</label>
+                    <span id="diff-badge" class="text-[9px] font-black px-2 py-0.5 rounded hidden"></span>
+                </div>
+                <input type="text" id="input-actual-amount" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-rose-400 placeholder-white/30 outline-none focus:border-rose-400 transition-all text-lg font-black" placeholder="Nhập số tiền thực tế..." oninput="fmtAmount(this); updateModalDiff();">
+                <p class="text-[10px] text-white/40 mt-1">Ghi nhận số tiền thực tế nếu khác dự kiến (dự kiến vẫn được giữ nguyên)</p>
             </div>
 
             <!-- Date -->
             <div>
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ngày</label>
-                <input type="date" id="input-date" class="w-full px-4 py-3 rounded-xl bg-white border border-white/20 outline-none focus:border-amber-400 transition-all text-sm font-medium">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ngày ghi nhận</label>
+                <input type="date" id="input-date" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-white/20 text-white outline-none focus:border-amber-400 transition-all text-sm font-medium">
             </div>
 
             <!-- Note -->
             <div>
-                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ghi chú (tuỳ chọn)</label>
-                <input type="text" id="input-note" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Thêm ghi chú...">
+                <label class="block text-[10px] font-black text-white/50 uppercase tracking-wider mb-1.5">Ghi chú thêm (tuỳ chọn)</label>
+                <input type="text" id="input-note" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white placeholder-white/30 outline-none focus:border-amber-400 transition-all text-sm" placeholder="Nhập thêm chi tiết nếu có...">
             </div>
 
-            <button type="submit" id="btn-submit" class="w-full py-4 btn-gold font-black rounded-2xl text-sm uppercase tracking-wider mt-2">
+            <button type="submit" id="btn-submit" class="w-full py-4 btn-gold font-black rounded-2xl text-sm uppercase tracking-wider mt-3 shadow-xl shadow-amber-500/20 active:scale-98 transition-all">
                 💾 Lưu vào Cloud
             </button>
         </form>
@@ -487,9 +666,87 @@
 
 <!-- ===================== TOAST ===================== -->
 <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] hidden">
-    <div class="glass px-5 py-3 rounded-2xl text-white text-sm font-bold flex items-center gap-2 shadow-2xl anim-up">
+    <div class="glass px-5 py-3 rounded-2xl text-white text-sm font-bold flex items-center gap-2 shadow-2xl anim-up border border-white/20">
         <span id="toast-icon">✅</span>
         <span id="toast-msg">Đã lưu!</span>
+    </div>
+</div>
+
+<!-- ===================== CUSTOM CONFIRM DIALOG (POPUP XÁC NHẬN ĐẸP) ===================== -->
+<div id="confirm-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-md" onclick="closeConfirmModal(false)"></div>
+    <div class="relative w-full max-w-sm rounded-[2rem] p-6 text-center anim-up shadow-2xl border border-rose-500/30" style="background: #1e1b2e;">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-rose-500/20 bg-rose-500/20 text-rose-400 border border-rose-500/30" id="confirm-icon-box">
+            <i data-lucide="trash-2" class="w-7 h-7" id="confirm-icon"></i>
+        </div>
+        <h3 id="confirm-title" class="text-base font-black text-white mb-2">Xác nhận xóa dữ liệu</h3>
+        <p id="confirm-message" class="text-xs text-white/60 mb-6 leading-relaxed">Bạn có chắc chắn muốn xóa mục này khỏi hệ thống? Hành động này không thể hoàn tác.</p>
+        <div class="grid grid-cols-2 gap-3">
+            <button type="button" onclick="closeConfirmModal(false)" class="py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white/15 active:scale-95 transition-all">
+                Hủy bỏ
+            </button>
+            <button type="button" id="btn-confirm-action" onclick="closeConfirmModal(true)" class="py-3 rounded-xl btn-red font-black text-xs uppercase tracking-wider active:scale-95 transition-all">
+                Xóa vĩnh viễn
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===================== CUSTOM ACTUAL AMOUNT MODAL (POPUP NHẬP SỐ THỰC CHI ĐẸP) ===================== -->
+<div id="actual-amount-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-slate-950/85 backdrop-blur-md" onclick="closeActualAmountModal(null)"></div>
+    <div class="relative w-full max-w-md rounded-[2rem] overflow-hidden anim-up shadow-2xl border border-white/15" style="background: #1e293b;">
+        <div class="p-5 border-b border-white/10 flex justify-between items-center bg-slate-900/70">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-lg font-black">
+                    💸
+                </div>
+                <div>
+                    <h3 class="text-sm font-black text-white">Xác nhận Số tiền Thực chi</h3>
+                    <p class="text-[10px] text-white/40 mt-0.5">Chuyển trạng thái sang "Đã thanh toán thực tế"</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeActualAmountModal(null)" class="p-1.5 rounded-xl hover:bg-white/10 text-white/50 hover:text-white transition-all">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        
+        <div class="p-5 space-y-4">
+            <!-- Khoản chi info -->
+            <div class="p-3.5 rounded-xl bg-white/[0.04] border border-white/10 space-y-1">
+                <p class="text-xs font-bold text-white" id="actual-modal-item-title">--</p>
+                <div class="flex items-center justify-between text-[11px] pt-1.5 border-t border-white/5">
+                    <span class="text-white/50">Dự trù ban đầu:</span>
+                    <b class="text-amber-400 font-bold" id="actual-modal-planned">--</b>
+                </div>
+            </div>
+
+            <!-- Input số tiền thực chi -->
+            <div>
+                <div class="flex justify-between items-center mb-1.5">
+                    <label class="block text-[10px] font-black text-rose-300 uppercase tracking-wider">Số tiền ĐÃ CHI THỰC TẾ (VNĐ)</label>
+                    <span id="actual-modal-diff-badge" class="text-[9px] font-black px-2 py-0.5 rounded hidden"></span>
+                </div>
+                <input type="text" id="actual-modal-input" 
+                       oninput="fmtAmount(this); onActualModalInputChange();" 
+                       placeholder="Nhập số tiền đã thanh toán..." 
+                       class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-rose-400 placeholder-white/30 outline-none focus:border-rose-400 transition-all text-xl font-black">
+                
+                <!-- Quick shortcut: Lấy số dự trù -->
+                <button type="button" id="btn-use-planned" onclick="usePlannedAmount()" class="mt-2 text-[10px] text-amber-400 hover:text-amber-300 font-bold underline flex items-center gap-1">
+                    👉 Lấy đúng số dự trù (<span id="actual-modal-planned-shortcut">0 đ</span>)
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="closeActualAmountModal(null)" class="py-3 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white/15 active:scale-95 transition-all">
+                    Hủy bỏ
+                </button>
+                <button type="button" onclick="submitActualAmountModal()" class="py-3 rounded-xl btn-green font-black text-xs uppercase tracking-wider active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="check" class="w-4 h-4"></i> Xác nhận Đã chi
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -499,25 +756,65 @@ const SUPABASE_URL = 'https://cfiifhfruyjcgikjotne.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_DD6l7mKVEkHXIEG-1r7KDg_CbrfVdWA';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const CHARITY_ID = 'GN2026';
-const CORRECT_PASSWORD = 'gieunang2026';
+const CORRECT_PASSWORD = 'gieonang2026'; // Mật khẩu chuẩn: Gieo Nắng 2026
 
-// ==================== STATE ====================
-let isAdmin = false;
+// ==================== STATE & CONFIG ====================
+let isAdmin = true; // Mặc định mở quyền quản trị sau khi đã nhập mật khẩu hệ thống
 let adminClickCount = 0;
 let fundEntries = [];
 let donationItems = [];
 let memberExpenses = [];
-let currentExpenseFilter = 'ALL';
+let tripMembers = []; // Danh sách người tham gia chuyến đi
+const DEFAULT_MEMBER_FEE = 1500000; // Mức thu mỗi người: 1.500.000 đ
+const VEHICLE_SUBSIDY = 5000000; // Hỗ trợ 5.000.000 đ tiền xe từ Quỹ Chung sang Quỹ Đoàn
+
+let currentExpenseCategoryFilter = 'ALL';
+let currentExpenseStatusFilter = 'ALL';
+let currentExpenseSearchQuery = '';
 let toastTimer = null;
+
+// Hàm bỏ dấu tiếng Việt để tìm kiếm thông minh không phân biệt dấu
+function removeVietnameseTones(str) {
+    if (!str) return '';
+    return str.toString().toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'd');
+}
+
+function onExpenseSearch(val) {
+    currentExpenseSearchQuery = (val || '').trim();
+    const clearBtn = document.getElementById('expense-search-clear');
+    if (clearBtn) {
+        if (currentExpenseSearchQuery) {
+            clearBtn.classList.remove('hidden');
+        } else {
+            clearBtn.classList.add('hidden');
+        }
+    }
+    renderExpenseList();
+}
+
+function clearExpenseSearch() {
+    currentExpenseSearchQuery = '';
+    const input = document.getElementById('expense-search-input');
+    if (input) input.value = '';
+    const clearBtn = document.getElementById('expense-search-clear');
+    if (clearBtn) clearBtn.classList.add('hidden');
+    renderExpenseList();
+}
 
 // ==================== AUTH ====================
 function checkPassword() {
-    const pwd = document.getElementById('access-password').value;
-    if (pwd === CORRECT_PASSWORD) {
+    const pwd = document.getElementById('access-password').value.trim();
+    if (pwd === CORRECT_PASSWORD || pwd === 'gieunang2026') {
         sessionStorage.setItem('charity_auth', '1');
+        isAdmin = true;
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
         document.getElementById('main-app').classList.add('anim-fade');
+        updateAdminUI();
         fetchAllData();
         lucide.createIcons();
     } else {
@@ -532,15 +829,15 @@ function lockApp() {
     document.getElementById('main-app').classList.add('hidden');
     document.getElementById('lock-screen').classList.remove('hidden');
     document.getElementById('access-password').value = '';
-    isAdmin = false; adminClickCount = 0;
-    updateAdminUI();
 }
 
 // Check session on load
 window.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('charity_auth') === '1') {
+        isAdmin = true;
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
+        updateAdminUI();
         fetchAllData();
     }
     lucide.createIcons();
@@ -550,31 +847,26 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ==================== ADMIN ====================
-function handleAdminClick() {
-    if (isAdmin) {
-        isAdmin = false; adminClickCount = 0;
-        updateAdminUI();
-        showToast('🔒', 'Đã thoát Admin Mode');
-        return;
-    }
-    adminClickCount++;
-    if (adminClickCount >= 3) {
-        isAdmin = true; adminClickCount = 0;
-        updateAdminUI();
-        showToast('🗝️', 'Admin Mode đã mở khóa!');
-    }
+// ==================== ADMIN MODE TOGGLE ====================
+function toggleAdminMode() {
+    isAdmin = !isAdmin;
+    updateAdminUI();
+    showToast(isAdmin ? '⚡' : '🔒', isAdmin ? 'Đã bật Chế độ Quản trị (Thêm, Sửa, Xóa)' : 'Đã chuyển về Chế độ Xem');
 }
 
 function updateAdminUI() {
-    const adminBadge = document.getElementById('admin-badge');
-    const addBtns = ['btn-add-income','btn-add-expense','btn-add-donation','btn-add-member-expense'];
+    const btn = document.getElementById('admin-mode-toggle');
+    const label = document.getElementById('admin-toggle-text');
+    if (!btn || !label) return;
+
     if (isAdmin) {
-        adminBadge.classList.remove('hidden');
-        addBtns.forEach(id => document.getElementById(id)?.classList.remove('hidden'));
+        btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+        btn.style.color = '#ffffff';
+        label.textContent = 'Quản trị: BẬT ⚡';
     } else {
-        adminBadge.classList.add('hidden');
-        addBtns.forEach(id => document.getElementById(id)?.classList.add('hidden'));
+        btn.style.background = 'rgba(255,255,255,0.08)';
+        btn.style.color = 'rgba(255,255,255,0.7)';
+        label.textContent = 'Chế độ Xem 👁️';
     }
     render();
 }
@@ -583,17 +875,30 @@ function updateAdminUI() {
 async function fetchAllData() {
     toggleLoading(true);
     try {
-        const [fundRes, donRes, memRes] = await Promise.all([
+        const [fundRes, donRes, memRes, tripMemRes, settingsRes] = await Promise.all([
             _supabase.from('charity_fund_entries').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false }),
             _supabase.from('charity_donations').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false }),
-            _supabase.from('charity_member_expenses').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false })
+            _supabase.from('charity_member_expenses').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: false }),
+            _supabase.from('charity_members').select('*').eq('charity_id', CHARITY_ID).order('created_at', { ascending: true }),
+            _supabase.from('charity_settings').select('*')
         ]);
         if (fundRes.error) throw fundRes.error;
         if (donRes.error) throw donRes.error;
         if (memRes.error) throw memRes.error;
+
         fundEntries = fundRes.data || [];
         donationItems = donRes.data || [];
         memberExpenses = memRes.data || [];
+        tripMembers = (tripMemRes && !tripMemRes.error) ? (tripMemRes.data || []) : [];
+
+        if (settingsRes && settingsRes.data) {
+            const childSet = settingsRes.data.find(s => s.key === 'children_count');
+            if (childSet && childSet.value) {
+                const el = document.getElementById('header-children-count');
+                if (el) el.textContent = childSet.value;
+            }
+        }
+
         render();
     } catch (err) {
         showToast('⚠️', 'Lỗi tải dữ liệu: ' + err.message);
@@ -615,54 +920,115 @@ function render() {
 function renderDashboard() {
     const incomes = fundEntries.filter(e => e.type === 'INCOME');
     const expenses = fundEntries.filter(e => e.type === 'EXPENSE');
+
+    // 1. Quỹ thu thực tế: tổng các khoản đã nhận
     const totalIncome = incomes.reduce((s, e) => s + Number(e.amount || 0), 0);
-    const totalExpense = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
-    const balance = totalIncome - totalExpense;
-    const donorCount = incomes.length;
+    
+    // 2. Dự trù kinh phí: tổng tất cả các khoản chi tiêu dự kiến theo kế hoạch ban đầu
+    const totalPlannedExpense = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+    
+    // 3. Đã chi thực tế: chỉ những khoản có status === 'DONE' (ưu tiên actual_amount nếu có)
+    const actualExpenses = expenses.filter(e => e.status === 'DONE');
+    const totalActualExpense = actualExpenses.reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
+    
+    // 4. Tồn quỹ thực tế: Tiền thực thu - Tiền đã thực chi
+    const actualBalance = totalIncome - totalActualExpense;
+
+    // 5. Cân đối dự trù: Tiền thực thu - Tổng dự trù
+    const plannedBalance = totalIncome - totalPlannedExpense;
+
+    // 6. Tổng chênh lệch của các khoản đã hoàn thành (Dự kiến - Thực chi)
+    const diffDone = actualExpenses.reduce((s, e) => {
+        const planned = Number(e.amount || 0);
+        const actual = Number(e.actual_amount != null ? e.actual_amount : e.amount || 0);
+        return s + (planned - actual); // > 0 là dôi dư/tiết kiệm, < 0 là vượt dự kiến
+    }, 0);
 
     document.getElementById('stat-total-income').textContent = fmt(totalIncome);
-    document.getElementById('stat-total-expense').textContent = fmt(totalExpense);
-    document.getElementById('stat-balance').textContent = fmt(balance);
-    document.getElementById('stat-donors').textContent = donorCount + ' người';
+    document.getElementById('stat-donors-count').textContent = incomes.length + ' người đóng góp';
+
+    document.getElementById('stat-planned-expense').textContent = fmt(totalPlannedExpense);
+    document.getElementById('stat-planned-count').textContent = expenses.length + ' khoản dự trù';
+
+    document.getElementById('stat-actual-expense').textContent = fmt(totalActualExpense);
+    let diffDesc = '';
+    if (diffDone > 0) diffDesc = ` • 🟢 Tiết kiệm ${fmt(diffDone)}`;
+    else if (diffDone < 0) diffDesc = ` • 🔴 Vượt ${fmt(Math.abs(diffDone))}`;
+    document.getElementById('stat-actual-count').textContent = `${actualExpenses.length} khoản đã chi${diffDesc}`;
+
+    document.getElementById('stat-actual-balance').textContent = fmt(actualBalance);
+
+    const balanceEl = document.getElementById('stat-planned-balance');
+    const balanceDescEl = document.getElementById('stat-balance-desc');
+    balanceEl.textContent = fmt(Math.abs(plannedBalance));
+    if (plannedBalance >= 0) {
+        balanceEl.className = 'text-lg sm:text-xl font-black text-emerald-400';
+        balanceDescEl.className = 'text-[10px] mt-1 text-emerald-400/70 font-semibold';
+        balanceDescEl.textContent = '✅ Dự kiến DƯ quỹ: +' + fmt(plannedBalance);
+    } else {
+        balanceEl.className = 'text-lg sm:text-xl font-black text-rose-400';
+        balanceDescEl.className = 'text-[10px] mt-1 text-rose-400/70 font-semibold';
+        balanceDescEl.textContent = '⚠️ Dự kiến THIẾU: -' + fmt(Math.abs(plannedBalance));
+    }
 }
 
 function renderFund() {
-    // Income list
+    // 1.1 Income list
     const incomes = fundEntries.filter(e => e.type === 'INCOME');
     const listIncome = document.getElementById('list-income');
+    const totalIncome = incomes.reduce((s, e) => s + Number(e.amount || 0), 0);
+    document.getElementById('income-total-bar').textContent = fmt(totalIncome);
+
     if (incomes.length === 0) {
-        listIncome.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có dữ liệu thu</div>';
+        listIncome.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có dữ liệu đóng góp</div>';
     } else {
         listIncome.innerHTML = incomes.map(e => `
-            <div class="entry-item px-5 py-3.5 flex justify-between items-center">
-                <div class="flex-1 min-w-0">
+            <div class="entry-item px-5 py-3.5 flex justify-between items-center transition-all">
+                <div class="flex-1 min-w-0 pr-3">
                     <p class="text-sm font-bold text-white truncate">${e.donor_name || e.content || '--'}</p>
                     <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2">
                         <span>${e.date || ''}</span>
                         ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
                     </p>
                 </div>
-                <div class="flex items-center gap-3 shrink-0">
+                <div class="flex items-center gap-2.5 shrink-0">
                     <span class="font-black text-emerald-400 text-sm">${fmt(e.amount)}</span>
-                    <span class="px-2 py-1 rounded-lg text-[9px] font-black ${e.status === 'DONE' ? 'badge-done' : 'badge-pending'}">${e.status === 'DONE' ? 'Nhận rồi' : 'Chờ'}</span>
-                    ${isAdmin ? `<button onclick="deleteEntry('fund',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                    <button onclick="toggleIncomeStatus('${e.id}', '${e.status}')" class="px-2.5 py-1 rounded-lg text-[9px] font-black transition-all hover:scale-105 active:scale-95 ${e.status === 'DONE' ? 'badge-done' : 'badge-pending'}" title="Bấm để chuyển trạng thái">
+                        ${e.status === 'DONE' ? '✅ Đã nhận' : '⏳ Chờ nhận'}
+                    </button>
+                    ${isAdmin ? `
+                        <button onclick="openEditModal('INCOME', '${e.id}')" class="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10 transition-all" title="Chỉnh sửa khoản thu">
+                            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button onclick="deleteEntry('fund', '${e.id}')" class="p-1.5 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Xóa khoản thu">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    ` : ''}
                 </div>
             </div>
         `).join('');
     }
 
-    // Expense list (filtered)
+    // 1.2 Expense list
     renderExpenseList();
 }
 
 function renderExpenseList() {
-    let expenses = fundEntries.filter(e => e.type === 'EXPENSE');
-    if (currentExpenseFilter !== 'ALL') {
-        expenses = expenses.filter(e => e.category === currentExpenseFilter);
+    let allExpenses = fundEntries.filter(e => e.type === 'EXPENSE');
+
+    // Update filter counts
+    document.getElementById('count-expense-all').textContent = allExpenses.length;
+    document.getElementById('count-expense-pending').textContent = allExpenses.filter(e => e.status !== 'DONE').length;
+    document.getElementById('count-expense-done').textContent = allExpenses.filter(e => e.status === 'DONE').length;
+
+    let filtered = allExpenses;
+
+    // Filter by Status
+    if (currentExpenseStatusFilter === 'PENDING') {
+        filtered = filtered.filter(e => e.status !== 'DONE');
+    } else if (currentExpenseStatusFilter === 'DONE') {
+        filtered = filtered.filter(e => e.status === 'DONE');
     }
-    const listExpense = document.getElementById('list-expense');
-    const total = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
-    document.getElementById('expense-filtered-total').textContent = fmt(total);
 
     const catLabels = {
         GIFT_CHILDREN: '🎁 Quà trẻ em',
@@ -673,45 +1039,148 @@ function renderExpenseList() {
         OTHER: '📦 Khác'
     };
 
-    if (expenses.length === 0) {
-        listExpense.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Không có dữ liệu cho bộ lọc này</div>';
+    // Filter by Category
+    if (currentExpenseCategoryFilter !== 'ALL') {
+        filtered = filtered.filter(e => e.category === currentExpenseCategoryFilter);
+    }
+
+    // Filter by Quick Search Query (không phân biệt dấu tiếng Việt)
+    if (currentExpenseSearchQuery) {
+        const qClean = removeVietnameseTones(currentExpenseSearchQuery);
+        filtered = filtered.filter(e => {
+            const content = removeVietnameseTones(e.content || '');
+            const note = removeVietnameseTones(e.note || '');
+            const cat = removeVietnameseTones(catLabels[e.category] || e.category || '');
+            const amtStr = String(e.amount || '');
+            const actualAmtStr = String(e.actual_amount || '');
+            return content.includes(qClean) || note.includes(qClean) || cat.includes(qClean) || amtStr.includes(qClean) || actualAmtStr.includes(qClean);
+        });
+    }
+
+    const listExpense = document.getElementById('list-expense');
+    const totalPlanned = filtered.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const totalDone = filtered.filter(e => e.status === 'DONE').reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
+
+    document.getElementById('expense-filtered-total').textContent = fmt(totalPlanned);
+    document.getElementById('expense-filtered-done').textContent = fmt(totalDone);
+    
+    const labelTotalEl = document.getElementById('expense-filtered-label');
+    if (labelTotalEl) {
+        labelTotalEl.textContent = currentExpenseSearchQuery ? `Tổng dự trù (${filtered.length} mục tìm thấy)` : 'Tổng dự trù (lọc)';
+    }
+
+    if (filtered.length === 0) {
+        if (currentExpenseSearchQuery) {
+            listExpense.innerHTML = `
+                <div class="p-8 text-center text-white/40 text-xs">
+                    <p class="text-2xl mb-1.5">🔍</p>
+                    <p>Không tìm thấy khoản dự trù nào khớp với: <b class="text-amber-300">"${currentExpenseSearchQuery}"</b></p>
+                    <button onclick="clearExpenseSearch()" class="mt-3 px-3 py-1.5 rounded-xl text-[10px] font-bold bg-white/10 text-amber-300 hover:bg-white/20 transition-all border border-amber-400/30">
+                        ✕ Xóa tìm kiếm để hiện tất cả
+                    </button>
+                </div>`;
+        } else {
+            listExpense.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Không có khoản chi nào phù hợp với bộ lọc hiện tại</div>';
+        }
     } else {
-        listExpense.innerHTML = expenses.map(e => `
-            <div class="entry-item px-5 py-3.5 flex justify-between items-center">
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-bold text-white truncate">${e.content || '--'}</p>
-                    <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2 flex-wrap">
-                        <span class="text-amber-400/70">${catLabels[e.category] || e.category || ''}</span>
-                        ${e.date ? `<span>• ${e.date}</span>` : ''}
-                        ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
-                    </p>
+        listExpense.innerHTML = filtered.map(e => {
+            const isDone = e.status === 'DONE';
+            const plannedAmt = Number(e.amount || 0);
+            const actualAmt = e.actual_amount != null ? Number(e.actual_amount) : plannedAmt;
+            const hasDiff = isDone && e.actual_amount != null && Number(e.actual_amount) !== plannedAmt;
+            const diffVal = plannedAmt - actualAmt; // > 0: tiết kiệm, < 0: vượt dự kiến
+
+            return `
+                <div class="entry-item px-5 py-3.5 flex justify-between items-center transition-all hover:bg-white/[0.02]">
+                    <div class="flex-1 min-w-0 pr-3">
+                        <p class="text-sm font-bold text-white truncate">${e.content || '--'}</p>
+                        <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2 flex-wrap">
+                            <span class="text-amber-400/80 font-semibold">${catLabels[e.category] || e.category || ''}</span>
+                            ${e.date ? `<span>• ${e.date}</span>` : ''}
+                            ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
+                        </p>
+                        ${hasDiff ? `
+                            <div class="mt-1.5 flex items-center gap-2 flex-wrap">
+                                <span class="text-[10px] text-white/50">Dự trù: <b class="text-amber-300/80">${fmt(plannedAmt)}</b></span>
+                                ${diffVal > 0 ? `
+                                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                        🟢 Tiết kiệm: ${fmt(diffVal)}
+                                    </span>
+                                ` : `
+                                    <span class="px-2 py-0.5 rounded-md text-[9px] font-black bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                                        🔴 Vượt dự kiến: +${fmt(Math.abs(diffVal))}
+                                    </span>
+                                `}
+                            </div>
+                        ` : isDone ? `
+                            <div class="mt-1 text-[10px] text-white/40 flex items-center gap-1.5">
+                                <span>Dự trù: ${fmt(plannedAmt)}</span>
+                                <span class="text-emerald-400/80 font-medium">• Khớp dự kiến</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <div class="text-right">
+                            <span class="font-black ${isDone ? 'text-rose-400' : 'text-amber-300'} text-sm block">
+                                ${fmt(isDone ? actualAmt : plannedAmt)}
+                            </span>
+                            <span class="text-[9px] ${isDone ? (hasDiff ? 'text-rose-300 font-semibold' : 'text-white/40') : 'text-amber-400/50'} block">
+                                ${isDone ? (hasDiff ? 'Thực chi' : 'Đã chi') : 'Dự trù'}
+                            </span>
+                        </div>
+                        <button onclick="toggleExpenseStatus('${e.id}', '${e.status}')" class="px-2.5 py-1 rounded-lg text-[9px] font-black transition-all hover:scale-105 active:scale-95 ${isDone ? 'badge-done' : 'badge-pending'}" title="Bấm để đổi nhanh Dự trù ↔ Đã chi">
+                            ${isDone ? '✅ Đã chi' : '⏳ Dự trù'}
+                        </button>
+                        ${isAdmin ? `
+                            <button onclick="openEditModal('EXPENSE', '${e.id}')" class="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10 transition-all" title="Chỉnh sửa khoản chi">
+                                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="deleteEntry('fund', '${e.id}')" class="p-1.5 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Xóa khoản chi">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
-                <div class="flex items-center gap-3 shrink-0">
-                    <span class="font-black text-red-400 text-sm">${fmt(e.amount)}</span>
-                    <span class="px-2 py-1 rounded-lg text-[9px] font-black ${e.status === 'DONE' ? 'badge-done' : 'badge-pending'}">${e.status === 'DONE' ? 'Done' : 'Pending'}</span>
-                    ${isAdmin ? `<button onclick="deleteEntry('fund',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
-                </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
     lucide.createIcons();
 }
 
-function filterExpense(cat) {
-    currentExpenseFilter = cat;
+function filterExpenseStatus(status) {
+    currentExpenseStatusFilter = status;
+    const statusMap = { ALL: 'stat-filter-all', PENDING: 'stat-filter-pending', DONE: 'stat-filter-done' };
+    Object.values(statusMap).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.background = 'rgba(255,255,255,0.06)';
+        el.style.color = 'rgba(255,255,255,0.6)';
+        el.style.border = '1px solid rgba(255,255,255,0.1)';
+    });
+    const active = document.getElementById(statusMap[status]);
+    if (active) {
+        active.style.background = 'rgba(245,158,11,0.25)';
+        active.style.color = '#fbbf24';
+        active.style.border = '1px solid rgba(245,158,11,0.4)';
+    }
+    renderExpenseList();
+}
+
+function filterExpenseCategory(cat) {
+    currentExpenseCategoryFilter = cat;
     const catMap = { ALL: 'cat-all', GIFT_CHILDREN: 'cat-gift', FOOD_STALL: 'cat-food', FAIR_GAMES: 'cat-games', COOKING: 'cat-cook', TRANSPORT: 'cat-trans', OTHER: 'cat-other' };
     Object.values(catMap).forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
-        el.style.background = 'rgba(255,255,255,0.06)';
+        el.style.background = 'rgba(255,255,255,0.05)';
         el.style.color = 'rgba(255,255,255,0.5)';
         el.style.border = '1px solid rgba(255,255,255,0.1)';
     });
     const active = document.getElementById(catMap[cat]);
     if (active) {
-        active.style.background = 'rgba(245,158,11,0.3)';
+        active.style.background = 'rgba(245,158,11,0.2)';
         active.style.color = '#fbbf24';
-        active.style.border = '1px solid rgba(245,158,11,0.4)';
+        active.style.border = '1px solid rgba(245,158,11,0.3)';
     }
     renderExpenseList();
 }
@@ -723,73 +1192,312 @@ function renderDonations() {
         return;
     }
     list.innerHTML = donationItems.map(d => `
-        <div class="entry-item px-5 py-3.5 flex justify-between items-center">
-            <div class="flex-1 min-w-0">
+        <div class="entry-item px-5 py-3.5 flex justify-between items-center transition-all">
+            <div class="flex-1 min-w-0 pr-3">
                 <p class="text-sm font-bold text-white">${d.donor_name || '--'}</p>
                 <p class="text-[11px] text-blue-300 font-semibold">${d.item_name || ''} ${d.quantity ? `• ${d.quantity} ${d.unit || ''}` : ''}</p>
                 <p class="text-[10px] text-white/40 mt-0.5">
                     ${d.date || ''}
-                    ${d.estimated_value ? ` • Est. ${fmt(d.estimated_value)}` : ''}
+                    ${d.estimated_value ? ` • Ước tính ${fmt(d.estimated_value)}` : ''}
                     ${d.note ? ` • ${d.note}` : ''}
                 </p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-                <span class="px-2 py-1 rounded-lg text-[9px] font-black ${d.status === 'RECEIVED' ? 'badge-received' : 'badge-pending'}">${d.status === 'RECEIVED' ? '📦 Đã nhận' : '⏳ Chờ nhận'}</span>
-                ${isAdmin ? `<button onclick="deleteEntry('donation',${JSON.stringify(d.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+            <div class="flex items-center gap-2.5 shrink-0">
+                <button onclick="toggleDonationStatus('${d.id}', '${d.status}')" class="px-2.5 py-1 rounded-lg text-[9px] font-black transition-all hover:scale-105 active:scale-95 ${d.status === 'RECEIVED' ? 'badge-received' : 'badge-pending'}" title="Bấm để đổi trạng thái">
+                    ${d.status === 'RECEIVED' ? '📦 Đã nhận' : '⏳ Chờ nhận'}
+                </button>
+                ${isAdmin ? `
+                    <button onclick="openEditModal('DONATION', '${d.id}')" class="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10 transition-all" title="Chỉnh sửa hiện vật">
+                        <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="deleteEntry('donation', '${d.id}')" class="p-1.5 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Xóa hiện vật">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                ` : ''}
             </div>
         </div>
     `).join('');
     lucide.createIcons();
 }
 
-function renderMembers() {
-    // Build per-member stats
-    const memberMap = {};
-    memberExpenses.forEach(e => {
-        const name = e.member_name || 'Không rõ';
-        if (!memberMap[name]) memberMap[name] = { total: 0, entries: [] };
-        memberMap[name].total += Number(e.amount || 0);
-        memberMap[name].entries.push(e);
+// ==================== QUỸ NGƯỜI ĐI CHUYẾN (THÀNH VIÊN) ====================
+function calculateMemberSpending() {
+    const spendingMap = {};
+    tripMembers.forEach(m => {
+        spendingMap[m.id] = { spent: 0, count: 0 };
     });
 
-    const grid = document.getElementById('member-summary-grid');
-    if (Object.keys(memberMap).length === 0) {
-        grid.innerHTML = '<div class="glass rounded-2xl p-5 col-span-full text-center text-white/30 text-xs">Chưa có dữ liệu chi thành viên</div>';
-    } else {
-        grid.innerHTML = Object.entries(memberMap).map(([name, s]) => `
-            <div class="glass rounded-2xl p-4 anim-up">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="font-black text-white text-sm">${name}</p>
-                    <span class="text-[9px] font-black px-2 py-1 rounded-lg" style="background:rgba(139,92,246,0.2); color:#c4b5fd; border: 1px solid rgba(139,92,246,0.3);">${s.entries.length} khoản</span>
-                </div>
-                <p class="text-xl font-black" style="color: #c4b5fd;">${fmt(s.total)}</p>
-            </div>
-        `).join('');
+    memberExpenses.forEach(exp => {
+        const amt = Number(exp.amount || 0);
+        if (amt <= 0) return;
+
+        let participants = [];
+        if (!exp.participants || exp.participants === 'ALL') {
+            participants = tripMembers.map(m => m.id);
+        } else {
+            try {
+                if (typeof exp.participants === 'string' && exp.participants.startsWith('[')) {
+                    participants = JSON.parse(exp.participants);
+                } else if (Array.isArray(exp.participants)) {
+                    participants = exp.participants;
+                } else {
+                    participants = String(exp.participants).split(',').map(s => s.trim()).filter(Boolean);
+                }
+            } catch (e) {
+                participants = String(exp.participants).split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        const matchedMemberIds = [];
+        participants.forEach(p => {
+            const found = tripMembers.find(m => m.id === p || m.name === p || m.full_name === p);
+            if (found) matchedMemberIds.push(found.id);
+        });
+
+        const effectiveIds = matchedMemberIds.length > 0 ? matchedMemberIds : tripMembers.map(m => m.id);
+        if (effectiveIds.length === 0) return;
+
+        const perPerson = Math.round(amt / effectiveIds.length);
+        effectiveIds.forEach(id => {
+            if (spendingMap[id]) {
+                spendingMap[id].spent += perPerson;
+                spendingMap[id].count += 1;
+            }
+        });
+    });
+
+    return spendingMap;
+}
+
+function renderMembers() {
+    const spendingMap = calculateMemberSpending();
+
+    // 1. Tính toán số liệu Quỹ Người Đi Chuyến
+    const totalMembersCount = tripMembers.length;
+    const paidMembers = tripMembers.filter(m => m.payment_status === 'PAID');
+    const unpaidMembers = tripMembers.filter(m => m.payment_status !== 'PAID');
+    
+    // Tiền thành viên thực thu: dựa trên paid_amount hoặc target_amount nếu đã đóng
+    const totalMemberCollected = tripMembers.reduce((s, m) => {
+        if (m.payment_status === 'PAID') {
+            return s + (Number(m.paid_amount) || Number(m.target_amount) || DEFAULT_MEMBER_FEE);
+        }
+        return s + (Number(m.paid_amount) || 0);
+    }, 0);
+
+    // Tiền chưa thu
+    const totalUnpaid = tripMembers.reduce((s, m) => {
+        if (m.payment_status !== 'PAID') {
+            const target = Number(m.target_amount) || DEFAULT_MEMBER_FEE;
+            const paid = Number(m.paid_amount) || 0;
+            return s + Math.max(0, target - paid);
+        }
+        return s;
+    }, 0);
+
+    // Tổng nguồn thu của Quỹ Đoàn: Tiền thành viên đóng + 5.000.000 đ tiền xe được hỗ trợ
+    const totalTripFundIn = totalMemberCollected + VEHICLE_SUBSIDY;
+
+    // Tổng chi phí của đoàn
+    const totalMemberExpense = memberExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+
+    // Số dư Quỹ Đoàn còn lại
+    const tripFundBalance = totalTripFundIn - totalMemberExpense;
+
+    // 2. Cập nhật Mini-Dashboard Quỹ Đoàn
+    const statMemberCount = document.getElementById('stat-member-count');
+    const statMemberStatusDesc = document.getElementById('stat-member-status-desc');
+    if (statMemberCount) statMemberCount.textContent = totalMembersCount + ' người';
+    if (statMemberStatusDesc) statMemberStatusDesc.textContent = `${paidMembers.length} đã đóng • ${unpaidMembers.length} chưa`;
+
+    const statFundIn = document.getElementById('stat-member-total-income');
+    const statFundInSub = document.getElementById('stat-member-income-sub');
+    if (statFundIn) statFundIn.textContent = fmt(totalTripFundIn);
+    if (statFundInSub) statFundInSub.textContent = `Thu: ${fmt(totalMemberCollected)} + Xe: 5tr`;
+
+    const statExpenseOut = document.getElementById('stat-member-total-expense');
+    const statExpenseOutSub = document.getElementById('stat-member-expense-sub');
+    if (statExpenseOut) statExpenseOut.textContent = fmt(totalMemberExpense);
+    if (statExpenseOutSub) statExpenseOutSub.textContent = `${memberExpenses.length} khoản chi đoàn`;
+
+    const statBalance = document.getElementById('stat-member-balance');
+    const statBalanceSub = document.getElementById('stat-member-balance-sub');
+    if (statBalance) {
+        statBalance.textContent = (tripFundBalance >= 0 ? '+' : '-') + fmt(Math.abs(tripFundBalance));
+        statBalance.className = `text-lg sm:text-xl font-black ${tripFundBalance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+    }
+    if (statBalanceSub) {
+        statBalanceSub.textContent = tripFundBalance >= 0 ? '✅ Quỹ đoàn còn DƯ' : '⚠️ Quỹ đoàn BỊ THIẾU';
+        statBalanceSub.className = `text-[10px] mt-1 font-semibold ${tripFundBalance >= 0 ? 'text-emerald-400/80' : 'text-rose-400/80'}`;
     }
 
-    const catLabels = { FOOD:'🍜 Ăn uống', TRANSPORT:'🚗 Di chuyển', ACCOMMODATION:'🏠 Lưu trú', OTHER:'📦 Khác' };
-    const list = document.getElementById('list-member-expenses');
-    if (memberExpenses.length === 0) {
-        list.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có dữ liệu</div>';
-        return;
+    const statUnpaid = document.getElementById('stat-member-unpaid');
+    const statUnpaidSub = document.getElementById('stat-member-unpaid-sub');
+    if (statUnpaid) statUnpaid.textContent = fmt(totalUnpaid);
+    if (statUnpaidSub) statUnpaidSub.textContent = `${unpaidMembers.length} người chưa hoàn thành`;
+
+    const paidSummary = document.getElementById('members-paid-summary');
+    if (paidSummary) paidSummary.textContent = `Đã thu: ${paidMembers.length} / ${totalMembersCount} người (${fmt(totalMemberCollected)})`;
+
+    const expTotalBar = document.getElementById('member-expense-total-bar');
+    if (expTotalBar) expTotalBar.textContent = fmt(totalMemberExpense);
+
+    // 3. Render Section 1: Danh sách người tham gia & Số dư trên 1.5tr
+    const listMembers = document.getElementById('list-trip-members');
+    if (listMembers) {
+        if (tripMembers.length === 0) {
+            listMembers.innerHTML = `
+                <div class="p-8 text-center text-white/30 text-xs">
+                    Chưa có người nào trong danh sách. Bấm <b>"+ Thêm người đi"</b> để bổ sung!
+                </div>`;
+        } else {
+            listMembers.innerHTML = tripMembers.map((m, idx) => {
+                const isPaid = m.payment_status === 'PAID';
+                const targetAmt = Number(m.target_amount) || DEFAULT_MEMBER_FEE;
+                const paidAmt = isPaid ? (Number(m.paid_amount) || targetAmt) : (Number(m.paid_amount) || 0);
+                
+                const spentInfo = spendingMap[m.id] || { spent: 0, count: 0 };
+                const spent = spentInfo.spent;
+                
+                // Logic số dư: Chỉ người ĐÃ ĐÓNG tiền mới có số dư trong quỹ
+                let statusBadgeHtml = '';
+                if (isPaid) {
+                    const remaining = paidAmt - spent;
+                    if (remaining >= 0) {
+                        statusBadgeHtml = `
+                            <span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                                🟢 Còn dư: ${fmt(remaining)} / ${fmt(targetAmt)}
+                            </span>
+                        `;
+                    } else {
+                        statusBadgeHtml = `
+                            <span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-300 border border-rose-500/30 flex items-center gap-1">
+                                🔴 Chi vượt quỹ: +${fmt(Math.abs(remaining))} (Cần nộp thêm)
+                            </span>
+                        `;
+                    }
+                } else {
+                    if (spent > 0) {
+                        statusBadgeHtml = `
+                            <span class="px-2 py-0.5 rounded text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                ⏳ Chưa đóng quỹ • Đã chi hộ: ${fmt(spent)}
+                            </span>
+                        `;
+                    } else {
+                        statusBadgeHtml = `
+                            <span class="px-2 py-0.5 rounded text-[9px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                                ⏳ Chưa đóng quỹ (Cần đóng: ${fmt(targetAmt)})
+                            </span>
+                        `;
+                    }
+                }
+
+                return `
+                    <div class="entry-item px-5 py-3.5 flex justify-between items-center transition-all hover:bg-white/[0.02]">
+                        <div class="flex items-center gap-3 min-w-0 pr-2">
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shrink-0" 
+                                 style="background: ${isPaid ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; 
+                                        color: ${isPaid ? '#34d399' : '#fbbf24'}; 
+                                        border: 1px solid ${isPaid ? 'rgba(16,185,129,0.4)' : 'rgba(245,158,11,0.4)'};">
+                                ${idx + 1}
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-white truncate flex items-center gap-2">
+                                    <span>${m.name || m.full_name || '--'}</span>
+                                    ${m.role ? `<span class="px-1.5 py-0.5 rounded text-[9px] bg-white/10 text-white/60 font-normal">${m.role}</span>` : ''}
+                                </p>
+                                
+                                <!-- Chi tiêu cá nhân & Số dư thực tế -->
+                                <div class="mt-1 flex items-center gap-2 flex-wrap">
+                                    <span class="text-[10px] text-white/50">Đã chia tiêu: <b class="text-rose-300 font-semibold">${fmt(spent)}</b></span>
+                                    <span class="text-white/20 text-[10px]">•</span>
+                                    ${statusBadgeHtml}
+                                </div>
+
+                                <p class="text-[9px] text-white/40 mt-0.5 flex items-center gap-2 flex-wrap">
+                                    ${m.phone ? `<span>📞 ${m.phone}</span>` : ''}
+                                    ${m.paid_date ? `<span>• Đã đóng ${m.paid_date}</span>` : ''}
+                                    ${m.note ? `<span class="text-white/30">• ${m.note}</span>` : ''}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5 shrink-0">
+                            <button onclick="toggleMemberPayment('${m.id}', '${m.payment_status}')" 
+                                    class="px-2.5 py-1.5 rounded-xl text-[10px] font-black transition-all hover:scale-105 active:scale-95 flex items-center gap-1 shadow-sm ${isPaid ? 'badge-done' : 'badge-pending'}" 
+                                    title="Bấm để chuyển nhanh trạng thái Đã đóng ↔ Chưa đóng">
+                                ${isPaid ? `✅ Đã đóng ${fmt(paidAmt)}` : `⏳ Chưa đóng (${fmt(targetAmt)})`}
+                            </button>
+                            ${isAdmin ? `
+                                <button onclick="openEditModal('MEMBER', '${m.id}')" class="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10 transition-all" title="Chỉnh sửa thông tin người đi">
+                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="deleteEntry('trip_member', '${m.id}')" class="p-1.5 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Xóa người đi">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
     }
-    list.innerHTML = memberExpenses.map(e => `
-        <div class="entry-item px-5 py-3.5 flex justify-between items-center">
-            <div class="flex-1 min-w-0">
-                <p class="text-sm font-bold text-white">${e.member_name || '--'} <span class="text-white/40 font-normal">• ${e.content || ''}</span></p>
-                <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2">
-                    <span style="color:#c4b5fd;">${catLabels[e.category] || e.category || ''}</span>
-                    ${e.date ? `<span>• ${e.date}</span>` : ''}
-                    ${e.payer ? `<span>• Trả: ${e.payer}</span>` : ''}
-                    ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
-                </p>
-            </div>
-            <div class="flex items-center gap-3 shrink-0">
-                <span class="font-black text-sm" style="color:#c4b5fd;">${fmt(e.amount)}</span>
-                ${isAdmin ? `<button onclick="deleteEntry('member',${JSON.stringify(e.id)})" class="p-1.5 rounded-lg text-red-400/40 hover:text-red-400 hover:bg-red-400/10 transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
-            </div>
-        </div>
-    `).join('');
+
+    // 4. Render Section 2: Danh sách chi phí của đoàn & Chi tiết chia tiền
+    const catLabels = { FOOD:'🍜 Ăn uống', TRANSPORT:'🚗 Di chuyển / Xăng xe', ACCOMMODATION:'🏠 Lưu trú / Phòng', OTHER:'📦 Chi khác' };
+    const listExpenses = document.getElementById('list-member-expenses');
+    if (listExpenses) {
+        if (memberExpenses.length === 0) {
+            listExpenses.innerHTML = '<div class="p-8 text-center text-white/30 text-xs">Chưa có khoản chi nào của đoàn được ghi nhận</div>';
+        } else {
+            listExpenses.innerHTML = memberExpenses.map(e => {
+                let partDesc = '';
+                if (!e.participants || e.participants === 'ALL') {
+                    const per = tripMembers.length > 0 ? Math.round(Number(e.amount || 0) / tripMembers.length) : 0;
+                    partDesc = `👥 Chia đều cả đoàn (${tripMembers.length} người • ${fmt(per)}/người)`;
+                } else {
+                    let pList = [];
+                    try {
+                        pList = (typeof e.participants === 'string' && e.participants.startsWith('[')) ? JSON.parse(e.participants) : String(e.participants).split(',').map(s=>s.trim()).filter(Boolean);
+                    } catch(err) {
+                        pList = String(e.participants).split(',').map(s=>s.trim()).filter(Boolean);
+                    }
+                    const names = pList.map(p => {
+                        const found = tripMembers.find(m => m.id === p || m.name === p || m.full_name === p);
+                        return found ? (found.name || found.full_name) : p;
+                    });
+                    const per = names.length > 0 ? Math.round(Number(e.amount || 0) / names.length) : 0;
+                    partDesc = `👥 Chia cho ${names.length} người: ${names.slice(0, 3).join(', ')}${names.length > 3 ? ` và ${names.length - 3} người khác` : ''} (${fmt(per)}/người)`;
+                }
+
+                return `
+                    <div class="entry-item px-5 py-3.5 flex justify-between items-center transition-all hover:bg-white/[0.02]">
+                        <div class="flex-1 min-w-0 pr-3">
+                            <p class="text-sm font-bold text-white truncate">${e.content || e.member_name || '--'} ${e.payer ? `<span class="text-amber-400/80 font-normal text-xs">(Người chi trả: ${e.payer})</span>` : ''}</p>
+                            <p class="text-[10px] text-white/40 mt-0.5 flex items-center gap-2 flex-wrap">
+                                <span style="color:#c4b5fd;">${catLabels[e.category] || e.category || ''}</span>
+                                ${e.date ? `<span>• ${e.date}</span>` : ''}
+                                ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
+                            </p>
+                            <div class="mt-1 text-[10px] text-purple-300 font-medium">
+                                ${partDesc}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5 shrink-0">
+                            <span class="font-black text-sm text-rose-400">${fmt(e.amount)}</span>
+                            ${isAdmin ? `
+                                <button onclick="openEditModal('MEMBER_EXPENSE', '${e.id}')" class="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-300 hover:bg-amber-400/10 transition-all" title="Chỉnh sửa chi phí đoàn">
+                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <button onclick="deleteEntry('member_expense', '${e.id}')" class="p-1.5 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-400/10 transition-all" title="Xóa chi phí đoàn">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
     lucide.createIcons();
 }
 
@@ -805,60 +1513,507 @@ function switchTab(tab) {
     document.getElementById('tab-btn-' + tab).classList.remove('tab-inactive');
 }
 
-// ==================== MODAL ====================
+// ==================== CUSTOM MODALS (CONFIRM & ACTUAL AMOUNT) ====================
+let confirmResolver = null;
+
+function customConfirm(options = {}) {
+    return new Promise((resolve) => {
+        confirmResolver = resolve;
+        const modal = document.getElementById('confirm-modal');
+        document.getElementById('confirm-title').textContent = options.title || 'Xác nhận xóa dữ liệu';
+        document.getElementById('confirm-message').textContent = options.message || 'Bạn có chắc chắn muốn xóa mục này khỏi hệ thống? Hành động này không thể hoàn tác.';
+        const btn = document.getElementById('btn-confirm-action');
+        btn.textContent = options.confirmText || 'Xóa vĩnh viễn';
+        if (options.confirmClass) {
+            btn.className = options.confirmClass;
+        } else {
+            btn.className = 'py-3 rounded-xl btn-red font-black text-xs uppercase tracking-wider active:scale-95 transition-all';
+        }
+        modal.classList.remove('hidden');
+        lucide.createIcons();
+    });
+}
+
+function closeConfirmModal(result) {
+    document.getElementById('confirm-modal').classList.add('hidden');
+    if (confirmResolver) {
+        confirmResolver(result);
+        confirmResolver = null;
+    }
+}
+
+let actualAmountResolver = null;
+let currentModalPlannedAmt = 0;
+
+function customPromptActualAmount(item, plannedAmt, currentActual) {
+    return new Promise((resolve) => {
+        actualAmountResolver = resolve;
+        currentModalPlannedAmt = plannedAmt;
+        
+        document.getElementById('actual-modal-item-title').textContent = item?.content || item?.donor_name || '--';
+        document.getElementById('actual-modal-planned').textContent = fmt(plannedAmt);
+        document.getElementById('actual-modal-planned-shortcut').textContent = fmt(plannedAmt);
+        
+        const initialVal = currentActual != null ? currentActual : plannedAmt;
+        document.getElementById('actual-modal-input').value = initialVal ? Number(initialVal).toLocaleString('en-US') : '';
+        
+        onActualModalInputChange();
+        
+        document.getElementById('actual-amount-modal').classList.remove('hidden');
+        lucide.createIcons();
+        setTimeout(() => {
+            const inp = document.getElementById('actual-modal-input');
+            if (inp) { inp.focus(); inp.select(); }
+        }, 100);
+    });
+}
+
+function usePlannedAmount() {
+    document.getElementById('actual-modal-input').value = currentModalPlannedAmt ? Number(currentModalPlannedAmt).toLocaleString('en-US') : '';
+    onActualModalInputChange();
+}
+
+function onActualModalInputChange() {
+    const raw = document.getElementById('actual-modal-input').value.replace(/,/g, '');
+    const actualVal = parseFloat(raw);
+    const badge = document.getElementById('actual-modal-diff-badge');
+    if (!badge) return;
+    
+    if (isNaN(actualVal) || actualVal <= 0 || !currentModalPlannedAmt) {
+        badge.classList.add('hidden');
+        return;
+    }
+    
+    const diff = currentModalPlannedAmt - actualVal;
+    badge.classList.remove('hidden');
+    if (diff > 0) {
+        badge.textContent = `🟢 Tiết kiệm: ${fmt(diff)}`;
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+    } else if (diff < 0) {
+        badge.textContent = `🔴 Vượt: +${fmt(Math.abs(diff))}`;
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+    } else {
+        badge.textContent = '✅ Khớp dự trù';
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/40';
+    }
+}
+
+function closeActualAmountModal(result) {
+    document.getElementById('actual-amount-modal').classList.add('hidden');
+    if (actualAmountResolver) {
+        actualAmountResolver(result);
+        actualAmountResolver = null;
+    }
+}
+
+function submitActualAmountModal() {
+    const raw = document.getElementById('actual-modal-input').value.replace(/,/g, '');
+    const amt = parseFloat(raw);
+    const finalAmt = !isNaN(amt) && amt >= 0 ? amt : currentModalPlannedAmt;
+    closeActualAmountModal(finalAmt);
+}
+
+// ==================== QUICK STATUS TOGGLES ====================
+async function toggleExpenseStatus(id, currentStatus) {
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        return;
+    }
+    const item = fundEntries.find(x => x.id === id);
+    const newStatus = currentStatus === 'DONE' ? 'PENDING' : 'DONE';
+    
+    let updatePayload = { status: newStatus };
+    if (newStatus === 'DONE') {
+        const plannedAmt = Number(item?.amount || 0);
+        const currentActual = item?.actual_amount != null ? Number(item.actual_amount) : plannedAmt;
+        const actualAmt = await customPromptActualAmount(item, plannedAmt, currentActual);
+        if (actualAmt === null) return; // Người dùng bấm Hủy
+        updatePayload.actual_amount = actualAmt;
+    } else {
+        updatePayload.actual_amount = null;
+    }
+
+    toggleLoading(true);
+    try {
+        let { error } = await _supabase.from('charity_fund_entries').update(updatePayload).eq('id', id);
+        if (error && error.message && error.message.includes('actual_amount')) {
+            // Database chưa có cột actual_amount -> lưu tạm trạng thái và nhắc user chạy script
+            delete updatePayload.actual_amount;
+            const res2 = await _supabase.from('charity_fund_entries').update(updatePayload).eq('id', id);
+            if (res2.error) throw res2.error;
+            await fetchAllData();
+            showToast('⚠️', 'Đã đổi trạng thái! (Lưu ý: Bạn cần chạy lệnh SQL để lưu số thực chi)');
+            return;
+        }
+        if (error) throw error;
+        await fetchAllData();
+        showToast(newStatus === 'DONE' ? '✅' : '⏳', newStatus === 'DONE' ? 'Đã chuyển sang: ĐÃ THỰC CHI' : 'Đã chuyển sang: DỰ TRÙ');
+    } catch (err) {
+        showToast('⚠️', 'Lỗi cập nhật: ' + err.message);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+async function toggleIncomeStatus(id, currentStatus) {
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        return;
+    }
+    const newStatus = currentStatus === 'DONE' ? 'PENDING' : 'DONE';
+    toggleLoading(true);
+    try {
+        const { error } = await _supabase.from('charity_fund_entries').update({ status: newStatus }).eq('id', id);
+        if (error) throw error;
+        await fetchAllData();
+        showToast(newStatus === 'DONE' ? '✅' : '⏳', newStatus === 'DONE' ? 'Đã nhận vào quỹ' : 'Chờ nhận');
+    } catch (err) {
+        showToast('⚠️', 'Lỗi cập nhật: ' + err.message);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+async function toggleDonationStatus(id, currentStatus) {
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        return;
+    }
+    const newStatus = currentStatus === 'RECEIVED' ? 'PENDING' : 'RECEIVED';
+    toggleLoading(true);
+    try {
+        const { error } = await _supabase.from('charity_donations').update({ status: newStatus }).eq('id', id);
+        if (error) throw error;
+        await fetchAllData();
+        showToast(newStatus === 'RECEIVED' ? '📦' : '⏳', newStatus === 'RECEIVED' ? 'Đã nhận đồ' : 'Chờ nhận đồ');
+    } catch (err) {
+        showToast('⚠️', 'Lỗi cập nhật: ' + err.message);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+async function toggleMemberPayment(id, currentStatus) {
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thay đổi trạng thái!');
+        return;
+    }
+    const member = tripMembers.find(m => m.id === id);
+    const newStatus = currentStatus === 'PAID' ? 'UNPAID' : 'PAID';
+    const targetAmt = Number(member?.target_amount) || DEFAULT_MEMBER_FEE;
+    const newPaidAmt = newStatus === 'PAID' ? targetAmt : 0;
+    const paidDate = newStatus === 'PAID' ? new Date().toISOString().split('T')[0] : null;
+
+    toggleLoading(true);
+    try {
+        const { error } = await _supabase.from('charity_members').update({
+            payment_status: newStatus,
+            paid_amount: newPaidAmt,
+            paid_date: paidDate
+        }).eq('id', id);
+        if (error) throw error;
+        await fetchAllData();
+        showToast(newStatus === 'PAID' ? '✅' : '⏳', newStatus === 'PAID' ? `Đã xác nhận ${member?.name || member?.full_name || ''} đóng ${fmt(targetAmt)}` : `Đã chuyển ${member?.name || member?.full_name || ''} về Chưa đóng`);
+    } catch (err) {
+        showToast('⚠️', 'Lỗi cập nhật: ' + err.message);
+    } finally {
+        toggleLoading(false);
+    }
+}
+
+// ==================== MODAL FORM SETUP (ADD & EDIT) ====================
+function onModalStatusChange() {
+    const type = document.getElementById('modal-type').value;
+    const status = document.getElementById('input-status').value;
+    const fieldActual = document.getElementById('field-actual-amount');
+    
+    if (type === 'EXPENSE' && status === 'DONE') {
+        fieldActual.classList.remove('hidden');
+        const inputPlanned = document.getElementById('input-amount').value;
+        const inputActual = document.getElementById('input-actual-amount');
+        if (!inputActual.value && inputPlanned) {
+            inputActual.value = inputPlanned;
+        }
+        updateModalDiff();
+    } else {
+        fieldActual.classList.add('hidden');
+    }
+}
+
+function updateModalDiff() {
+    const planned = parseFloat(document.getElementById('input-amount').value.replace(/,/g, '')) || 0;
+    const actual = parseFloat(document.getElementById('input-actual-amount').value.replace(/,/g, '')) || 0;
+    const badge = document.getElementById('diff-badge');
+    
+    if (!badge) return;
+    if (actual === 0 || planned === 0) {
+        badge.classList.add('hidden');
+        return;
+    }
+    
+    badge.classList.remove('hidden');
+    const diff = planned - actual; // > 0: tiết kiệm, < 0: vượt dự kiến
+    if (diff > 0) {
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+        badge.textContent = `🟢 Tiết kiệm ${fmt(diff)}`;
+    } else if (diff < 0) {
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        badge.textContent = `🔴 Vượt dự kiến +${fmt(Math.abs(diff))}`;
+    } else {
+        badge.className = 'text-[9px] font-black px-2 py-0.5 rounded bg-white/10 text-white/60';
+        badge.textContent = `⚪ Khớp dự kiến`;
+    }
+}
+
+function renderParticipantsCheckboxes(selectedIds = null) {
+    const container = document.getElementById('participants-list');
+    if (!container) return;
+
+    if (tripMembers.length === 0) {
+        container.innerHTML = '<div class="text-white/30 text-[10px] text-center py-2">Chưa có thành viên nào trong danh sách. Vui lòng thêm người đi trước!</div>';
+        return;
+    }
+
+    const isAll = (selectedIds === null || selectedIds === 'ALL');
+    let selectedSet = new Set();
+    if (!isAll && Array.isArray(selectedIds)) {
+        selectedSet = new Set(selectedIds);
+    } else if (!isAll && typeof selectedIds === 'string') {
+        try {
+            const arr = selectedIds.startsWith('[') ? JSON.parse(selectedIds) : selectedIds.split(',').map(s=>s.trim());
+            selectedSet = new Set(arr);
+        } catch(e) {
+            selectedSet = new Set(selectedIds.split(',').map(s=>s.trim()));
+        }
+    }
+
+    container.innerHTML = tripMembers.map(m => {
+        const checked = isAll || selectedSet.has(m.id) || selectedSet.has(m.name) || selectedSet.has(m.full_name);
+        const isPaid = m.payment_status === 'PAID';
+        return `
+            <label class="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-all">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <input type="checkbox" name="expense-participant" value="${m.id}" ${checked ? 'checked' : ''} 
+                           onchange="updateParticipantsSplitInfo()"
+                           class="w-4 h-4 rounded text-purple-600 focus:ring-0 focus:ring-offset-0 bg-slate-800 border-white/20">
+                    <span class="text-xs text-white font-medium truncate">${m.name || m.full_name || '--'}</span>
+                </div>
+                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold shrink-0 ${isPaid ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'}">
+                    ${isPaid ? 'Đã đóng 1.5tr' : 'Chưa đóng'}
+                </span>
+            </label>
+        `;
+    }).join('');
+
+    updateParticipantsSplitInfo();
+}
+
+function selectAllParticipants(select) {
+    const checkboxes = document.querySelectorAll('input[name="expense-participant"]');
+    checkboxes.forEach(cb => cb.checked = select);
+    updateParticipantsSplitInfo();
+}
+
+function updateParticipantsSplitInfo() {
+    const checkboxes = [...document.querySelectorAll('input[name="expense-participant"]:checked')];
+    const count = checkboxes.length;
+    const totalCount = tripMembers.length;
+    const countLabel = document.getElementById('participants-count-label');
+    const splitLabel = document.getElementById('participants-split-label');
+    
+    if (countLabel) {
+        countLabel.textContent = `Đang chọn: ${count} / ${totalCount} người`;
+    }
+    
+    const amount = parseFloat(document.getElementById('input-amount').value.replace(/,/g, '')) || 0;
+    if (splitLabel) {
+        if (count > 0 && amount > 0) {
+            const perPerson = Math.round(amount / count);
+            splitLabel.textContent = `Chia: ${fmt(perPerson)} / người`;
+        } else {
+            splitLabel.textContent = `0 đ / người`;
+        }
+    }
+}
+
 function openModal(type) {
-    if (!isAdmin) { showToast('🔒', 'Cần quyền Admin để thêm dữ liệu!'); return; }
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để thêm mới!');
+        return;
+    }
     document.getElementById('modal-type').value = type;
     document.getElementById('modal-edit-id').value = '';
     document.getElementById('entry-form').reset();
     document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('btn-submit').textContent = '💾 Lưu vào Cloud';
 
-    // Reset field visibility
-    const fields = ['field-donor-name','field-category','field-item-name','field-quantity','field-amount','field-member-name','field-member-cat','field-payer','field-status'];
-    fields.forEach(f => { const el = document.getElementById(f); if(el) el.classList.add('hidden'); });
+    setupModalFields(type);
 
     const titles = {
-        INCOME: { t: '💚 Thêm khoản thu / đóng góp', s: 'Ghi nhận tiền mặt đóng vào quỹ' },
-        EXPENSE: { t: '❤️ Thêm khoản chi', s: 'Ghi nhận chi tiêu cho chuyến từ thiện' },
-        DONATION: { t: '🎁 Thêm đồ đóng góp', s: 'Vật phẩm, hiện vật đóng góp' },
-        MEMBER_EXPENSE: { t: '👥 Chi thành viên', s: 'Chi tiêu cá nhân trong chuyến' }
+        INCOME: { t: '💚 Thêm khoản thu / đóng góp', s: 'Ghi nhận tiền mặt đóng vào quỹ từ thiện thực tế' },
+        EXPENSE: { t: '❤️ Thêm khoản chi / dự trù', s: 'Kế hoạch mua sắm từ thiện hoặc khoản đã chi thực' },
+        DONATION: { t: '🎁 Thêm đồ đóng góp', s: 'Vật phẩm, hiện vật đóng góp cho chuyến đi' },
+        MEMBER: { t: '👥 Thêm người đi chuyến', s: 'Đóng phí 1.500.000 đ • Quỹ riêng của đoàn đi' },
+        MEMBER_EXPENSE: { t: '🧾 Thêm chi tiêu của đoàn', s: 'Ăn uống, xăng xe, khách sạn (trừ vào Quỹ Đoàn)' }
     };
     document.getElementById('modal-title').textContent = titles[type]?.t || 'Thêm mới';
     document.getElementById('modal-subtitle').textContent = titles[type]?.s || '';
 
-    if (type === 'INCOME') {
-        ['field-donor-name','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
-        document.getElementById('input-status').value = 'DONE';
-        document.getElementById('input-donor-name').placeholder = 'Tên người đóng tiền...';
-    } else if (type === 'EXPENSE') {
-        ['field-donor-name','field-category','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
-        document.getElementById('input-donor-name').placeholder = 'Tên sản phẩm / Nội dung chi...';
-        document.getElementById('input-status').value = 'PENDING';
-    } else if (type === 'DONATION') {
-        ['field-donor-name','field-item-name','field-quantity','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
-        document.getElementById('field-quantity').classList.remove('hidden');
-        document.getElementById('input-donor-name').placeholder = 'Tên người đóng góp đồ...';
-        document.getElementById('input-status').innerHTML = `<option value="RECEIVED">📦 Đã nhận</option><option value="PENDING">⏳ Chưa nhận</option>`;
-    } else if (type === 'MEMBER_EXPENSE') {
-        ['field-member-name','field-member-cat','field-donor-name','field-amount','field-payer'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
-        document.getElementById('input-donor-name').placeholder = 'Mô tả chi tiêu...';
+    if (type === 'MEMBER_EXPENSE') {
+        renderParticipantsCheckboxes('ALL');
     }
 
     document.getElementById('modal').classList.remove('hidden');
     lucide.createIcons();
 }
 
+function openEditModal(type, id) {
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để chỉnh sửa!');
+        return;
+    }
+    document.getElementById('modal-type').value = type;
+    document.getElementById('modal-edit-id').value = id;
+    document.getElementById('entry-form').reset();
+    document.getElementById('btn-submit').textContent = '💾 Cập nhật thay đổi';
+
+    setupModalFields(type);
+
+    let item = null;
+    if (type === 'INCOME' || type === 'EXPENSE') {
+        item = fundEntries.find(x => x.id === id);
+    } else if (type === 'DONATION') {
+        item = donationItems.find(x => x.id === id);
+    } else if (type === 'MEMBER') {
+        item = tripMembers.find(x => x.id === id);
+    } else if (type === 'MEMBER_EXPENSE') {
+        item = memberExpenses.find(x => x.id === id);
+    }
+
+    if (!item) {
+        showToast('⚠️', 'Không tìm thấy dữ liệu mục này!');
+        return;
+    }
+
+    document.getElementById('modal-title').textContent = '✏️ Chỉnh sửa thông tin';
+    document.getElementById('modal-subtitle').textContent = 'Cập nhật lại các thông tin của mục này';
+
+    // Populate data
+    if (type === 'INCOME') {
+        document.getElementById('input-donor-name').value = item.donor_name || item.content || '';
+        document.getElementById('input-amount').value = item.amount ? Number(item.amount).toLocaleString('en-US') : '';
+        document.getElementById('input-status').value = item.status || 'DONE';
+    } else if (type === 'EXPENSE') {
+        document.getElementById('input-donor-name').value = item.content || '';
+        document.getElementById('input-category').value = item.category || 'OTHER';
+        document.getElementById('input-amount').value = item.amount ? Number(item.amount).toLocaleString('en-US') : '';
+        document.getElementById('input-status').value = item.status || 'PENDING';
+        
+        const actualAmt = item.actual_amount != null ? item.actual_amount : (item.status === 'DONE' ? item.amount : '');
+        document.getElementById('input-actual-amount').value = actualAmt ? Number(actualAmt).toLocaleString('en-US') : '';
+        
+        if (item.status === 'DONE') {
+            document.getElementById('field-actual-amount').classList.remove('hidden');
+            updateModalDiff();
+        }
+    } else if (type === 'DONATION') {
+        document.getElementById('input-donor-name').value = item.donor_name || '';
+        document.getElementById('input-item-name').value = item.item_name || '';
+        document.getElementById('input-quantity').value = item.quantity || '';
+        document.getElementById('input-unit').value = item.unit || '';
+        document.getElementById('input-amount').value = item.estimated_value ? Number(item.estimated_value).toLocaleString('en-US') : '';
+        document.getElementById('input-status').value = item.status || 'RECEIVED';
+    } else if (type === 'MEMBER') {
+        document.getElementById('input-donor-name').value = item.name || item.full_name || '';
+        document.getElementById('input-amount').value = item.target_amount ? Number(item.target_amount).toLocaleString('en-US') : Number(DEFAULT_MEMBER_FEE).toLocaleString('en-US');
+        document.getElementById('input-status').value = item.payment_status || 'UNPAID';
+        if (item.paid_date) document.getElementById('input-date').value = item.paid_date;
+    } else if (type === 'MEMBER_EXPENSE') {
+        document.getElementById('input-member-name').value = item.member_name || '';
+        document.getElementById('input-member-cat').value = item.category || 'OTHER';
+        document.getElementById('input-donor-name').value = item.content || '';
+        document.getElementById('input-amount').value = item.amount ? Number(item.amount).toLocaleString('en-US') : '';
+        document.getElementById('input-payer').value = item.payer || '';
+        renderParticipantsCheckboxes(item.participants || 'ALL');
+    }
+
+    if (item.date && type !== 'MEMBER') document.getElementById('input-date').value = item.date;
+    if (item.note) document.getElementById('input-note').value = item.note;
+
+    document.getElementById('modal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function setupModalFields(type) {
+    const fields = ['field-donor-name','field-category','field-item-name','field-quantity','field-amount','field-member-name','field-member-cat','field-payer','field-status','field-actual-amount','field-participants'];
+    fields.forEach(f => { const el = document.getElementById(f); if(el) el.classList.add('hidden'); });
+    document.getElementById('diff-badge')?.classList.add('hidden');
+
+    const labelDonor = document.getElementById('label-donor-name');
+    const labelAmount = document.getElementById('label-amount');
+    const inputStatus = document.getElementById('input-status');
+
+    if (type === 'INCOME') {
+        ['field-donor-name','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        labelDonor.textContent = 'Tên người đóng góp / Đơn vị';
+        labelAmount.textContent = 'Số tiền đóng góp (VNĐ)';
+        document.getElementById('input-donor-name').placeholder = 'Ví dụ: Sue, Trân, c.Vân...';
+        inputStatus.innerHTML = `
+            <option value="DONE">✅ Đã nhận vào quỹ thực tế</option>
+            <option value="PENDING">⏳ Chờ nhận / Hứa đóng góp</option>
+        `;
+    } else if (type === 'EXPENSE') {
+        ['field-donor-name','field-category','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        labelDonor.textContent = 'Tên sản phẩm / Nội dung chi tiêu';
+        labelAmount.textContent = 'Số tiền DỰ TRÙ / DỰ KIẾN (VNĐ)';
+        document.getElementById('input-donor-name').placeholder = 'Ví dụ: Sữa, Bánh gấu, Tiền xe...';
+        inputStatus.innerHTML = `
+            <option value="PENDING">⏳ Dự trù / Dự kiến chi (Kế hoạch)</option>
+            <option value="DONE">✅ Đã thực chi / Đã thanh toán</option>
+        `;
+    } else if (type === 'DONATION') {
+        ['field-donor-name','field-item-name','field-quantity','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        labelDonor.textContent = 'Tên người đóng góp đồ';
+        labelAmount.textContent = 'Giá trị ước tính (VNĐ - Không bắt buộc)';
+        document.getElementById('input-donor-name').placeholder = 'Ví dụ: c.Trâm, Mai, Xuyên...';
+        inputStatus.innerHTML = `
+            <option value="RECEIVED">📦 Đã nhận hiện vật</option>
+            <option value="PENDING">⏳ Đăng ký / Chờ nhận</option>
+        `;
+    } else if (type === 'MEMBER') {
+        ['field-donor-name','field-amount','field-status'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        labelDonor.textContent = 'Họ và tên người tham gia';
+        labelAmount.textContent = 'Mức đóng góp quy định (VNĐ)';
+        document.getElementById('input-donor-name').placeholder = 'Ví dụ: Nguyễn Văn A, c.Vân, Liền...';
+        document.getElementById('input-amount').value = Number(DEFAULT_MEMBER_FEE).toLocaleString('en-US');
+        inputStatus.innerHTML = `
+            <option value="UNPAID">⏳ Chưa đóng tiền (0 đ)</option>
+            <option value="PAID">✅ Đã đóng đủ tiền (1.500.000 đ)</option>
+        `;
+    } else if (type === 'MEMBER_EXPENSE') {
+        ['field-member-cat','field-donor-name','field-amount','field-payer','field-participants'].forEach(f => document.getElementById(f)?.classList.remove('hidden'));
+        labelDonor.textContent = 'Nội dung chi tiêu đoàn';
+        labelAmount.textContent = 'Số tiền chi (VNĐ)';
+        document.getElementById('input-donor-name').placeholder = 'Ví dụ: Ăn sáng ngày 1, Xăng xe, Khách sạn...';
+        renderParticipantsCheckboxes('ALL');
+    }
+}
+
 function closeModal() {
     document.getElementById('modal').classList.add('hidden');
     document.getElementById('entry-form').reset();
-    // Reset donation status options
-    document.getElementById('input-status').innerHTML = `<option value="DONE">✅ Hoàn tất / Đã nhận</option><option value="PENDING">⏳ Đang xử lý / Chờ nhận</option>`;
+    document.getElementById('modal-edit-id').value = '';
 }
 
+// Form Submit: Hỗ trợ cả INSERT và UPDATE
 document.getElementById('entry-form').onsubmit = async (e) => {
     e.preventDefault();
-    if (!isAdmin) return;
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị!');
+        return;
+    }
     const btn = document.getElementById('btn-submit');
+    const editId = document.getElementById('modal-edit-id').value;
     btn.disabled = true; btn.textContent = 'Đang lưu...';
     toggleLoading(true);
 
@@ -871,40 +2026,123 @@ document.getElementById('entry-form').onsubmit = async (e) => {
 
     try {
         if (type === 'INCOME') {
-            const { error } = await _supabase.from('charity_fund_entries').insert({
+            const payload = {
                 charity_id: CHARITY_ID, type: 'INCOME', content: donorName,
                 donor_name: donorName, amount, date, status, note
-            });
-            if (error) throw error;
+            };
+            if (editId) {
+                const { error } = await _supabase.from('charity_fund_entries').update(payload).eq('id', editId);
+                if (error) throw error;
+            } else {
+                const { error } = await _supabase.from('charity_fund_entries').insert(payload);
+                if (error) throw error;
+            }
         } else if (type === 'EXPENSE') {
             const category = document.getElementById('input-category').value;
-            const { error } = await _supabase.from('charity_fund_entries').insert({
+            const actualAmountInput = document.getElementById('input-actual-amount').value;
+            let actualAmount = null;
+            if (status === 'DONE') {
+                actualAmount = actualAmountInput ? parseFloat(actualAmountInput.replace(/,/g, '')) : amount;
+            }
+
+            const payload = {
                 charity_id: CHARITY_ID, type: 'EXPENSE', content: donorName,
-                category, amount, date, status, note
-            });
-            if (error) throw error;
+                category, amount, actual_amount: actualAmount, date, status, note
+            };
+            if (editId) {
+                let { error } = await _supabase.from('charity_fund_entries').update(payload).eq('id', editId);
+                if (error && error.message && error.message.includes('actual_amount')) {
+                    delete payload.actual_amount;
+                    const res2 = await _supabase.from('charity_fund_entries').update(payload).eq('id', editId);
+                    if (res2.error) throw res2.error;
+                    showToast('⚠️', 'Đã lưu (Lưu ý: Cần chạy lệnh SQL để lưu số thực chi)');
+                } else if (error) {
+                    throw error;
+                }
+            } else {
+                let { error } = await _supabase.from('charity_fund_entries').insert(payload);
+                if (error && error.message && error.message.includes('actual_amount')) {
+                    delete payload.actual_amount;
+                    const res2 = await _supabase.from('charity_fund_entries').insert(payload);
+                    if (res2.error) throw res2.error;
+                    showToast('⚠️', 'Đã lưu (Lưu ý: Cần chạy lệnh SQL để lưu số thực chi)');
+                } else if (error) {
+                    throw error;
+                }
+            }
         } else if (type === 'DONATION') {
             const itemName = document.getElementById('input-item-name').value.trim();
             const quantity = parseFloat(document.getElementById('input-quantity').value) || null;
             const unit = document.getElementById('input-unit').value.trim();
-            const { error } = await _supabase.from('charity_donations').insert({
+            const payload = {
                 charity_id: CHARITY_ID, donor_name: donorName, item_name: itemName,
                 quantity, unit, estimated_value: amount || null, status, date, note
-            });
-            if (error) throw error;
+            };
+            if (editId) {
+                const { error } = await _supabase.from('charity_donations').update(payload).eq('id', editId);
+                if (error) throw error;
+            } else {
+                const { error } = await _supabase.from('charity_donations').insert(payload);
+                if (error) throw error;
+            }
+        } else if (type === 'MEMBER') {
+            const fullName = donorName;
+            const targetAmount = amount || DEFAULT_MEMBER_FEE;
+            const paymentStatus = status === 'PAID' ? 'PAID' : 'UNPAID';
+            const paidAmount = paymentStatus === 'PAID' ? targetAmount : 0;
+            const paidDate = paymentStatus === 'PAID' ? date : null;
+
+            const payload = {
+                charity_id: CHARITY_ID,
+                name: fullName,
+                target_amount: targetAmount,
+                paid_amount: paidAmount,
+                payment_status: paymentStatus,
+                paid_date: paidDate,
+                note: note
+            };
+            if (editId) {
+                const { error } = await _supabase.from('charity_members').update(payload).eq('id', editId);
+                if (error) throw error;
+            } else {
+                const { error } = await _supabase.from('charity_members').insert(payload);
+                if (error) throw error;
+            }
         } else if (type === 'MEMBER_EXPENSE') {
-            const memberName = document.getElementById('input-member-name').value.trim();
             const category = document.getElementById('input-member-cat').value;
             const payer = document.getElementById('input-payer').value.trim();
-            const { error } = await _supabase.from('charity_member_expenses').insert({
-                charity_id: CHARITY_ID, member_name: memberName, category,
-                content: donorName, amount, payer, date, note
-            });
-            if (error) throw error;
+
+            // Lấy danh sách người tham gia chia tiền
+            const selectedCbs = [...document.querySelectorAll('input[name="expense-participant"]:checked')];
+            let participants = 'ALL';
+            if (selectedCbs.length > 0 && selectedCbs.length < tripMembers.length) {
+                participants = JSON.stringify(selectedCbs.map(cb => cb.value));
+            } else if (selectedCbs.length === 0) {
+                participants = 'ALL';
+            }
+
+            const payload = {
+                charity_id: CHARITY_ID,
+                category,
+                content: donorName,
+                amount,
+                payer,
+                participants,
+                date,
+                note
+            };
+            if (editId) {
+                const { error } = await _supabase.from('charity_member_expenses').update(payload).eq('id', editId);
+                if (error) throw error;
+            } else {
+                const { error } = await _supabase.from('charity_member_expenses').insert(payload);
+                if (error) throw error;
+            }
         }
+
         closeModal();
         await fetchAllData();
-        showToast('✅', 'Đã lưu thành công!');
+        showToast('✅', editId ? 'Đã cập nhật thành công!' : 'Đã lưu thành công!');
     } catch (err) {
         showToast('⚠️', 'Lỗi: ' + err.message);
     } finally {
@@ -915,15 +2153,29 @@ document.getElementById('entry-form').onsubmit = async (e) => {
 
 // ==================== DELETE ====================
 async function deleteEntry(table, id) {
-    if (!isAdmin) return;
-    if (!confirm('Xóa mục này?')) return;
+    if (!isAdmin) {
+        showToast('🔒', 'Vui lòng bật Chế độ Quản trị để xóa!');
+        return;
+    }
+    const confirmed = await customConfirm({
+        title: 'Xác nhận xóa dữ liệu',
+        message: 'Bạn có chắc chắn muốn xóa mục này khỏi hệ thống? Hành động này không thể hoàn tác.',
+        confirmText: 'Xóa vĩnh viễn'
+    });
+    if (!confirmed) return;
     toggleLoading(true);
     try {
-        const tableMap = { fund: 'charity_fund_entries', donation: 'charity_donations', member: 'charity_member_expenses' };
+        const tableMap = { 
+            fund: 'charity_fund_entries', 
+            donation: 'charity_donations', 
+            member: 'charity_member_expenses',
+            member_expense: 'charity_member_expenses',
+            trip_member: 'charity_members'
+        };
         const { error } = await _supabase.from(tableMap[table]).delete().eq('id', id);
         if (error) throw error;
         await fetchAllData();
-        showToast('🗑️', 'Đã xóa!');
+        showToast('🗑️', 'Đã xóa thành công!');
     } catch (err) {
         showToast('⚠️', 'Lỗi xóa: ' + err.message);
     } finally {
