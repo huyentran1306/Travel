@@ -221,19 +221,45 @@
                     </div>
                 </div>
 
-                <!-- Quick Action: Refresh & Share -->
-                <div class="flex items-center gap-2.5 self-stretch md:self-center justify-end">
-                    <button onclick="fetchAllData(true)" id="btn-refresh" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl glass hover:bg-white/10 text-white/80 hover:text-white text-xs font-bold transition-all active:scale-95" title="Cập nhật số liệu mới nhất">
+                <!-- Quick Action: Gift info, Refresh & Share -->
+                <div class="flex items-center gap-2 self-stretch md:self-center justify-end flex-wrap">
+                    <button onclick="openGiftPackageModal()" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white text-xs font-black shadow-lg shadow-amber-500/25 transition-all active:scale-95" title="Xem chi tiết mỗi em nhỏ sẽ nhận được gì">
+                        <span>🎁</span>
+                        <span>Mỗi em nhận gì?</span>
+                    </button>
+                    <button onclick="fetchAllData(true)" id="btn-refresh" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl glass hover:bg-white/10 text-white/80 hover:text-white text-xs font-bold transition-all active:scale-95" title="Cập nhật số liệu mới nhất">
                         <i data-lucide="rotate-cw" id="icon-refresh" class="w-4 h-4 transition-transform duration-500"></i>
                         <span>Làm mới</span>
                     </button>
-                    <button onclick="copyShareLink()" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all active:scale-95" title="Sao chép link chia sẻ">
+                    <button onclick="copyShareLink()" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all active:scale-95" title="Sao chép link chia sẻ">
                         <i data-lucide="share-2" class="w-4 h-4"></i>
-                        <span>Chia sẻ link</span>
+                        <span>Chia sẻ</span>
                     </button>
                 </div>
             </div>
         </header>
+
+        <!-- SPECIAL BANNER: MỖI EM NHỎ SẼ NHẬN ĐƯỢC GÌ -->
+        <div onclick="openGiftPackageModal()" class="cursor-pointer glass rounded-2xl p-4 sm:p-5 mb-5 sm:mb-7 border border-amber-500/30 hover:border-amber-400/60 bg-gradient-to-r from-amber-500/15 via-purple-500/10 to-blue-500/15 transition-all hover:scale-[1.008] active:scale-[0.99] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 shadow-xl group">
+            <div class="flex items-center gap-3.5 sm:gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-2xl shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                    🎁
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h3 class="text-sm sm:text-base font-black text-white group-hover:text-amber-300 transition-colors">Mỗi em nhỏ tại Buôn Ngô sẽ nhận được những gì?</h3>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">Bấm xem chi tiết</span>
+                    </div>
+                    <p class="text-xs text-white/70 mt-1 leading-relaxed">
+                        🏮 Lồng đèn phát sáng • 🥛 1 Lốc sữa (4 hộp) • 🐻 Bánh gấu • 🍬 Kẹo dẻo • 🥨 Bim bim • 🍲 Nui sườn trứng cút • 🥤 Trà tắc • 🧸 Gấu bông...
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5 text-amber-400 font-bold text-xs shrink-0 self-end sm:self-center bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20 group-hover:bg-amber-500/20 transition-all">
+                <span>Xem gói quà</span>
+                <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+            </div>
+        </div>
 
         <!-- KPI SUMMARY CARDS -->
         <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-7 animate-fade">
@@ -472,6 +498,162 @@
 
     </div>
 
+    <!-- ==================== SPECIAL MODAL: GÓI QUÀ & HOẠT ĐỘNG CHO MỖI EM ==================== -->
+    <div id="gift-package-modal" onclick="if(event.target === this) closeGiftPackageModal()" class="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 hidden opacity-0 transition-opacity duration-300">
+        <!-- Modal Dialog -->
+        <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar rounded-3xl p-5 sm:p-7 border border-amber-500/30 shadow-2xl bg-[#0f172a] text-white animate-fade">
+            <!-- Close Button -->
+            <button onclick="closeGiftPackageModal()" class="absolute top-4 right-4 w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white/70 hover:text-white flex items-center justify-center transition-all active:scale-95" title="Đóng">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Header of Modal -->
+            <div class="flex items-center gap-3.5 mb-5 pr-8">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-2xl shadow-lg shadow-orange-500/30 shrink-0">
+                    🎁
+                </div>
+                <div>
+                    <h3 class="text-lg sm:text-xl font-black text-white leading-snug">Mỗi Em Nhỏ Sẽ Nhận Được Gì?</h3>
+                    <p class="text-xs text-amber-300/80 font-medium mt-0.5">Dành cho 340 em nhỏ tại Buôn Ngô - Cư Pui - Đắk Lắk</p>
+                </div>
+            </div>
+
+            <!-- Content Cards -->
+            <div class="space-y-4 text-xs sm:text-sm">
+
+                <!-- Phần 1: Túi quà Trung Thu mang về -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">🛍️</span>
+                        <h4 class="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide">1. Túi Quà Trung Thu Mang Về (1 túi/em)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-white/90">
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🏮</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Lồng đèn Trung Thu</b>
+                                <span class="text-[11px] text-white/50">350 cái xếp gọn do c.Trâm chuẩn bị</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">✨</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Dây Đèn nháy phát sáng</b>
+                                <span class="text-[11px] text-white/50">Gắn vào lồng đèn rực rỡ đêm hội</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🥛</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Lốc Sữa tươi (4 hộp)</b>
+                                <span class="text-[11px] text-white/50">Tổng 30 thùng (360 lốc) đủ mỗi em 1 lốc</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🐻</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Hộp Bánh gấu thơm ngon</b>
+                                <span class="text-[11px] text-white/50">354 hộp bánh gấu nhân kem</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🍬</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Gói Kẹo dẻo trái cây</b>
+                                <span class="text-[11px] text-white/50">350 túi kẹo dẻo ngọt ngào</span>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🥨</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Bịch Snack / Bim bim</b>
+                                <span class="text-[11px] text-white/50">350 bịch snack giòn rụm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phần 2: Bữa ăn dinh dưỡng tại chỗ -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-blue-500/10 border border-blue-500/25">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">🍲</span>
+                        <h4 class="text-sm sm:text-base font-black text-blue-400 uppercase tracking-wide">2. Bữa Ăn Dinh Dưỡng Tại Chỗ</h4>
+                    </div>
+                    <div class="space-y-2 text-white/90">
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                            <span class="text-base">🥣</span>
+                            <div>
+                                <b class="text-white block font-bold">1 Tô Nui Sườn Heo Nóng Hổi</b>
+                                <span class="text-[11px] text-white/60">30kg sườn heo, 10kg thịt băm, 6kg chả xay, củ cải cà rốt và <b>mỗi tô có từ 2 - 3 quả trứng cút</b> (900 quả). Dùng tô giấy & muỗng sạch sẽ.</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                                <span class="text-base">🥤</span>
+                                <div>
+                                    <b class="text-white block font-bold">1 Ly Trà Tắc Mát Lạnh</b>
+                                    <span class="text-[11px] text-white/60">Pha từ trà túi lọc, tắc tươi & đá mát</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/5">
+                                <span class="text-base">🍉</span>
+                                <div>
+                                    <b class="text-white block font-bold">Dưa Hấu Tráng Miệng</b>
+                                    <span class="text-[11px] text-white/60">30kg dưa hấu ngọt mát chia đều bàn ăn</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phần 3: Hiện vật trao thêm -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-purple-500/10 border border-purple-500/25">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg">🧸</span>
+                        <h4 class="text-sm sm:text-base font-black text-purple-300 uppercase tracking-wide">3. Quà Hiện Vật Trao Thêm (Theo lứa tuổi)</h4>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-white/90">
+                        <div class="p-2.5 rounded-xl bg-white/5 text-center sm:text-left">
+                            <span class="text-lg block mb-1">🧸</span>
+                            <b class="text-white block font-bold text-xs">Gấu bông đáng yêu</b>
+                            <span class="text-[11px] text-white/50">Thú nhồi bông sạch đẹp</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 text-center sm:text-left">
+                            <span class="text-lg block mb-1">👕</span>
+                            <b class="text-white block font-bold text-xs">Quần áo & Balo</b>
+                            <span class="text-[11px] text-white/50">Đồ dùng đi học cho các em</span>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-white/5 text-center sm:text-left">
+                            <span class="text-lg block mb-1">👟</span>
+                            <b class="text-white block font-bold text-xs">Giày / Dép mới</b>
+                            <span class="text-[11px] text-white/50">Dành cho em nhỏ khó khăn</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phần 4: Gian hàng trò chơi hội chợ -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/25">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-lg">🎪</span>
+                        <h4 class="text-sm sm:text-base font-black text-emerald-300 uppercase tracking-wide">4. Gian Hàng Hội Chợ Vui Chơi Có Quà</h4>
+                    </div>
+                    <p class="text-xs text-white/70 leading-relaxed">
+                        Các em được tự do tham gia 3 trò chơi dân gian: <b>Ném vòng vào chóp</b>, <b>Ném bóng vào rổ</b> và <b>Gắp bóng bàn bằng đũa</b> để nhận thêm các phần quà thưởng khích lệ!
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Footer Action Button -->
+            <div class="mt-6 pt-4 border-t border-white/10 flex justify-end">
+                <button onclick="closeGiftPackageModal()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all active:scale-95 shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <span>Tuyệt vời, cảm ơn ❤️</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl bg-slate-900/95 text-white border border-white/20 text-xs font-bold shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
         <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
@@ -537,6 +719,26 @@
             if (activeBtn) activeBtn.classList.add('active');
 
             lucide.createIcons();
+        }
+
+        // GIFT PACKAGE MODAL CONTROLLERS
+        function openGiftPackageModal() {
+            const modal = document.getElementById('gift-package-modal');
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+            }, 10);
+            lucide.createIcons();
+        }
+
+        function closeGiftPackageModal() {
+            const modal = document.getElementById('gift-package-modal');
+            if (!modal) return;
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
         }
 
         // LOADING SCREEN CONTROLLERS
