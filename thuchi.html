@@ -499,7 +499,7 @@
     </div>
 
     <!-- ==================== SPECIAL MODAL: GÓI QUÀ & HOẠT ĐỘNG CHO MỖI EM ==================== -->
-    <div id="gift-package-modal" onclick="if(event.target === this) closeGiftPackageModal()" class="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 hidden opacity-0 transition-opacity duration-300">
+    <div id="gift-package-modal" onclick="if(event.target === this) closeGiftPackageModal()" class="fixed inset-0 z-[1000] bg-black/85 backdrop-blur-md items-center justify-center p-3 sm:p-5" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
         <!-- Modal Dialog -->
         <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar rounded-3xl p-5 sm:p-7 border border-amber-500/30 shadow-2xl bg-[#0f172a] text-white animate-fade">
             <!-- Close Button -->
@@ -725,19 +725,21 @@
         function openGiftPackageModal() {
             const modal = document.getElementById('gift-package-modal');
             if (!modal) return;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-            }, 10);
+            modal.style.display = 'flex';
+            // Trigger reflow for smooth transition
+            void modal.offsetHeight;
+            modal.style.opacity = '1';
+            document.body.style.overflow = 'hidden';
             lucide.createIcons();
         }
 
         function closeGiftPackageModal() {
             const modal = document.getElementById('gift-package-modal');
             if (!modal) return;
-            modal.classList.add('opacity-0');
+            modal.style.opacity = '0';
+            document.body.style.overflow = '';
             setTimeout(() => {
-                modal.classList.add('hidden');
+                modal.style.display = 'none';
             }, 300);
         }
 
@@ -823,6 +825,10 @@
                     setTimeout(() => {
                         hideLoadingScreen();
                         isInitialLoad = false;
+                        // TỰ ĐỘNG BẬT POPUP MỞ ĐẦU THÔNG BÁO CHO MỌI NGƯỜI
+                        setTimeout(() => {
+                            openGiftPackageModal();
+                        }, 350);
                     }, remaining);
                 }
             }
