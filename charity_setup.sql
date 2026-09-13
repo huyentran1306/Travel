@@ -94,7 +94,7 @@ VALUES
     ('access_password', 'gieonang2026'),
     ('member_target_amount', '1500000'),
     ('vehicle_subsidy_amount', '5000000'),
-    ('children_count', '350')
+    ('children_count', '340')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now();
 
 -- BƯỚC 3: INSERT THU (GÓP)
@@ -133,7 +133,10 @@ INSERT INTO charity_fund_entries (charity_id, type, donor_name, content, amount,
 ('GN2026', 'INCOME', 'c. Trâm Võ - b.Hải', 'c. Trâm Võ - b.Hải', 8000000, '2026-08-01', 'DONE', NULL),
 ('GN2026', 'INCOME', 'bạn T giấu tên', 'bạn T giấu tên', 1500000, '2026-08-01', 'DONE', NULL),
 ('GN2026', 'INCOME', 'Dan Thanh', 'Dan Thanh', 1000000, '2026-08-01', 'DONE', NULL),
-('GN2026', 'INCOME', 'Nguyet - JL', 'Nguyet - JL', 1000000, '2026-08-01', 'DONE', NULL);
+('GN2026', 'INCOME', 'Nguyet - JL', 'Nguyet - JL', 1000000, '2026-08-01', 'DONE', NULL),
+('GN2026', 'INCOME', 'Thanh Thảo', 'Thanh Thảo', 500000, '2026-08-01', 'DONE', NULL),
+('GN2026', 'INCOME', 'Dương', 'Dương', 500000, '2026-08-01', 'DONE', NULL),
+('GN2026', 'INCOME', 'Ú', 'Ú', 500000, '2026-08-01', 'DONE', NULL);
 
 -- BƯỚC 4: INSERT CHI (DỰ TRÙ KINH PHÍ / KẾ HOẠCH DỰ KIẾN)
 -- Lưu ý: Các khoản chi dưới đây là DỰ TRÙ (status = 'PENDING').
@@ -189,7 +192,9 @@ INSERT INTO charity_donations (charity_id, donor_name, item_name, status, date) 
 ('GN2026', 'Đức Anh', 'Gấu bông + quần áo', 'RECEIVED', '2026-08-01'),
 ('GN2026', 'a. Hoàng Henry - JL', 'Gấu bông + quần áo', 'RECEIVED', '2026-08-01'),
 ('GN2026', 'c. Nhân - JL', 'Gấu bông + quần áo + balo', 'RECEIVED', '2026-08-01'),
-('GN2026', 'Trung ND', 'Quần áo + giày', 'RECEIVED', '2026-08-01');
+('GN2026', 'Trung ND', 'Quần áo + giày', 'RECEIVED', '2026-08-01'),
+('GN2026', 'c. Phượng Lucy', 'Gấu bông', 'RECEIVED', '2026-08-01'),
+('GN2026', 'Bùi Thị Loan', '3 thùng sữa', 'RECEIVED', '2026-08-01');
 
 -- BƯỚC 6: CẬP NHẬT DỮ LIỆU ĐÃ CÓ TRƯỚC ĐÓ (NẾU ĐÃ CHẠY SCRIPT CŨ)
 -- Chuyển toàn bộ các khoản chi về DỰ KIẾN (PENDING)
