@@ -349,31 +349,34 @@
         </section>
 
         <!-- NAVIGATION TABS -->
-        <nav class="flex items-center gap-2 p-1.5 glass rounded-2xl mb-5 sm:mb-6 overflow-x-auto custom-scrollbar">
-            <button onclick="switchTab('incomes')" id="tab-btn-incomes" class="tab-btn active flex-1 min-w-[135px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2">
-                <i data-lucide="circle-dollar-sign" class="w-4 h-4"></i>
-                <span>Góp Tiền Mặt (<span id="badge-incomes-count">0</span>)</span>
-            </button>
-            <button onclick="switchTab('donations')" id="tab-btn-donations" class="tab-btn flex-1 min-w-[135px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2">
-                <i data-lucide="gift" class="w-4 h-4"></i>
-                <span>Hiện Vật (<span id="badge-donations-count">0</span>)</span>
-            </button>
-            <button onclick="switchTab('expenses')" id="tab-btn-expenses" class="tab-btn flex-1 min-w-[135px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2">
-                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                <span>Chi Tiêu (<span id="badge-expenses-count">0</span>)</span>
-            </button>
-            <button onclick="switchTab('report')" id="tab-btn-report" class="tab-btn flex-1 min-w-[135px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2">
-                <i data-lucide="pie-chart" class="w-4 h-4"></i>
-                <span>Tổng Kết Người Mua</span>
-            </button>
-            <button onclick="switchTab('trip')" id="tab-btn-trip" class="tab-btn flex-1 min-w-[160px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-cyan-300">
-                <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i>
-                <span>Lịch Trình & Quỹ Đoàn</span>
-            </button>
-            <button onclick="switchTab('history')" id="tab-btn-history" class="tab-btn flex-1 min-w-[155px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-amber-300">
-                <i data-lucide="history" class="w-4 h-4 text-amber-400"></i>
-                <span>Lịch Sử Các Năm (6 đợt)</span>
-            </button>
+        <nav class="glass rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 mb-5 sm:mb-6">
+            <!-- Mobile: Lưới 3 cột x 2 hàng hiển thị trọn vẹn 6 mục (không cần vuốt ngang) | Desktop: Hàng ngang linh hoạt -->
+            <div class="grid grid-cols-3 lg:flex items-center gap-1.5 sm:gap-2">
+                <button onclick="switchTab('incomes')" id="tab-btn-incomes" class="tab-btn active flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all">
+                    <i data-lucide="circle-dollar-sign" class="w-4 h-4 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate"><span class="hidden sm:inline">Góp </span>Tiền Mặt (<span id="badge-incomes-count">0</span>)</span>
+                </button>
+                <button onclick="switchTab('donations')" id="tab-btn-donations" class="tab-btn flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all">
+                    <i data-lucide="gift" class="w-4 h-4 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate">Hiện Vật (<span id="badge-donations-count">0</span>)</span>
+                </button>
+                <button onclick="switchTab('expenses')" id="tab-btn-expenses" class="tab-btn flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all">
+                    <i data-lucide="shopping-cart" class="w-4 h-4 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate">Chi Tiêu (<span id="badge-expenses-count">0</span>)</span>
+                </button>
+                <button onclick="switchTab('report')" id="tab-btn-report" class="tab-btn flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all">
+                    <i data-lucide="pie-chart" class="w-4 h-4 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate"><span class="hidden md:inline">Tổng Kết </span>Người Mua</span>
+                </button>
+                <button onclick="switchTab('trip')" id="tab-btn-trip" class="tab-btn flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all text-cyan-300">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate">Lịch Trình<span class="hidden lg:inline"> & Quỹ Đoàn</span></span>
+                </button>
+                <button onclick="switchTab('history')" id="tab-btn-history" class="tab-btn flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all text-amber-300">
+                    <i data-lucide="history" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                    <span class="text-[11px] sm:text-xs md:text-sm font-bold truncate">Lịch Sử<span class="hidden lg:inline"> Các Năm (6 đợt)</span></span>
+                </button>
+            </div>
         </nav>
 
         <!-- ==================== TAB 1: INCOMES (TIỀN MẶT) ==================== -->
