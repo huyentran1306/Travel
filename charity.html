@@ -281,7 +281,7 @@
     <!-- Summary Dashboard (5 chỉ số thông minh: Phân tách Dự kiến vs Thực tế) -->
     <div id="dashboard" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 anim-up">
         <!-- 1. Quỹ Thu Thực Tế -->
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-emerald-500">
+        <div onclick="switchTab('incomes')" class="glass stat-card rounded-2xl p-4 border-l-4 border-l-emerald-500 cursor-pointer hover:border-emerald-400 active:scale-95 transition-all" title="Bấm để xem danh sách Tiền Thu">
             <div class="flex items-center justify-between mb-1">
                 <p class="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Quỹ Thu Thực Tế</p>
                 <span class="text-xs">💚</span>
@@ -291,7 +291,7 @@
         </div>
 
         <!-- 2. Dự Trù Kinh Phí (Kế hoạch chi) -->
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-amber-500">
+        <div onclick="switchTab('expenses'); filterExpenseStatus('PENDING');" class="glass stat-card rounded-2xl p-4 border-l-4 border-l-amber-500 cursor-pointer hover:border-amber-400 active:scale-95 transition-all" title="Bấm để lọc các khoản Dự trù">
             <div class="flex items-center justify-between mb-1">
                 <p class="text-[9px] font-black text-amber-400 uppercase tracking-widest">Dự Trù Chi Phí</p>
                 <span class="text-xs">📋</span>
@@ -301,7 +301,7 @@
         </div>
 
         <!-- 3. Đã Chi Thực Tế -->
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-rose-500">
+        <div onclick="switchTab('expenses'); filterExpenseStatus('DONE');" class="glass stat-card rounded-2xl p-4 border-l-4 border-l-rose-500 cursor-pointer hover:border-rose-400 active:scale-95 transition-all" title="Bấm để lọc các khoản Đã chi">
             <div class="flex items-center justify-between mb-1">
                 <p class="text-[9px] font-black text-rose-400 uppercase tracking-widest">Đã Chi Thực Tế</p>
                 <span class="text-xs">💸</span>
@@ -311,7 +311,7 @@
         </div>
 
         <!-- 4. Tồn Quỹ Thực Tế -->
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-cyan-500">
+        <div onclick="switchTab('incomes')" class="glass stat-card rounded-2xl p-4 border-l-4 border-l-cyan-500 cursor-pointer hover:border-cyan-400 active:scale-95 transition-all" title="Bấm để xem danh sách Tiền Thu">
             <div class="flex items-center justify-between mb-1">
                 <p class="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Tồn Quỹ Thực Tế</p>
                 <span class="text-xs">🪙</span>
@@ -321,7 +321,7 @@
         </div>
 
         <!-- 5. Cân Đối Dự Trù -->
-        <div class="glass stat-card rounded-2xl p-4 border-l-4 border-l-purple-500 col-span-2 sm:col-span-1">
+        <div onclick="switchTab('expenses')" class="glass stat-card rounded-2xl p-4 border-l-4 border-l-purple-500 col-span-2 sm:col-span-1 cursor-pointer hover:border-purple-400 active:scale-95 transition-all" title="Bấm để xem Chi Tiêu & Dự Trù">
             <div class="flex items-center justify-between mb-1">
                 <p class="text-[9px] font-black text-purple-300 uppercase tracking-widest">Cân Đối Dự Trù</p>
                 <span class="text-xs">⚖️</span>
@@ -333,20 +333,22 @@
 
     <!-- Tab Navigation (Desktop/Tablet only, mobile uses fixed bottom navigation bar) -->
     <div class="hidden md:flex gap-2 overflow-x-auto pb-1 anim-up" style="scrollbar-width: none;">
-        <button id="tab-btn-fund" onclick="switchTab('fund')" class="tab-active flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="wallet" class="w-4 h-4"></i> Quỹ Từ Thiện (Thu & Chi)
+        <button id="tab-btn-incomes" onclick="switchTab('incomes')" class="tab-active flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
+            <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-emerald-400"></i> Tiền Thu (Thực Tế)
+        </button>
+        <button id="tab-btn-expenses" onclick="switchTab('expenses')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
+            <i data-lucide="shopping-cart" class="w-4 h-4 text-amber-400"></i> Chi Tiêu & Dự Trù
         </button>
         <button id="tab-btn-donations" onclick="switchTab('donations')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="gift" class="w-4 h-4"></i> Đồ Đóng Góp (Hiện Vật)
+            <i data-lucide="gift" class="w-4 h-4 text-blue-400"></i> Đồ Đóng Góp (Hiện Vật)
         </button>
         <button id="tab-btn-members" onclick="switchTab('members')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="users" class="w-4 h-4"></i> 👥 Quỹ Người Đi Chuyến
+            <i data-lucide="users" class="w-4 h-4 text-purple-400"></i> Quỹ Đoàn Đi Chuyến
         </button>
     </div>
 
-    <!-- ===================== TAB 1: QUỸ TỪ THIỆN ===================== -->
-    <div id="tab-fund" class="space-y-6">
-
+    <!-- ===================== TAB 1: TIỀN THU (THỰC TẾ) ===================== -->
+    <div id="tab-incomes" class="space-y-6">
         <!-- 1.1 Income Section (Thu vào thực tế) -->
         <div class="glass rounded-[1.5rem] overflow-hidden">
             <div class="section-header px-5 py-4 flex justify-between items-center">
@@ -361,7 +363,7 @@
                     <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm người đóng
                 </button>
             </div>
-            <div id="list-income" class="divide-y divide-white/5 max-h-80 overflow-y-auto custom-scrollbar">
+            <div id="list-income" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
                 <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách đóng góp...</div>
             </div>
             <div class="px-5 py-3 border-t border-white/10 flex justify-between items-center bg-white/[0.02]">
@@ -369,7 +371,10 @@
                 <span id="income-total-bar" class="text-base font-black text-emerald-400">--</span>
             </div>
         </div>
+    </div>
 
+    <!-- ===================== TAB 2: CHI TIÊU & DỰ TRÙ ===================== -->
+    <div id="tab-expenses" class="hidden space-y-6">
         <!-- 1.2 Expense Section (Dự trù & Thực chi) -->
         <div class="glass rounded-[1.5rem] overflow-hidden">
             <div class="section-header px-5 py-4 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
@@ -426,7 +431,7 @@
                 </div>
             </div>
 
-            <div id="list-expense" class="divide-y divide-white/5 max-h-[480px] overflow-y-auto custom-scrollbar">
+            <div id="list-expense" class="divide-y divide-white/5 max-h-[500px] overflow-y-auto custom-scrollbar">
                 <div class="p-8 text-center text-white/30 text-xs">Đang tải danh sách chi tiêu...</div>
             </div>
 
@@ -916,18 +921,22 @@
     </div>
 </div>
 
-<!-- MOBILE BOTTOM NAVIGATION BAR -->
-<nav id="mobile-bottom-nav" class="fixed bottom-0 left-0 right-0 z-40 bottom-nav-bar safe-area-bottom md:hidden px-3 pt-1.5 pb-1 flex items-center justify-around">
-    <button onclick="switchTab('fund')" id="bottom-nav-fund" class="bottom-nav-btn active flex-1" title="Quỹ Từ Thiện">
-        <i data-lucide="wallet" class="w-5 h-5 bottom-nav-icon"></i>
-        <span class="text-[10px] font-bold tracking-tight">Quỹ Từ Thiện</span>
+<!-- MOBILE BOTTOM NAVIGATION BAR (App-like fixed bottom bar) -->
+<nav id="mobile-bottom-nav" class="fixed bottom-0 left-0 right-0 z-50 bottom-nav-bar safe-area-bottom md:hidden px-2 pt-1.5 pb-1 flex items-center justify-around hidden">
+    <button onclick="switchTab('incomes')" id="bottom-nav-incomes" class="bottom-nav-btn active flex-1" title="Tiền Thu">
+        <i data-lucide="circle-dollar-sign" class="w-5 h-5 bottom-nav-icon text-emerald-400"></i>
+        <span class="text-[10px] font-bold tracking-tight">Tiền Thu</span>
+    </button>
+    <button onclick="switchTab('expenses')" id="bottom-nav-expenses" class="bottom-nav-btn flex-1" title="Chi Tiêu">
+        <i data-lucide="shopping-cart" class="w-5 h-5 bottom-nav-icon text-amber-400"></i>
+        <span class="text-[10px] font-bold tracking-tight">Chi Tiêu</span>
     </button>
     <button onclick="switchTab('donations')" id="bottom-nav-donations" class="bottom-nav-btn flex-1" title="Hiện Vật">
-        <i data-lucide="gift" class="w-5 h-5 bottom-nav-icon"></i>
+        <i data-lucide="gift" class="w-5 h-5 bottom-nav-icon text-blue-400"></i>
         <span class="text-[10px] font-bold tracking-tight">Hiện Vật</span>
     </button>
     <button onclick="switchTab('members')" id="bottom-nav-members" class="bottom-nav-btn flex-1" title="Quỹ Đoàn">
-        <i data-lucide="users" class="w-5 h-5 bottom-nav-icon"></i>
+        <i data-lucide="users" class="w-5 h-5 bottom-nav-icon text-purple-400"></i>
         <span class="text-[10px] font-bold tracking-tight">Quỹ Đoàn</span>
     </button>
 </nav>
@@ -996,6 +1005,10 @@ function checkPassword() {
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
         document.getElementById('main-app').classList.add('anim-fade');
+        const bNav = document.getElementById('mobile-bottom-nav');
+        if (bNav) bNav.classList.remove('hidden');
+        const savedTab = sessionStorage.getItem('charity_active_tab') || 'incomes';
+        switchTab(savedTab);
         updateAdminUI();
         fetchAllData();
         lucide.createIcons();
@@ -1009,6 +1022,8 @@ function checkPassword() {
 function lockApp() {
     sessionStorage.removeItem('charity_auth');
     document.getElementById('main-app').classList.add('hidden');
+    const bNav = document.getElementById('mobile-bottom-nav');
+    if (bNav) bNav.classList.add('hidden');
     document.getElementById('lock-screen').classList.remove('hidden');
     document.getElementById('access-password').value = '';
 }
@@ -1019,6 +1034,10 @@ window.addEventListener('DOMContentLoaded', () => {
         isAdmin = false; // Mặc định vào CHẾ ĐỘ XEM an toàn
         document.getElementById('lock-screen').classList.add('hidden');
         document.getElementById('main-app').classList.remove('hidden');
+        const bNav = document.getElementById('mobile-bottom-nav');
+        if (bNav) bNav.classList.remove('hidden');
+        const savedTab = sessionStorage.getItem('charity_active_tab') || 'incomes';
+        switchTab(savedTab);
         updateAdminUI();
         fetchAllData();
     }
@@ -1713,7 +1732,9 @@ function renderMembers() {
 
 // ==================== TABS ====================
 function switchTab(tab) {
-    ['fund','donations','members'].forEach(t => {
+    if (tab === 'fund') tab = 'incomes';
+    const tabs = ['incomes', 'expenses', 'donations', 'members'];
+    tabs.forEach(t => {
         const p = document.getElementById('tab-' + t);
         if (p) p.classList.add('hidden');
         const b = document.getElementById('tab-btn-' + t);
@@ -1737,6 +1758,7 @@ function switchTab(tab) {
     if (targetBNav) {
         targetBNav.classList.add('active');
     }
+    sessionStorage.setItem('charity_active_tab', tab);
     lucide.createIcons();
 }
 
