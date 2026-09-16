@@ -86,6 +86,51 @@
             color: #ffffff;
         }
 
+        /* Mobile Bottom Navigation Bar */
+        .bottom-nav-bar {
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.65);
+        }
+        .bottom-nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            color: rgba(255, 255, 255, 0.45);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 7px 2px 5px;
+            border-radius: 12px;
+        }
+        .bottom-nav-btn:hover {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .bottom-nav-btn.active {
+            color: #f59e0b;
+        }
+        .bottom-nav-btn.active .bottom-nav-icon {
+            transform: translateY(-2px) scale(1.15);
+            color: #f59e0b;
+            filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.5));
+        }
+        .bottom-nav-btn.active::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            width: 18px;
+            height: 3px;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #f59e0b, #ea580c);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.8);
+        }
+        .safe-area-bottom {
+            padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+        }
+
         .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.3); border-radius: 10px; }
@@ -190,59 +235,59 @@
     <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-32 bg-amber-500/10 blur-[100px] pointer-events-none"></div>
 
     <!-- MAIN CONTAINER -->
-    <div class="w-full max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 sm:pt-7">
+    <div class="w-full max-w-[1240px] mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-7 pb-24 md:pb-10">
 
         <!-- HEADER BANNER -->
-        <header class="glass-gold rounded-3xl p-5 sm:p-7 shadow-2xl relative overflow-hidden mb-5 sm:mb-7 animate-fade">
+        <header class="glass-gold rounded-3xl p-4 sm:p-7 shadow-2xl relative overflow-hidden mb-5 sm:mb-7 animate-fade">
             <!-- Decorative circle -->
             <div class="absolute -right-16 -bottom-16 w-56 h-56 rounded-full bg-amber-500/10 blur-2xl pointer-events-none"></div>
             
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
-                <div class="flex items-center gap-4 sm:gap-5">
-                    <div class="w-15 h-15 sm:w-18 sm:h-18 p-3.5 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl shadow-xl shadow-amber-500/20 shrink-0" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-5 relative z-10">
+                <div class="flex items-start sm:items-center gap-3.5 sm:gap-5">
+                    <div class="w-13 h-13 sm:w-18 sm:h-18 p-3 rounded-2xl flex items-center justify-center text-2xl sm:text-4xl shadow-xl shadow-amber-500/20 shrink-0" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
                         🌟
                     </div>
                     <div>
-                        <div class="flex items-center gap-2.5 flex-wrap">
-                            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">GIEO NẮNG 2026</h1>
-                            <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h1 class="text-xl sm:text-3xl font-black text-white tracking-tight leading-tight">GIEO NẮNG 2026</h1>
+                            <span class="px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5 shadow-sm">
                                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                 Báo cáo thu chi
                             </span>
                         </div>
                         <p class="text-amber-400 text-xs sm:text-sm font-bold uppercase tracking-wider mt-1">Trung Thu Yêu Thương</p>
-                        <p class="text-white/60 text-xs sm:text-sm mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-                            <span>📍 <b>Buôn Ngô</b>, Cư Pui, Krông Bông, Đắk Lắk</span>
+                        <p class="text-white/60 text-xs sm:text-sm mt-1.5 flex flex-wrap items-center gap-x-2.5 sm:gap-x-3 gap-y-1">
+                            <span>📍 <b>Buôn Ngô</b>, Cư Pui, Đắk Lắk</span>
                             <span class="text-white/30">•</span>
                             <span>📅 <b>19 - 20/09/2026</b></span>
                             <span class="text-white/30">•</span>
                             <span>👶 <b><span id="header-children-count" class="text-amber-300 font-bold">340</span> em nhỏ</b></span>
                         </p>
-                        <div class="mt-2 flex items-center gap-2 flex-wrap">
+                        <div class="mt-2.5 flex items-center gap-2 flex-wrap">
                             <button onclick="switchTab('trip')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 transition-all hover:scale-105 active:scale-95 shadow-sm group">
                                 <i data-lucide="map-pin" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
-                                <span>🚗 Lịch trình 3 ngày (18-20/09) & Quỹ đoàn đi</span>
+                                <span>🚗 Lịch trình 3 ngày (18-20/09) & Quỹ đoàn</span>
                             </button>
                             <button onclick="switchTab('history')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition-all hover:scale-105 active:scale-95 shadow-sm group">
                                 <i data-lucide="history" class="w-3.5 h-3.5 group-hover:rotate-[-45deg] transition-transform"></i>
-                                <span>📜 Hành trình 3 năm bền bỉ (6 đợt thiện nguyện)</span>
+                                <span>📜 Hành trình 3 năm bền bỉ (6 đợt)</span>
                             </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quick Action: Gift info, Refresh & Share -->
-                <div class="flex items-center gap-2 self-stretch md:self-center justify-end flex-wrap">
-                    <button onclick="openGiftPackageModal()" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white text-xs font-black shadow-lg shadow-amber-500/25 transition-all active:scale-95" title="Xem chi tiết mỗi em nhỏ sẽ nhận được gì">
+                <div class="w-full md:w-auto grid grid-cols-3 sm:flex items-center gap-2 pt-1 md:pt-0">
+                    <button onclick="openGiftPackageModal()" class="flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white text-[11px] sm:text-xs font-black shadow-lg shadow-amber-500/25 transition-all active:scale-95" title="Xem chi tiết mỗi em nhỏ sẽ nhận được gì">
                         <span>🎁</span>
-                        <span>Mỗi em nhận gì?</span>
+                        <span class="truncate">Mỗi em nhận gì?</span>
                     </button>
-                    <button onclick="fetchAllData(true)" id="btn-refresh" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl glass hover:bg-white/10 text-white/80 hover:text-white text-xs font-bold transition-all active:scale-95" title="Cập nhật số liệu mới nhất">
-                        <i data-lucide="rotate-cw" id="icon-refresh" class="w-4 h-4 transition-transform duration-500"></i>
+                    <button onclick="fetchAllData(true)" id="btn-refresh" class="flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-2.5 rounded-xl glass hover:bg-white/10 text-white/80 hover:text-white text-[11px] sm:text-xs font-bold transition-all active:scale-95" title="Cập nhật số liệu mới nhất">
+                        <i data-lucide="rotate-cw" id="icon-refresh" class="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-500"></i>
                         <span>Làm mới</span>
                     </button>
-                    <button onclick="copyShareLink()" class="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-xs font-bold transition-all active:scale-95" title="Sao chép link chia sẻ">
-                        <i data-lucide="share-2" class="w-4 h-4"></i>
+                    <button onclick="copyShareLink()" class="flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3.5 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 text-[11px] sm:text-xs font-bold transition-all active:scale-95" title="Sao chép link chia sẻ">
+                        <i data-lucide="share-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                         <span>Chia sẻ</span>
                     </button>
                 </div>
@@ -1574,10 +1619,38 @@
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl bg-slate-900/95 text-white border border-white/20 text-xs font-bold shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
+    <div id="toast" class="fixed bottom-20 md:bottom-5 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-xl bg-slate-900/95 text-white border border-white/20 text-xs font-bold shadow-2xl backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
         <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
         <span id="toast-text">Thông báo</span>
     </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR (App-like fixed bottom bar) -->
+    <nav id="mobile-bottom-nav" class="fixed bottom-0 left-0 right-0 z-40 bottom-nav-bar safe-area-bottom md:hidden px-1.5 pt-1.5 pb-1 flex items-center justify-around">
+        <button onclick="switchTab('incomes')" id="bottom-nav-incomes" class="bottom-nav-btn active flex-1" title="Tiền mặt">
+            <i data-lucide="circle-dollar-sign" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Tiền mặt</span>
+        </button>
+        <button onclick="switchTab('donations')" id="bottom-nav-donations" class="bottom-nav-btn flex-1" title="Hiện vật">
+            <i data-lucide="gift" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Hiện vật</span>
+        </button>
+        <button onclick="switchTab('expenses')" id="bottom-nav-expenses" class="bottom-nav-btn flex-1" title="Chi tiêu">
+            <i data-lucide="shopping-cart" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Chi tiêu</span>
+        </button>
+        <button onclick="switchTab('report')" id="bottom-nav-report" class="bottom-nav-btn flex-1" title="Người mua">
+            <i data-lucide="pie-chart" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Người mua</span>
+        </button>
+        <button onclick="switchTab('trip')" id="bottom-nav-trip" class="bottom-nav-btn flex-1" title="Lịch trình">
+            <i data-lucide="map-pin" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Lịch trình</span>
+        </button>
+        <button onclick="switchTab('history')" id="bottom-nav-history" class="bottom-nav-btn flex-1" title="Lịch sử">
+            <i data-lucide="history" class="w-5 h-5 bottom-nav-icon"></i>
+            <span class="text-[10px] font-bold tracking-tight">Lịch sử</span>
+        </button>
+    </nav>
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
@@ -1630,12 +1703,22 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-panel').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.bottom-nav-btn').forEach(btn => btn.classList.remove('active'));
 
             const activePanel = document.getElementById('tab-content-' + tabId);
             const activeBtn = document.getElementById('tab-btn-' + tabId);
+            const activeBottomBtn = document.getElementById('bottom-nav-' + tabId);
 
             if (activePanel) activePanel.classList.remove('hidden');
-            if (activeBtn) activeBtn.classList.add('active');
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                try {
+                    activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                } catch(e) {}
+            }
+            if (activeBottomBtn) {
+                activeBottomBtn.classList.add('active');
+            }
 
             lucide.createIcons();
         }
@@ -1828,20 +1911,20 @@
             }
 
             container.innerHTML = incomes.map((e, idx) => `
-                <div class="item-row px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/5 flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center shrink-0">
+                <div class="item-row p-3 sm:px-4 sm:py-3.5 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+                    <div class="flex items-start sm:items-center gap-3 min-w-0">
+                        <div class="w-7 h-7 rounded-xl bg-amber-500/10 text-amber-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
                             ${idx + 1}
                         </div>
-                        <div class="min-w-0">
-                            <p class="text-sm sm:text-base font-bold text-white truncate leading-snug">${e.donor_name || e.content || 'Ẩn danh'}</p>
-                            <p class="text-[11px] text-white/40 flex items-center gap-2 mt-0.5">
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm sm:text-base font-bold text-white leading-snug break-words">${e.donor_name || e.content || 'Ẩn danh'}</p>
+                            <p class="text-[11px] text-white/40 flex items-center gap-2 mt-0.5 flex-wrap">
                                 ${e.date ? `<span>📅 ${e.date}</span>` : ''}
                                 ${e.note ? `<span class="text-white/30">• ${e.note}</span>` : ''}
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2.5 shrink-0">
+                    <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t border-white/5 sm:border-0">
                         <span class="text-sm sm:text-base font-black text-emerald-400">${fmt(e.amount)}</span>
                         <span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                             ✅ Đã nhận
