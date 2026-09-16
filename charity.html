@@ -331,21 +331,27 @@
         </div>
     </div>
 
-    <!-- Tab Navigation (Desktop/Tablet only, mobile uses fixed bottom navigation bar) -->
-    <div class="hidden md:flex gap-2 overflow-x-auto pb-1 anim-up" style="scrollbar-width: none;">
-        <button id="tab-btn-incomes" onclick="switchTab('incomes')" class="tab-active flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="circle-dollar-sign" class="w-4 h-4 text-emerald-400"></i> Tiền Thu (Thực Tế)
-        </button>
-        <button id="tab-btn-expenses" onclick="switchTab('expenses')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="shopping-cart" class="w-4 h-4 text-amber-400"></i> Chi Tiêu & Dự Trù
-        </button>
-        <button id="tab-btn-donations" onclick="switchTab('donations')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="gift" class="w-4 h-4 text-blue-400"></i> Đồ Đóng Góp (Hiện Vật)
-        </button>
-        <button id="tab-btn-members" onclick="switchTab('members')" class="tab-inactive flex items-center gap-2 px-5 py-3 rounded-xl font-black text-xs whitespace-nowrap transition-all">
-            <i data-lucide="users" class="w-4 h-4 text-purple-400"></i> Quỹ Đoàn Đi Chuyến
-        </button>
-    </div>
+    <!-- Tab Navigation (Hiển thị đẹp mắt trên cả Mobile và Desktop) -->
+    <nav class="glass rounded-2xl sm:rounded-3xl p-1.5 sm:p-2 anim-up">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+            <button id="tab-btn-incomes" onclick="switchTab('incomes')" class="tab-active flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex items-center justify-center gap-1.5 sm:gap-2 font-black text-xs transition-all">
+                <i data-lucide="circle-dollar-sign" class="w-4 h-4 shrink-0 text-emerald-400"></i>
+                <span class="truncate">Tiền Thu</span>
+            </button>
+            <button id="tab-btn-expenses" onclick="switchTab('expenses')" class="tab-inactive flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex items-center justify-center gap-1.5 sm:gap-2 font-black text-xs transition-all">
+                <i data-lucide="shopping-cart" class="w-4 h-4 shrink-0 text-amber-400"></i>
+                <span class="truncate">Chi Tiêu</span>
+            </button>
+            <button id="tab-btn-donations" onclick="switchTab('donations')" class="tab-inactive flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex items-center justify-center gap-1.5 sm:gap-2 font-black text-xs transition-all">
+                <i data-lucide="gift" class="w-4 h-4 shrink-0 text-blue-400"></i>
+                <span class="truncate">Hiện Vật</span>
+            </button>
+            <button id="tab-btn-members" onclick="switchTab('members')" class="tab-inactive flex-1 py-2 sm:py-2.5 px-1.5 sm:px-3.5 rounded-xl text-center flex items-center justify-center gap-1.5 sm:gap-2 font-black text-xs transition-all">
+                <i data-lucide="users" class="w-4 h-4 shrink-0 text-purple-400"></i>
+                <span class="truncate">Quỹ Đoàn</span>
+            </button>
+        </div>
+    </nav>
 
     <!-- ===================== TAB 1: TIỀN THU (THỰC TẾ) ===================== -->
     <div id="tab-incomes" class="space-y-6">
