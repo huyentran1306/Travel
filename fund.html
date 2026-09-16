@@ -432,56 +432,84 @@
 
         <!-- ==================== TAB 3: EXPENSES (CHI TIÊU) ==================== -->
         <main id="tab-content-expenses" class="tab-panel hidden">
-            <div class="glass rounded-3xl p-5 sm:p-7 shadow-xl">
-                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-5 pb-5 border-b border-white/10">
+            <div class="glass rounded-3xl p-4 sm:p-7 shadow-xl animate-fade">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-white/10">
                     <div>
-                        <h2 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
-                            <span>Chi Tiêu Thực Tế Quỹ Từ Thiện</span>
-                            <span class="text-[11px] font-bold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30">Đã chốt sổ</span>
-                        </h2>
-                        <p class="text-xs text-white/50 mt-0.5">Chi tiết các khoản chi thực tế và người phụ trách mua</p>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-base sm:text-lg font-black text-white">Chi Tiêu Thực Tế Quỹ Từ Thiện</h2>
+                            <span class="text-[10px] sm:text-[11px] font-bold text-emerald-400 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                Đã chốt sổ
+                            </span>
+                        </div>
+                        <p class="text-xs text-white/50 mt-0.5">Chi tiết các khoản chi thực tế, phân bổ theo 5 nhóm phục vụ các em</p>
                     </div>
 
-                    <div class="relative min-w-[240px] sm:w-72">
-                        <i data-lucide="search" class="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-                        <input type="text" id="search-expense-input" oninput="onExpenseSearch(this.value)" placeholder="Tìm khoản chi (sữa, bánh, rau...)..." class="w-full pl-10 pr-9 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs sm:text-sm placeholder:text-white/30 focus:outline-none focus:border-amber-400 focus:bg-white/10 transition-all">
-                        <button id="search-expense-clear" onclick="clearExpenseSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white">
-                            <i data-lucide="x" class="w-3.5 h-3.5"></i>
-                        </button>
+                    <!-- Quick Button to Open Modal -->
+                    <button onclick="openExpenseDetailModal('ALL')" class="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs sm:text-sm shadow-lg shadow-blue-500/25 transition-all active:scale-95 shrink-0 border border-blue-400/30">
+                        <i data-lucide="receipt-text" class="w-4 h-4"></i>
+                        <span>Bảng Kê Chi Tiết 32 Món</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-70"></i>
+                    </button>
+                </div>
+
+                <!-- KPI Summary Strip -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 mb-5">
+                    <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                        <span class="text-[10px] sm:text-[11px] text-white/50 font-bold uppercase block">Tổng Thực Chi</span>
+                        <div class="text-lg sm:text-xl lg:text-2xl font-black text-blue-400 mt-1" id="stat-total-expense-tab">35.043.000 đ</div>
+                        <span class="text-[10px] text-blue-300/60 mt-0.5">Khớp 100% hóa đơn</span>
+                    </div>
+                    <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                        <span class="text-[10px] sm:text-[11px] text-white/50 font-bold uppercase block">Quy Mô Khoản Chi</span>
+                        <div class="text-lg sm:text-xl lg:text-2xl font-black text-white mt-1" id="stat-count-expense-tab">32 món chi</div>
+                        <span class="text-[10px] text-white/40 mt-0.5">Chia 5 nhóm mục đích</span>
+                    </div>
+                    <div class="p-3.5 sm:p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                        <span class="text-[10px] sm:text-[11px] text-white/50 font-bold uppercase block">Người Mua Phụ Trách</span>
+                        <div class="text-lg sm:text-xl lg:text-2xl font-black text-amber-400 mt-1">5 đầu mối</div>
+                        <span class="text-[10px] text-amber-300/60 mt-0.5">c.Yến, Trân, Hải, Liền, Trâm</span>
+                    </div>
+                    <div class="p-3.5 sm:p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex flex-col justify-between">
+                        <span class="text-[10px] sm:text-[11px] text-emerald-300/70 font-bold uppercase block">Trạng Thái Sổ Quỹ</span>
+                        <div class="text-lg sm:text-xl lg:text-2xl font-black text-emerald-300 mt-1">100% Đã Chi</div>
+                        <span class="text-[10px] text-emerald-300/60 mt-0.5">Minh bạch rõ ràng</span>
                     </div>
                 </div>
 
-                <!-- Category Filters -->
-                <div class="flex items-center gap-2 mb-4 overflow-x-auto custom-scrollbar pb-1">
-                    <button onclick="filterExpenseCategory('ALL')" id="filter-cat-ALL" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-white shrink-0 shadow-sm">
-                        Tất cả (<span id="cat-count-ALL">0</span>)
-                    </button>
-                    <button onclick="filterExpenseCategory('GIFT_CHILDREN')" id="filter-cat-GIFT_CHILDREN" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0">
-                        🎁 Quà trẻ em (<span id="cat-count-GIFT_CHILDREN">0</span>)
-                    </button>
-                    <button onclick="filterExpenseCategory('COOKING')" id="filter-cat-COOKING" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0">
-                        🍲 Nấu ăn (<span id="cat-count-COOKING">0</span>)
-                    </button>
-                    <button onclick="filterExpenseCategory('FOOD_STALL')" id="filter-cat-FOOD_STALL" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0">
-                        🥤 Gian hàng ẩm thực (<span id="cat-count-FOOD_STALL">0</span>)
-                    </button>
-                    <button onclick="filterExpenseCategory('FAIR_GAMES')" id="filter-cat-FAIR_GAMES" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0">
-                        🎪 Trò chơi hội chợ (<span id="cat-count-FAIR_GAMES">0</span>)
-                    </button>
-                    <button onclick="filterExpenseCategory('TRANSPORT')" id="filter-cat-TRANSPORT" class="cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0">
-                        🚐 Xe di chuyển (<span id="cat-count-TRANSPORT">0</span>)
-                    </button>
+                <!-- GOM NHÓM 5 DANH MỤC CHI TIÊU (OVERVIEW CARDS) -->
+                <div class="mb-5">
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <h3 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="layers" class="w-4 h-4 text-blue-400"></i>
+                            <span>5 Nhóm Danh Mục Chi Tiêu</span>
+                        </h3>
+                        <span class="text-[10px] sm:text-xs text-white/40">Chạm thẻ để xem danh sách món</span>
+                    </div>
+
+                    <!-- Grid of 5 Category Cards -->
+                    <div id="expense-category-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <!-- Rendered by JS -->
+                    </div>
                 </div>
 
-                <!-- Expense Subtotal bar -->
-                <div class="flex items-center justify-between px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 mb-4 text-xs sm:text-sm font-bold text-blue-300">
-                    <span>Số khoản chi: <b id="subtotal-expense-count" class="text-white">0</b> món</span>
-                    <span>Tổng tiền thực chi: <b id="subtotal-expense-amount" class="text-blue-400">0 đ</b></span>
-                </div>
-
-                <!-- Expense List -->
-                <div id="expenses-container" class="space-y-2">
-                    <div class="p-8 text-center text-white/40 text-xs">Đang tải danh sách chi tiêu...</div>
+                <!-- Call to Action Banner to Open Modal -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-900/30 via-slate-900/50 to-indigo-900/30 border border-blue-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left shadow-lg">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center text-xl shrink-0 border border-blue-500/30">
+                            📋
+                        </div>
+                        <div>
+                            <b class="text-white text-xs sm:text-sm block">Xem đầy đủ bảng kê 32 món chi & người phụ trách</b>
+                            <p class="text-[11px] sm:text-xs text-white/60 mt-0.5">Bảng kê được gom nhóm khoa học, có thanh tìm kiếm và bộ lọc từng mục</p>
+                        </div>
+                    </div>
+                    <button onclick="openExpenseDetailModal('ALL')" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-blue-500/20 transition-all active:scale-95 shrink-0 flex items-center justify-center gap-1.5">
+                        <i data-lucide="receipt-text" class="w-4 h-4"></i>
+                        <span>Xem Chi Tiết Từng Món</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
         </main>
@@ -1619,6 +1647,85 @@
                 </button>
             </div>
         </div>
+    <!-- ==================== SPECIAL MODAL: BẢNG KÊ CHI TIÊU GOM NHÓM ==================== -->
+    <div id="expense-detail-modal" onclick="if(event.target === this) closeExpenseDetailModal()" class="fixed inset-0 z-[1000] bg-black/85 backdrop-blur-md items-center justify-center p-2.5 sm:p-5" style="display: none; opacity: 0; transition: opacity 0.3s ease;">
+        <!-- Modal Dialog -->
+        <div class="relative w-full max-w-3xl max-h-[92vh] flex flex-col rounded-3xl border border-blue-500/30 shadow-2xl bg-[#0b1329] text-white animate-fade overflow-hidden">
+            
+            <!-- STICKY MODAL HEADER -->
+            <div class="p-4 sm:p-5 border-b border-white/10 bg-slate-900/95 backdrop-blur-md flex items-center justify-between gap-3 shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl shrink-0 border border-blue-500/30 shadow-lg shadow-blue-500/10">
+                        🛒
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h3 class="text-base sm:text-lg font-black text-white leading-snug truncate">Chi Tiết Các Khoản Chi Quỹ Từ Thiện</h3>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Đã chi 100%</span>
+                        </div>
+                        <p class="text-xs text-blue-300/80 font-medium mt-0.5 flex items-center gap-2 flex-wrap">
+                            <span>Toàn bộ 32 khoản</span>
+                            <span>•</span>
+                            <span>Tổng chi: <b class="text-amber-400 font-black">35.043.000 đ</b></span>
+                        </p>
+                    </div>
+                </div>
+                <button onclick="closeExpenseDetailModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white/70 hover:text-white flex items-center justify-center transition-all active:scale-95 shrink-0" title="Đóng">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- MODAL CONTROLS: SEARCH & CATEGORY FILTER TABS -->
+            <div class="px-4 py-3 sm:px-5 bg-white/[0.02] border-b border-white/5 space-y-2.5 shrink-0">
+                <!-- Search input -->
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 text-white/40 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input type="text" id="modal-expense-search-input" oninput="onModalExpenseSearch(this.value)" placeholder="Tìm khoản chi, người mua (sữa, bánh, c.Yến, sườn...)..." class="w-full pl-10 pr-9 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs sm:text-sm placeholder:text-white/30 focus:outline-none focus:border-blue-400 focus:bg-white/10 transition-all">
+                    <button id="modal-expense-search-clear" onclick="clearModalExpenseSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Category Filter Pills -->
+                <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 text-xs">
+                    <button onclick="filterModalExpenseCategory('ALL')" id="modal-cat-ALL" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-blue-500 text-white shrink-0 shadow-sm border border-blue-400/40">
+                        Tất cả (<span id="modal-badge-ALL">32</span>)
+                    </button>
+                    <button onclick="filterModalExpenseCategory('GIFT_CHILDREN')" id="modal-cat-GIFT_CHILDREN" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10">
+                        🎁 Quà trẻ em (<span id="modal-badge-GIFT_CHILDREN">7</span>)
+                    </button>
+                    <button onclick="filterModalExpenseCategory('COOKING')" id="modal-cat-COOKING" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10">
+                        🍲 Nấu ăn (<span id="modal-badge-COOKING">10</span>)
+                    </button>
+                    <button onclick="filterModalExpenseCategory('FOOD_STALL')" id="modal-cat-FOOD_STALL" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10">
+                        🥤 Ẩm thực (<span id="modal-badge-FOOD_STALL">8</span>)
+                    </button>
+                    <button onclick="filterModalExpenseCategory('FAIR_GAMES')" id="modal-cat-FAIR_GAMES" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10">
+                        🎪 Hội chợ (<span id="modal-badge-FAIR_GAMES">6</span>)
+                    </button>
+                    <button onclick="filterModalExpenseCategory('TRANSPORT')" id="modal-cat-TRANSPORT" class="modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10">
+                        🚐 Xe (<span id="modal-badge-TRANSPORT">1</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- MODAL BODY: SCROLLABLE GROUPED EXPENSE LIST -->
+            <div id="modal-expense-grouped-container" class="flex-1 overflow-y-auto custom-scrollbar p-3.5 sm:p-5 space-y-6">
+                <!-- Grouped sections rendered by JS -->
+            </div>
+
+            <!-- STICKY MODAL FOOTER -->
+            <div class="p-3 sm:p-4 bg-slate-900/95 border-t border-white/10 flex items-center justify-between gap-3 shrink-0">
+                <div class="text-xs">
+                    <span class="text-white/50">Đang hiển thị: </span>
+                    <b id="modal-expense-status-text" class="text-white font-bold">32 / 32 món chi</b>
+                </div>
+                <button onclick="closeExpenseDetailModal()" class="px-4 sm:px-5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-all active:scale-95 flex items-center gap-1.5">
+                    <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                    <span>Đóng</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Toast Notification -->
@@ -1973,118 +2080,258 @@
         }
 
         // ==================== 4. EXPENSES (CHI TIÊU) ====================
-        function onExpenseSearch(val) {
-            currentExpenseSearch = (val || '').trim();
-            const clearBtn = document.getElementById('search-expense-clear');
-            if (currentExpenseSearch) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
+        const EXPENSE_CATEGORIES = [
+            { 
+                key: 'GIFT_CHILDREN', 
+                title: 'Quà Tặng Trẻ Em', 
+                icon: '🎁', 
+                desc: 'Lồng đèn, lốc sữa Fami, bánh gấu, bim bim, kẹo dẻo...',
+                badge: 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+            },
+            { 
+                key: 'COOKING', 
+                title: 'Nấu Ăn Bữa Trưa', 
+                icon: '🍲', 
+                desc: 'Sườn heo, nui gạo, 900 trứng cút, xúc xích, gia vị...',
+                badge: 'bg-orange-500/20 text-orange-300 border-orange-500/30'
+            },
+            { 
+                key: 'FOOD_STALL', 
+                title: 'Gian Hàng Ẩm Thực', 
+                icon: '🥤', 
+                desc: 'Trà tắc mát lạnh, dưa hấu tráng miệng, ly nắp cầu, ống hút...',
+                badge: 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+            },
+            { 
+                key: 'FAIR_GAMES', 
+                title: 'Trò Chơi Hội Chợ', 
+                icon: '🎪', 
+                desc: 'Bóng ném rổ, vòng ném chóp, gắp bóng bàn, phần thưởng...',
+                badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+            },
+            { 
+                key: 'TRANSPORT', 
+                title: 'Xe & Vận Chuyển', 
+                icon: '🚐', 
+                desc: 'Hỗ trợ xe di chuyển chở hàng hóa, quà tặng & nguyên liệu...',
+                badge: 'bg-blue-500/20 text-blue-300 border-blue-500/30'
             }
-            renderExpenses();
-        }
+        ];
 
-        function clearExpenseSearch() {
-            document.getElementById('search-expense-input').value = '';
-            onExpenseSearch('');
-        }
-
-        function filterExpenseCategory(cat) {
-            currentExpenseCategory = cat;
-            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
-                btn.className = 'cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-white/60 hover:text-white shrink-0';
-            });
-            const activeBtn = document.getElementById('filter-cat-' + cat);
-            if (activeBtn) {
-                activeBtn.className = 'cat-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-white shrink-0 shadow-sm';
-            }
-            renderExpenses();
-        }
+        let currentModalExpenseCategory = 'ALL';
+        let currentModalExpenseSearch = '';
 
         function renderExpenses() {
-            const container = document.getElementById('expenses-container');
             const allExpenses = fundEntries.filter(e => e.type === 'EXPENSE');
+            const totalExpense = allExpenses.reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
 
-            // Category counts
-            document.getElementById('cat-count-ALL').textContent = allExpenses.length;
-            ['GIFT_CHILDREN', 'COOKING', 'FOOD_STALL', 'FAIR_GAMES', 'TRANSPORT'].forEach(cat => {
-                const el = document.getElementById('cat-count-' + cat);
-                if (el) el.textContent = allExpenses.filter(e => e.category === cat).length;
-            });
+            const statTotalEl = document.getElementById('stat-total-expense-tab');
+            if (statTotalEl) statTotalEl.textContent = fmt(totalExpense);
 
-            let filtered = allExpenses;
-            if (currentExpenseCategory !== 'ALL') {
-                filtered = filtered.filter(e => e.category === currentExpenseCategory);
-            }
+            const statCountEl = document.getElementById('stat-count-expense-tab');
+            if (statCountEl) statCountEl.textContent = allExpenses.length + ' món chi';
 
-            if (currentExpenseSearch) {
-                const q = removeVietnameseTones(currentExpenseSearch);
-                filtered = filtered.filter(e => {
-                    const content = removeVietnameseTones(e.content || '');
-                    const note = removeVietnameseTones(e.note || '');
-                    return content.includes(q) || note.includes(q);
-                });
-            }
+            const gridContainer = document.getElementById('expense-category-grid');
+            if (!gridContainer) return;
 
-            const totalAmount = filtered.reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
-            document.getElementById('subtotal-expense-count').textContent = filtered.length;
-            document.getElementById('subtotal-expense-amount').textContent = fmt(totalAmount);
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="p-8 text-center text-white/30 text-xs">
-                        <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
-                        Không có khoản chi nào phù hợp với bộ lọc.
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            const catLabels = {
-                GIFT_CHILDREN: '🎁 Quà trẻ em',
-                COOKING: '🍲 Nấu ăn',
-                FOOD_STALL: '🥤 Ẩm thực',
-                FAIR_GAMES: '🎪 Hội chợ',
-                TRANSPORT: '🚐 Di chuyển',
-                OTHER: '📦 Khác'
-            };
-
-            container.innerHTML = filtered.map((e, idx) => {
-                const actual = Number(e.actual_amount != null ? e.actual_amount : e.amount || 0);
-                const isZero = actual === 0;
+            gridContainer.innerHTML = EXPENSE_CATEGORIES.map(cat => {
+                const items = allExpenses.filter(e => e.category === cat.key);
+                const groupSum = items.reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
 
                 return `
-                    <div class="item-row px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-start gap-3 min-w-0">
-                            <div class="w-7 h-7 rounded-xl bg-blue-500/10 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                                ${idx + 1}
-                            </div>
-                            <div class="min-w-0">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <p class="text-sm sm:text-base font-bold text-white leading-snug">${e.content || '--'}</p>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-white/10 text-white/70">
-                                        ${catLabels[e.category] || 'Khác'}
-                                    </span>
+                    <div onclick="openExpenseDetailModal('${cat.key}')" class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-blue-500/40 transition-all hover:bg-white/[0.06] cursor-pointer group flex flex-col justify-between shadow-lg active:scale-[0.99]">
+                        <div>
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="text-xl shrink-0">${cat.icon}</span>
+                                    <h4 class="text-xs sm:text-sm font-black text-white group-hover:text-blue-300 transition-colors truncate">${cat.title}</h4>
                                 </div>
-                                <p class="text-xs text-white/40 mt-1 flex flex-wrap items-center gap-2">
-                                    ${e.note ? `<span class="text-amber-300/90 font-medium">👉 ${e.note}</span>` : ''}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t border-white/5 sm:border-0">
-                            <div class="text-left sm:text-right">
-                                <span class="text-sm sm:text-base font-black ${isZero ? 'text-white/40' : 'text-blue-400'}">
-                                    ${isZero ? '0 đ (Quỹ còn)' : fmt(actual)}
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${cat.badge} border shrink-0">
+                                    ${items.length} món
                                 </span>
                             </div>
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                                ✅ Đã chi
+                            <p class="text-[11px] text-white/50 leading-relaxed line-clamp-2">
+                                ${cat.desc}
+                            </p>
+                        </div>
+                        <div class="mt-3.5 pt-2.5 border-t border-white/5 flex items-center justify-between">
+                            <span class="text-sm sm:text-base font-black text-blue-400">${fmt(groupSum)}</span>
+                            <span class="text-[11px] font-bold text-white/60 group-hover:text-white transition-all flex items-center gap-1">
+                                <span>Xem chi tiết</span>
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform"></i>
                             </span>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            lucide.createIcons();
+        }
+
+        // ==================== EXPENSE DETAIL MODAL CONTROLLERS ====================
+        function openExpenseDetailModal(category = 'ALL') {
+            currentModalExpenseCategory = category;
+            currentModalExpenseSearch = '';
+            
+            const searchInput = document.getElementById('modal-expense-search-input');
+            if (searchInput) searchInput.value = '';
+            const clearBtn = document.getElementById('modal-expense-search-clear');
+            if (clearBtn) clearBtn.classList.add('hidden');
+
+            renderModalGroupedExpenses();
+
+            const modal = document.getElementById('expense-detail-modal');
+            if (!modal) return;
+            modal.style.display = 'flex';
+            void modal.offsetHeight;
+            modal.style.opacity = '1';
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeExpenseDetailModal() {
+            const modal = document.getElementById('expense-detail-modal');
+            if (!modal) return;
+            modal.style.opacity = '0';
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function filterModalExpenseCategory(cat) {
+            currentModalExpenseCategory = cat;
+            renderModalGroupedExpenses();
+        }
+
+        function onModalExpenseSearch(val) {
+            currentModalExpenseSearch = (val || '').trim();
+            const clearBtn = document.getElementById('modal-expense-search-clear');
+            if (currentModalExpenseSearch) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderModalGroupedExpenses();
+        }
+
+        function clearModalExpenseSearch() {
+            const input = document.getElementById('modal-expense-search-input');
+            if (input) input.value = '';
+            onModalExpenseSearch('');
+        }
+
+        function renderModalGroupedExpenses() {
+            const container = document.getElementById('modal-expense-grouped-container');
+            if (!container) return;
+
+            const allExpenses = fundEntries.filter(e => e.type === 'EXPENSE');
+
+            // Update badge counts in modal filter bar
+            const allBadge = document.getElementById('modal-badge-ALL');
+            if (allBadge) allBadge.textContent = allExpenses.length;
+            EXPENSE_CATEGORIES.forEach(c => {
+                const badge = document.getElementById('modal-badge-' + c.key);
+                if (badge) badge.textContent = allExpenses.filter(e => e.category === c.key).length;
+            });
+
+            // Update active state on filter buttons
+            document.querySelectorAll('.modal-cat-btn').forEach(btn => {
+                btn.className = 'modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-white/5 text-white/60 hover:text-white shrink-0 border border-white/10 transition-all';
+            });
+            const activeBtn = document.getElementById('modal-cat-' + currentModalExpenseCategory);
+            if (activeBtn) {
+                activeBtn.className = 'modal-cat-btn px-2.5 py-1.5 rounded-xl font-bold bg-blue-500 text-white shrink-0 shadow-sm border border-blue-400/40 transition-all';
+            }
+
+            // Determine which categories to include
+            let targetCategories = EXPENSE_CATEGORIES;
+            if (currentModalExpenseCategory !== 'ALL') {
+                targetCategories = EXPENSE_CATEGORIES.filter(c => c.key === currentModalExpenseCategory);
+            }
+
+            const searchQuery = removeVietnameseTones(currentModalExpenseSearch);
+            let totalDisplayedItems = 0;
+            let totalDisplayedAmount = 0;
+
+            const groupsHtml = targetCategories.map(cat => {
+                let items = allExpenses.filter(e => e.category === cat.key);
+
+                if (searchQuery) {
+                    items = items.filter(e => {
+                        const c = removeVietnameseTones(e.content || '');
+                        const n = removeVietnameseTones(e.note || '');
+                        return c.includes(searchQuery) || n.includes(searchQuery);
+                    });
+                }
+
+                if (items.length === 0) return '';
+
+                const groupTotal = items.reduce((s, e) => s + Number(e.actual_amount != null ? e.actual_amount : e.amount || 0), 0);
+                totalDisplayedItems += items.length;
+                totalDisplayedAmount += groupTotal;
+
+                return `
+                    <div class="space-y-2.5">
+                        <!-- Sticky Group Header Banner -->
+                        <div class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-blue-500/15 border border-blue-500/30 sticky top-0 backdrop-blur-md z-10 shadow-sm">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="text-base shrink-0">${cat.icon}</span>
+                                <h4 class="text-xs sm:text-sm font-black text-blue-300 uppercase tracking-wide truncate">
+                                    ${cat.title} (${items.length} món)
+                                </h4>
+                            </div>
+                            <span class="text-xs sm:text-sm font-black text-amber-400 shrink-0">${fmt(groupTotal)}</span>
+                        </div>
+
+                        <!-- Item list in group -->
+                        <div class="space-y-2">
+                            ${items.map((e, idx) => {
+                                const actual = Number(e.actual_amount != null ? e.actual_amount : e.amount || 0);
+                                const isZero = actual === 0;
+
+                                return `
+                                    <div class="item-row p-3 sm:px-4 sm:py-3 rounded-2xl bg-white/[0.03] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+                                        <div class="flex items-start gap-3 min-w-0">
+                                            <div class="w-6 h-6 rounded-lg bg-blue-500/10 text-blue-400 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                                                ${idx + 1}
+                                            </div>
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-xs sm:text-sm font-bold text-white leading-snug break-words">${e.content || '--'}</p>
+                                                ${e.note ? `<p class="text-[11px] text-white/50 mt-0.5 flex flex-wrap items-center gap-1"><span class="text-amber-300/90 font-medium">👉 ${e.note}</span></p>` : ''}
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between sm:justify-end gap-2.5 shrink-0 pt-2 sm:pt-0 border-t border-white/5 sm:border-0">
+                                            <span class="text-xs sm:text-sm font-black ${isZero ? 'text-white/40' : 'text-blue-400'}">
+                                                ${isZero ? '0 đ (Quỹ còn)' : fmt(actual)}
+                                            </span>
+                                            <span class="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                                                ✅ Đã chi
+                                            </span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).filter(Boolean).join('');
+
+            if (totalDisplayedItems === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-white/30 text-xs">
+                        <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                        Không tìm thấy khoản chi nào phù hợp với từ khóa tìm kiếm.
+                    </div>
+                `;
+            } else {
+                container.innerHTML = groupsHtml;
+            }
+
+            const statusTextEl = document.getElementById('modal-expense-status-text');
+            if (statusTextEl) {
+                statusTextEl.textContent = `${totalDisplayedItems} / ${allExpenses.length} món chi • Tổng: ${fmt(totalDisplayedAmount)}`;
+            }
 
             lucide.createIcons();
         }
