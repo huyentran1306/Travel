@@ -219,9 +219,13 @@
                             <span>👶 <b><span id="header-children-count" class="text-amber-300 font-bold">340</span> em nhỏ</b></span>
                         </p>
                         <div class="mt-2 flex items-center gap-2 flex-wrap">
+                            <button onclick="switchTab('trip')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 transition-all hover:scale-105 active:scale-95 shadow-sm group">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>🚗 Lịch trình 3 ngày (18-20/09) & Quỹ đoàn đi</span>
+                            </button>
                             <button onclick="switchTab('history')" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition-all hover:scale-105 active:scale-95 shadow-sm group">
                                 <i data-lucide="history" class="w-3.5 h-3.5 group-hover:rotate-[-45deg] transition-transform"></i>
-                                <span>📜 Hành trình 3 năm bền bỉ (6 đợt thiện nguyện) • Bấm xem lịch sử</span>
+                                <span>📜 Hành trình 3 năm bền bỉ (6 đợt thiện nguyện)</span>
                             </button>
                         </div>
                     </div>
@@ -316,6 +320,10 @@
             <button onclick="switchTab('report')" id="tab-btn-report" class="tab-btn flex-1 min-w-[135px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2">
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
                 <span>Tổng Kết Người Mua</span>
+            </button>
+            <button onclick="switchTab('trip')" id="tab-btn-trip" class="tab-btn flex-1 min-w-[160px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-cyan-300">
+                <i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i>
+                <span>Lịch Trình & Quỹ Đoàn</span>
             </button>
             <button onclick="switchTab('history')" id="tab-btn-history" class="tab-btn flex-1 min-w-[155px] py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 text-amber-300">
                 <i data-lucide="history" class="w-4 h-4 text-amber-400"></i>
@@ -473,6 +481,518 @@
                     <p class="text-xs sm:text-sm text-white/70 max-w-xl mx-auto leading-relaxed">
                         Sự đồng hành và sẻ chia của mọi người đã mang lại một mùa Tết Trung Thu ấm áp, tràn ngập tiếng cười và niềm vui cho 340 em nhỏ tại Buôn Ngô - Cư Pui - Đắk Lắk.
                     </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- ==================== TAB: TRIP & MEMBER FUND (LỊCH TRÌNH & QUỸ ĐOÀN ĐI) ==================== -->
+        <main id="tab-content-trip" class="tab-panel hidden">
+            <div class="space-y-6 animate-fade">
+                <!-- HERO BANNER LỊCH TRÌNH & QUỸ ĐOÀN -->
+                <div class="glass rounded-3xl p-5 sm:p-7 shadow-xl relative overflow-hidden border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1.5">
+                                    <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                                    Kế Hoạch Khởi Hành
+                                </span>
+                                <span class="text-white/40 text-xs">•</span>
+                                <span class="text-xs text-white/70 font-medium">18/09 - 20/09/2026 (3 Ngày 2 Đêm)</span>
+                            </div>
+                            <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                                Lịch Trình Chi Tiết & Quỹ Thành Viên Đi Chuyến
+                            </h2>
+                            <p class="text-xs sm:text-sm text-white/70 mt-1 max-w-2xl leading-relaxed">
+                                Kế hoạch di chuyển từ TP.HCM đến Buôn Ngô (Đắk Lắk) và bảng theo dõi thu chi nội bộ của đoàn đi — hoàn toàn độc lập và minh bạch với Quỹ Từ Thiện.
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2 self-start md:self-center shrink-0 flex-wrap">
+                            <a href="https://docs.google.com/spreadsheets/d/1GFt0NRhb9JBQmT17HFYKebuTJnFcWwdLjvHZDSzv4es/edit?gid=2112221570#gid=2112221570" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all active:scale-95 shadow-sm">
+                                <i data-lucide="external-link" class="w-4 h-4"></i>
+                                <span>Mở Sheet Lịch Trình & Quỹ</span>
+                            </a>
+                            <button onclick="switchTab('incomes')" class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl glass hover:bg-white/10 text-white text-xs font-bold transition-all active:scale-95 border border-white/15">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                                <span>Về Quỹ Chung</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LƯU Ý TÁCH BẠCH TÀI CHÍNH -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex items-start gap-3.5">
+                    <div class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0 text-lg">
+                        💡
+                    </div>
+                    <div class="text-xs text-white/80 leading-relaxed">
+                        <b class="text-purple-300 block mb-0.5 text-xs sm:text-sm">Nguyên Tắc Minh Bạch Quỹ Đoàn & Quỹ Thiện Nguyện:</b>
+                        Quỹ đoàn đi chuyến là chi phí sinh hoạt, ăn ở và di chuyển do <b>13 thành viên tham gia tự túc đóng góp (1.500.000 đ / người)</b>, hoàn toàn tách bạch với Quỹ Từ Thiện dành cho các em nhỏ. Quỹ từ thiện của các bé chỉ hỗ trợ <b>5.000.000 đ tiền xe</b> theo đúng kế hoạch chở hàng hóa, quà tặng và nguyên liệu nấu ăn đã công khai.
+                    </div>
+                </div>
+
+                <!-- OVERVIEW STATS QUỸ ĐOÀN -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="glass rounded-2xl p-4 sm:p-5 border border-cyan-500/20">
+                        <div class="flex items-center justify-between text-cyan-400 mb-1.5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider">Đã Thu Đoàn</span>
+                            <i data-lucide="wallet" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-cyan-400">13.500.000 đ</div>
+                        <p class="text-[11px] text-white/50 mt-1">9 / 13 người đã đóng (1.5tr/ng)</p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-4 sm:p-5 border border-blue-500/20">
+                        <div class="flex items-center justify-between text-blue-400 mb-1.5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider">Dự Chi Đoàn</span>
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-blue-400">14.300.000 đ</div>
+                        <p class="text-[11px] text-white/50 mt-1">Ước tính ~ 1.100.000 đ / người</p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-4 sm:p-5 border border-emerald-500/20">
+                        <div class="flex items-center justify-between text-emerald-400 mb-1.5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider">Hỗ Trợ Tiền Xe</span>
+                            <i data-lucide="truck" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-emerald-400">+5.000.000 đ</div>
+                        <p class="text-[11px] text-emerald-300/70 mt-1">Hỗ trợ xe chở hàng từ Quỹ chung</p>
+                    </div>
+
+                    <div class="glass rounded-2xl p-4 sm:p-5 border border-amber-500/20">
+                        <div class="flex items-center justify-between text-amber-400 mb-1.5">
+                            <span class="text-[11px] font-bold uppercase tracking-wider">Đã Cọc Ứng Trước</span>
+                            <i data-lucide="credit-card" class="w-4 h-4"></i>
+                        </div>
+                        <div class="text-xl sm:text-2xl font-black text-amber-400">2.500.000 đ</div>
+                        <p class="text-[11px] text-white/50 mt-1">Cọc xe 2tr • Cọc homestay 500k</p>
+                    </div>
+                </div>
+
+                <!-- ==================== SECTION A: LỊCH TRÌNH 3 NGÀY CHI TIẾT ==================== -->
+                <div class="glass rounded-3xl p-5 sm:p-7 shadow-xl">
+                    <div class="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-white/10 flex-wrap">
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                                <i data-lucide="calendar" class="w-5 h-5 text-cyan-400"></i>
+                                <span>Lịch Trình Di Chuyển & Hoạt Động (18 - 20/09/2026)</span>
+                            </h3>
+                            <p class="text-xs text-white/50 mt-0.5">Lộ trình TP.HCM ➔ Krông Bông (Đắk Lắk) ➔ TP.HCM</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-xl text-xs font-bold bg-white/5 text-cyan-300 border border-cyan-500/20">
+                            3 Ngày 2 Đêm
+                        </span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- NGÀY 1: 18/09/2026 -->
+                        <div class="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-all">
+                            <div class="flex items-center gap-2.5 mb-4">
+                                <span class="px-3 py-1 rounded-lg text-xs font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                                    NGÀY 1 • THỨ SÁU (18/09/2026)
+                                </span>
+                                <span class="text-xs text-white/60 font-bold">Xuất phát từ TP. Hồ Chí Minh</span>
+                            </div>
+
+                            <div class="space-y-4 text-xs sm:text-sm">
+                                <!-- Mốc 20h00 -->
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-cyan-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-cyan-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1.5 flex-1">
+                                        <div class="flex items-center justify-between flex-wrap gap-1">
+                                            <b class="text-white text-sm">20h00 • Tập trung tại Chung Cư SaiGon Town</b>
+                                            <span class="text-[11px] text-cyan-300 font-bold bg-cyan-500/10 px-2 py-0.5 rounded">Điểm xuất phát chính</span>
+                                        </div>
+                                        <p class="text-white/70">📍 Địa chỉ: <b>83/16 Thoại Ngọc Hầu</b>, P. Hòa Thạnh, Q. Tân Phú, TP.HCM</p>
+                                        <p class="text-white/70">📦 Bốc chuyển quà tặng, vật dụng hội chợ, đồ dùng lên xe. Đúng 20h30 xuất phát.</p>
+                                        <div class="flex items-center gap-3 pt-1 flex-wrap">
+                                            <a href="tel:0981165795" class="inline-flex items-center gap-1.5 text-xs text-amber-300 font-bold bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/25 transition-all">
+                                                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                                                <span>Hotline: Hải (0981 165 795)</span>
+                                            </a>
+                                            <a href="https://maps.google.com/?q=Chung+cư+SaiGon+Town+83/16+Thoại+Ngọc+Hầu" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-cyan-300 font-bold bg-cyan-500/10 hover:bg-cyan-500/20 px-2.5 py-1 rounded-lg border border-cyan-500/25 transition-all">
+                                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                                                <span>Google Maps SaiGon Town</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mốc 22h00 -->
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-cyan-500/40">
+                                    <div class="w-3 h-3 rounded-full bg-cyan-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1.5 flex-1">
+                                        <div class="flex items-center justify-between flex-wrap gap-1">
+                                            <b class="text-white text-sm">22h00 • Đón các thành viên còn lại tại Ngã Tư Thủ Đức</b>
+                                            <span class="text-[11px] text-cyan-300 font-bold bg-cyan-500/10 px-2 py-0.5 rounded">Điểm đón 2</span>
+                                        </div>
+                                        <p class="text-white/70">Đón mọi người khu vực Thủ Đức / Quận 9, kiểm tra quân số và thẳng tiến lên Đắk Lắk.</p>
+                                        <div class="flex items-center gap-3 pt-1 flex-wrap">
+                                            <a href="tel:0962736604" class="inline-flex items-center gap-1.5 text-xs text-amber-300 font-bold bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1 rounded-lg border border-amber-500/25 transition-all">
+                                                <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                                                <span>Hotline: Trân (0962 736 604)</span>
+                                            </a>
+                                            <a href="https://maps.app.goo.gl/f73R82Gw7wVHzSeA8" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-cyan-300 font-bold bg-cyan-500/10 hover:bg-cyan-500/20 px-2.5 py-1 rounded-lg border border-cyan-500/25 transition-all">
+                                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                                                <span>Vị trí đón Ngã tư Thủ Đức</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NGÀY 2: 19/09/2026 -->
+                        <div class="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/30 transition-all">
+                            <div class="flex items-center gap-2.5 mb-4">
+                                <span class="px-3 py-1 rounded-lg text-xs font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                    NGÀY 2 • THỨ BẢY (19/09/2026)
+                                </span>
+                                <span class="text-xs text-amber-400 font-bold">Ngày hội chính Gieo Nắng 2026 tại Buôn Ngô</span>
+                            </div>
+
+                            <div class="space-y-4 text-xs sm:text-sm">
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-amber-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-amber-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1">
+                                        <b class="text-white">06h30 • Đến Đắk Lắk, Vệ sinh cá nhân & Ăn sáng</b>
+                                        <p class="text-white/60">Đoàn dừng chân ăn sáng nhẹ và chuẩn bị tinh thần lên đường vào buôn làng.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-amber-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-amber-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1 flex-1">
+                                        <div class="flex items-center justify-between flex-wrap gap-1">
+                                            <b class="text-white">08h00 • Di chuyển vào Điểm trường Buôn Ngô</b>
+                                            <a href="https://maps.app.goo.gl/Y16A8FQ2qq1CAqhaA?g_st=ic" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] text-amber-300 font-bold underline">
+                                                <i data-lucide="navigation" class="w-3 h-3"></i>
+                                                <span>Xem định vị trường</span>
+                                            </a>
+                                        </div>
+                                        <p class="text-white/60">📍 Xã Cư Pui, Huyện Krông Bông, Đắk Lắk.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-amber-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-amber-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-2 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex-1">
+                                        <b class="text-amber-300 text-sm block">09h00 - 12h30 • TỔ CHỨC TRUNG THU CHO 340 BÉ BUÔN NGÔ</b>
+                                        <ul class="text-white/80 space-y-1 text-xs list-disc list-inside">
+                                            <li>Chuẩn bị 340 phần quà bánh kẹo, lồng đèn, sữa Fami</li>
+                                            <li>Làm nước trà tắc mát lạnh & gọt 30kg dưa hấu tráng miệng</li>
+                                            <li>Tổ chức 3 gian hàng trò chơi hội chợ vui nhộn nhận quà</li>
+                                            <li>Nấu và phân phát 340 tô nui sườn heo trứng cút nóng hổi</li>
+                                            <li>Dọn dẹp vệ sinh trường học sạch đẹp</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-amber-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-amber-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1 flex-1">
+                                        <div class="flex items-center justify-between flex-wrap gap-1">
+                                            <b class="text-white">13h00 • Về Dancasa Horse Farm & Homestay</b>
+                                            <a href="https://maps.app.goo.gl/kcHBdwSQ3AaCy6F56" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] text-cyan-300 font-bold underline">
+                                                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                                                <span>Xem Map Homestay</span>
+                                            </a>
+                                        </div>
+                                        <p class="text-white/70">📍 Ea Ktur, Cư Kuin, Đắk Lắk. Nhận phòng, tắm rửa nghỉ ngơi, khám phá trang trại ngựa & check-in.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-amber-500/40">
+                                    <div class="w-3 h-3 rounded-full bg-amber-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1">
+                                        <b class="text-white">17h00 • Ăn tối & Sinh hoạt đoàn</b>
+                                        <p class="text-white/60">Đoàn ăn tối chọn món, trò chuyện tổng kết ngày hoạt động và nghỉ ngơi sau một ngày trọn vẹn.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NGÀY 3: 20/09/2026 -->
+                        <div class="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all">
+                            <div class="flex items-center gap-2.5 mb-4">
+                                <span class="px-3 py-1 rounded-lg text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                    NGÀY 3 • CHỦ NHẬT (20/09/2026)
+                                </span>
+                                <span class="text-xs text-emerald-400 font-bold">Khám phá & Khởi hành về TP. Hồ Chí Minh</span>
+                            </div>
+
+                            <div class="space-y-4 text-xs sm:text-sm">
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-emerald-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1">
+                                        <b class="text-white">08h00 - 09h00 • Thể dục, Ăn sáng & Thư giãn tại Homestay</b>
+                                        <p class="text-white/60">Thưởng thức không khí trong lành Tây Nguyên, ăn sáng và tham gia hoạt động workshop trải nghiệm (tự túc).</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-emerald-500/40 pb-4">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1">
+                                        <b class="text-white">12h00 • Trả phòng Homestay & Ăn trưa</b>
+                                        <p class="text-white/60">Dọn dẹp hành lý, trả phòng và di chuyển đến quán ăn trưa nạp năng lượng.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-3.5 pl-2 relative border-l-2 border-emerald-500/40">
+                                    <div class="w-3 h-3 rounded-full bg-emerald-400 absolute -left-[7px] top-1"></div>
+                                    <div class="space-y-1">
+                                        <b class="text-white">Chiều - Tối • Khởi hành về lại TP.HCM</b>
+                                        <p class="text-white/60">Xe lăn bánh về Sài Gòn, dừng chân nghỉ ngơi, ăn nhẹ tự túc trên đường về. Kết thúc chuyến thiện nguyện bình an và ý nghĩa!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SECTION B: QUỸ THÀNH VIÊN ĐI CHUYẾN ==================== -->
+                <div class="glass rounded-3xl p-5 sm:p-7 shadow-xl">
+                    <div class="flex items-center justify-between gap-3 mb-6 pb-4 border-b border-white/10 flex-wrap">
+                        <div>
+                            <h3 class="text-base sm:text-lg font-black text-white flex items-center gap-2">
+                                <i data-lucide="coins" class="w-5 h-5 text-amber-400"></i>
+                                <span>Báo Cáo Thu Chi Quỹ Đoàn Đi Chuyến</span>
+                            </h3>
+                            <p class="text-xs text-white/50 mt-0.5">Số liệu thực tế theo Google Sheet cập nhật từ ban tổ chức</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            1.500.000 đ / người
+                        </span>
+                    </div>
+
+                    <!-- BẢNG 1: TRẠNG THÁI ĐÓNG TIỀN CỦA 13 THÀNH VIÊN -->
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                            <h4 class="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                                <span>1. Danh Sách Đóng Tiền Thành Viên (13 Người)</span>
+                            </h4>
+                            <span class="text-xs text-emerald-300 font-bold">Đã thu: 13.500.000 đ / 19.500.000 đ</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                            <!-- 1. Trân -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">1. Trân</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 2. Hải -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">2. Hải</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 3. Liền -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">3. Liền</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 4. Hương -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">4. Hương</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 5. Tính -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">5. Tính</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 6. Toàn -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">6. Toàn</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 7. Dũng -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">7. Dũng</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 8. Vân -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">8. Vân</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 9. Trâm -->
+                            <div class="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">9. Trâm</b>
+                                    <span class="text-[11px] text-white/40">Chưa nộp</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">CHƯA THU</span>
+                            </div>
+                            <!-- 10. Tâm -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">10. Tâm</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                            <!-- 11. Nguyệt -->
+                            <div class="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">11. Nguyệt</b>
+                                    <span class="text-[11px] text-white/40">Chưa nộp</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">CHƯA THU</span>
+                            </div>
+                            <!-- 12. Chồng Nguyệt -->
+                            <div class="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">12. Chồng Nguyệt</b>
+                                    <span class="text-[11px] text-white/40">Chưa nộp</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30">CHƯA THU</span>
+                            </div>
+                            <!-- 13. Nguyên -->
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                <div>
+                                    <b class="text-white block text-xs">13. Nguyên (Thảo Nguyên)</b>
+                                    <span class="text-[11px] text-emerald-400 font-bold">1.500.000 đ</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">ĐÃ THU</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG 2: KẾ HOẠCH DỰ CHI (10 KHOẢN) & ĐÃ CHI -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Cột Trái: Dự Chi -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10">
+                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-white/10">
+                                <h4 class="text-xs sm:text-sm font-black text-blue-300 uppercase tracking-wider">
+                                    2. Kế Hoạch Dự Chi (10 Mục)
+                                </h4>
+                                <span class="text-xs text-blue-300 font-black">14.300.000 đ</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">1. HomeStay Dancasa</span>
+                                    <b class="text-white">1.240.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">2. Tiền xe di chuyển</span>
+                                    <b class="text-white">8.000.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">3. Ăn sáng (19/09) <span class="text-white/40">(~50k/ng)</span></span>
+                                    <b class="text-white">600.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">4. Ăn trưa (19/09) <span class="text-emerald-400 font-bold">(Ăn chung các bé)</span></span>
+                                    <b class="text-emerald-400">0 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">5. Ăn chiều (19/09)</span>
+                                    <b class="text-white">1.500.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">6. Ăn sáng (20/09) <span class="text-white/40">(~50k/ng)</span></span>
+                                    <b class="text-white">600.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">7. Ăn trưa (20/09) <span class="text-white/40">(~100k/ng)</span></span>
+                                    <b class="text-white">1.200.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">8. Đồ ăn vặt + Nước</span>
+                                    <b class="text-white">500.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5 border-b border-white/5">
+                                    <span class="text-white/80">9. Nước uống trạm dừng chân</span>
+                                    <b class="text-white">360.000 đ</b>
+                                </div>
+                                <div class="flex justify-between py-1.5">
+                                    <span class="text-white/80">10. Phòng nghỉ cho bác tài</span>
+                                    <b class="text-white">300.000 đ</b>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-2.5 border-t border-white/10 flex justify-between text-xs">
+                                <span class="text-white/50">Dự tính bình quân:</span>
+                                <b class="text-blue-300">~ 1.100.000 đ / người</b>
+                            </div>
+                        </div>
+
+                        <!-- Cột Phải: Đã Chi & Đối Soát -->
+                        <div class="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-3 pb-2 border-b border-white/10">
+                                    <h4 class="text-xs sm:text-sm font-black text-emerald-300 uppercase tracking-wider">
+                                        3. Khoản Đã Chi & Cọc Thực Tế
+                                    </h4>
+                                    <span class="text-xs text-amber-400 font-black">2.500.000 đ</span>
+                                </div>
+                                <div class="space-y-2.5 text-xs">
+                                    <div class="flex justify-between py-1.5 border-b border-white/5">
+                                        <span class="text-white/80">1. Cọc HomeStay Dancasa</span>
+                                        <b class="text-amber-400">500.000 đ</b>
+                                    </div>
+                                    <div class="flex justify-between py-1.5 border-b border-white/5">
+                                        <span class="text-white/80">2. Cọc xe di chuyển</span>
+                                        <b class="text-amber-400">2.000.000 đ</b>
+                                    </div>
+                                    <div class="flex justify-between py-1.5 border-b border-white/5">
+                                        <span class="text-white/80">3. Hỗ trợ xe chở hàng (từ Quỹ chung)</span>
+                                        <b class="text-emerald-400">-5.000.000 đ</b>
+                                    </div>
+                                    <div class="p-3 rounded-xl bg-white/5 mt-3 space-y-1.5">
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-white/60">Tổng chi ban đầu:</span>
+                                            <b class="text-white">-2.500.000 đ</b>
+                                        </div>
+                                        <div class="flex justify-between text-xs">
+                                            <span class="text-white/60">Còn lại trong quỹ hiện tại:</span>
+                                            <b class="text-cyan-300 text-sm">4.000.000 đ</b>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-t border-white/10 text-center">
+                                <a href="https://docs.google.com/spreadsheets/d/1GFt0NRhb9JBQmT17HFYKebuTJnFcWwdLjvHZDSzv4es/edit?gid=2112221570#gid=2112221570" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-bold text-cyan-300 hover:text-cyan-200 transition-colors">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                                    <span>Xem bảng tính Google Sheet trực tiếp để cập nhật chi tiêu mới</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back to 2026 button at bottom -->
+                <div class="pt-2 text-center">
+                    <button onclick="switchTab('incomes')" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-cyan-500/20 transition-all active:scale-95">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>Quay Lại Báo Cáo Quỹ Từ Thiện 2026</span>
+                    </button>
                 </div>
             </div>
         </main>
